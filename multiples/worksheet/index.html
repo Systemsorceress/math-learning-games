@@ -1,0 +1,2786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Multiples Adventure 🧸💕</title>
+
+  <style>
+    /* =========================================================
+       CUTE GIRLY PINK + TEDDY BEAR THEME
+       ========================================================= */
+
+    :root {
+      --pink: #f58fb1;
+      --pink-dark: #d95f89;
+      --pink-light: #ffe5ef;
+      --pink-pale: #fff4f8;
+
+      --rose: #f7b6ca;
+      --peach: #ffd8c8;
+      --cream: #fffaf5;
+
+      --brown: #795548;
+      --brown-dark: #5d4037;
+      --brown-light: #a98272;
+
+      --purple: #b58bd9;
+      --purple-light: #f1e5fb;
+
+      --green: #65b891;
+      --green-light: #e8f8ef;
+
+      --red: #e87979;
+      --red-light: #fff0f0;
+
+      --text: #55454b;
+      --muted: #8d777e;
+
+      --white: #ffffff;
+      --border: #f1ccd9;
+
+      --shadow:
+        0 8px 25px rgba(173, 105, 130, 0.12);
+
+      --radius: 22px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family:
+        "Trebuchet MS",
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+      color: var(--text);
+
+      background:
+        radial-gradient(
+          circle at 8% 8%,
+          rgba(255, 210, 225, 0.8),
+          transparent 22%
+        ),
+        radial-gradient(
+          circle at 92% 18%,
+          rgba(246, 222, 249, 0.8),
+          transparent 22%
+        ),
+        radial-gradient(
+          circle at 15% 90%,
+          rgba(255, 224, 210, 0.65),
+          transparent 20%
+        ),
+        var(--pink-pale);
+
+      min-height: 100vh;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    /* =========================================================
+       FLOATING DECORATIONS
+       ========================================================= */
+
+    .decor {
+      position: fixed;
+      pointer-events: none;
+      z-index: -1;
+      opacity: 0.65;
+      font-size: 30px;
+      animation: floatDecor 4s ease-in-out infinite;
+    }
+
+    .decor.one {
+      top: 15%;
+      left: 2%;
+    }
+
+    .decor.two {
+      top: 34%;
+      right: 2%;
+      animation-delay: 1s;
+    }
+
+    .decor.three {
+      bottom: 15%;
+      left: 3%;
+      animation-delay: 2s;
+    }
+
+    .decor.four {
+      bottom: 8%;
+      right: 4%;
+      animation-delay: 0.5s;
+    }
+
+    @keyframes floatDecor {
+      0%, 100% {
+        transform: translateY(0) rotate(-5deg);
+      }
+
+      50% {
+        transform: translateY(-10px) rotate(5deg);
+      }
+    }
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    .topbar {
+      position: relative;
+      overflow: hidden;
+
+      background:
+        linear-gradient(
+          135deg,
+          #f59bbb 0%,
+          #f7a8c4 48%,
+          #dca8e9 100%
+        );
+
+      color: white;
+
+      padding: 22px 20px 28px;
+
+      box-shadow:
+        0 7px 25px rgba(190, 104, 140, 0.22);
+    }
+
+    .topbar::before {
+      content: "♡";
+      position: absolute;
+      font-size: 120px;
+      right: 4%;
+      top: -45px;
+      opacity: 0.12;
+    }
+
+    .topbar::after {
+      content: "✦  ♡  ✦  ♡  ✦";
+      position: absolute;
+      left: 4%;
+      bottom: 5px;
+      font-size: 16px;
+      opacity: 0.28;
+      letter-spacing: 12px;
+    }
+
+    .topbar-inner {
+      max-width: 1100px;
+      margin: auto;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 20px;
+    }
+
+    .title-area {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    /* =========================================================
+       TEDDY BEAR
+       ========================================================= */
+
+    .teddy {
+      position: relative;
+      width: 76px;
+      height: 76px;
+      flex: 0 0 76px;
+
+      background: #b9856f;
+      border-radius: 48% 48% 45% 45%;
+
+      box-shadow:
+        inset 0 -5px 0 rgba(91, 53, 41, 0.10),
+        0 5px 10px rgba(100, 53, 42, 0.18);
+    }
+
+    .teddy::before,
+    .teddy::after {
+      content: "";
+      position: absolute;
+
+      width: 28px;
+      height: 28px;
+
+      top: -9px;
+
+      background: #a9725f;
+      border-radius: 50%;
+
+      box-shadow:
+        inset 0 0 0 6px #c9947d;
+    }
+
+    .teddy::before {
+      left: 4px;
+    }
+
+    .teddy::after {
+      right: 4px;
+    }
+
+    .teddy-eyes {
+      position: absolute;
+
+      width: 7px;
+      height: 7px;
+
+      top: 30px;
+      left: 20px;
+
+      background: var(--brown-dark);
+      border-radius: 50%;
+
+      box-shadow:
+        29px 0 0 var(--brown-dark);
+    }
+
+    .teddy-nose {
+      position: absolute;
+
+      width: 15px;
+      height: 11px;
+
+      top: 42px;
+      left: 31px;
+
+      background: var(--brown-dark);
+
+      border-radius: 50% 50% 55% 55%;
+    }
+
+    .teddy-mouth {
+      position: absolute;
+
+      width: 18px;
+      height: 10px;
+
+      top: 49px;
+      left: 29px;
+
+      border-bottom: 2px solid var(--brown-dark);
+      border-radius: 50%;
+    }
+
+    .teddy-blush {
+      position: absolute;
+
+      width: 12px;
+      height: 7px;
+
+      top: 43px;
+      left: 10px;
+
+      background: #e99aa7;
+      border-radius: 50%;
+
+      box-shadow: 43px 0 0 #e99aa7;
+      opacity: 0.7;
+    }
+
+    .teddy-bow {
+      position: absolute;
+
+      bottom: -5px;
+      left: 28px;
+
+      font-size: 24px;
+      z-index: 2;
+    }
+
+    .title-area h1 {
+      margin: 0;
+
+      font-size:
+        clamp(1.55rem, 4vw, 2.35rem);
+
+      text-shadow:
+        0 2px 3px rgba(120, 64, 86, 0.15);
+    }
+
+    .title-area p {
+      margin: 4px 0 0;
+      opacity: 0.94;
+      font-size: 0.95rem;
+    }
+
+    .score-badge {
+      background: rgba(255, 255, 255, 0.24);
+
+      border: 2px solid rgba(255, 255, 255, 0.55);
+
+      padding: 10px 18px;
+
+      border-radius: 999px;
+
+      font-weight: bold;
+
+      white-space: nowrap;
+
+      box-shadow:
+        0 4px 10px rgba(132, 67, 94, 0.12);
+    }
+
+    /* =========================================================
+       MAIN
+       ========================================================= */
+
+    .container {
+      width: min(1100px, calc(100% - 28px));
+
+      margin: 28px auto 70px;
+    }
+
+    /* =========================================================
+       INTRO CARD
+       ========================================================= */
+
+    .intro-card {
+      position: relative;
+
+      background: var(--white);
+
+      border:
+        2px solid var(--pink-light);
+
+      border-radius: var(--radius);
+
+      padding: 22px 25px;
+
+      margin-bottom: 25px;
+
+      box-shadow: var(--shadow);
+
+      text-align: center;
+
+      overflow: hidden;
+    }
+
+    .intro-card::before {
+      content: "🧸";
+      position: absolute;
+      left: 20px;
+      bottom: -7px;
+      font-size: 48px;
+      opacity: 0.18;
+    }
+
+    .intro-card::after {
+      content: "💕";
+      position: absolute;
+      right: 22px;
+      top: 12px;
+      font-size: 30px;
+      opacity: 0.25;
+    }
+
+    .intro-card h2 {
+      margin: 0 0 5px;
+
+      color: var(--pink-dark);
+
+      font-size: 1.45rem;
+    }
+
+    .intro-card p {
+      margin: 0;
+
+      color: var(--muted);
+    }
+
+    /* =========================================================
+       EXERCISE CARDS
+       ========================================================= */
+
+    .exercise {
+      background: var(--white);
+
+      border:
+        2px solid var(--pink-light);
+
+      border-radius: var(--radius);
+
+      margin-bottom: 26px;
+
+      box-shadow: var(--shadow);
+
+      overflow: hidden;
+    }
+
+    .exercise-header {
+      position: relative;
+
+      padding: 17px 20px;
+
+      display: flex;
+      align-items: center;
+
+      gap: 13px;
+
+      background:
+        linear-gradient(
+          90deg,
+          #fff0f6,
+          #fff7f1
+        );
+
+      border-bottom:
+        2px solid var(--pink-light);
+    }
+
+    .exercise-header::after {
+      content: "♡";
+      position: absolute;
+      right: 20px;
+      font-size: 40px;
+      color: var(--pink);
+      opacity: 0.18;
+    }
+
+    .exercise-number {
+      width: 48px;
+      height: 48px;
+
+      flex: 0 0 48px;
+
+      border-radius: 50%;
+
+      background:
+        linear-gradient(
+          135deg,
+          var(--pink),
+          var(--pink-dark)
+        );
+
+      color: white;
+
+      display: grid;
+      place-items: center;
+
+      font-weight: bold;
+      font-size: 1.2rem;
+
+      box-shadow:
+        0 4px 10px rgba(218, 95, 137, 0.25);
+
+      border: 3px solid white;
+    }
+
+    .exercise-header h2 {
+      margin: 0;
+      font-size: 1.25rem;
+      color: var(--brown-dark);
+    }
+
+    .exercise-header p {
+      margin: 2px 0 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .exercise-content {
+      padding: 22px;
+    }
+
+    /* =========================================================
+       INPUTS
+       ========================================================= */
+
+    .answer-input {
+      width: 72px;
+      height: 45px;
+
+      border:
+        2px solid var(--border);
+
+      border-radius: 12px;
+
+      text-align: center;
+
+      font-size: 1rem;
+
+      font-weight: bold;
+
+      color: var(--brown-dark);
+
+      background: #fffafd;
+
+      outline: none;
+
+      transition:
+        border-color 0.2s,
+        box-shadow 0.2s,
+        transform 0.2s;
+    }
+
+    .answer-input:focus {
+      border-color: var(--pink);
+
+      box-shadow:
+        0 0 0 4px rgba(245, 143, 177, 0.17);
+
+      transform: translateY(-1px);
+    }
+
+    .answer-input.correct {
+      border-color: var(--green);
+
+      background: var(--green-light);
+
+      color: #3b8b62;
+    }
+
+    .answer-input.incorrect {
+      border-color: var(--red);
+
+      background: var(--red-light);
+
+      color: #b95050;
+
+      animation: shake 0.25s ease;
+    }
+
+    .answer-input.prefilled {
+      background: #f8f3f5;
+      border-color: #e5dce0;
+      color: #8a777e;
+    }
+
+    @keyframes shake {
+      0%, 100% {
+        transform: translateX(0);
+      }
+
+      25% {
+        transform: translateX(-3px);
+      }
+
+      75% {
+        transform: translateX(3px);
+      }
+    }
+
+    /* =========================================================
+       EXERCISE 7
+       ========================================================= */
+
+    .visual-question {
+      margin-bottom: 30px;
+    }
+
+    .visual-question:last-child {
+      margin-bottom: 0;
+    }
+
+    .question-label {
+      font-weight: bold;
+
+      margin-bottom: 12px;
+
+      color: var(--pink-dark);
+    }
+
+    .counter-row {
+      display: flex;
+
+      flex-wrap: wrap;
+
+      gap: 10px;
+
+      margin-bottom: 16px;
+
+      padding: 16px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #fff5f8,
+          #fff9f3
+        );
+
+      border:
+        2px dashed #f0bfd0;
+
+      border-radius: 16px;
+    }
+
+    .counter-group {
+      display: flex;
+
+      gap: 5px;
+
+      align-items: center;
+
+      padding: 8px 10px;
+
+      background: white;
+
+      border-radius: 11px;
+
+      box-shadow:
+        0 3px 8px rgba(130, 81, 97, 0.07);
+    }
+
+    .counter {
+      width: 20px;
+      height: 20px;
+
+      border-radius: 50%;
+
+      background:
+        radial-gradient(
+          circle at 35% 30%,
+          #ffeef5,
+          #f5a0bb
+        );
+
+      border:
+        2px solid #e884a5;
+
+      display: inline-block;
+    }
+
+    .sentence {
+      display: flex;
+
+      flex-wrap: wrap;
+
+      align-items: center;
+
+      gap: 9px;
+
+      font-size: 1.05rem;
+
+      font-weight: 600;
+    }
+
+    /* =========================================================
+       MULTIPLE LISTS
+       ========================================================= */
+
+    .multiple-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+      gap: 16px;
+    }
+
+    .multiple-row {
+      position: relative;
+
+      padding: 17px;
+
+      border:
+        2px solid #f6dce5;
+
+      border-radius: 16px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #fffdfd,
+          #fff7fa
+        );
+    }
+
+    .multiple-row::after {
+      content: "🧸";
+
+      position: absolute;
+
+      right: 10px;
+      bottom: 8px;
+
+      font-size: 25px;
+
+      opacity: 0.12;
+    }
+
+    .multiple-title {
+      display: inline-flex;
+
+      align-items: center;
+
+      gap: 7px;
+
+      margin-bottom: 12px;
+
+      font-weight: bold;
+
+      color: var(--purple);
+    }
+
+    .number-pill {
+      display: inline-grid;
+
+      place-items: center;
+
+      min-width: 40px;
+
+      height: 34px;
+
+      padding: 0 9px;
+
+      border-radius: 11px;
+
+      background: var(--purple-light);
+
+      color: #7952a8;
+
+      font-weight: bold;
+
+      border: 1px solid #dfcdf1;
+    }
+
+    .number-sequence {
+      display: flex;
+
+      flex-wrap: wrap;
+
+      align-items: center;
+
+      gap: 7px;
+    }
+
+    .comma {
+      font-weight: bold;
+      color: var(--muted);
+    }
+
+    /* =========================================================
+       EXERCISE 9
+       ========================================================= */
+
+    .matching-intro {
+      padding: 13px 15px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #fff0f6,
+          #f9f0ff
+        );
+
+      border:
+        2px solid #f0d5e2;
+
+      border-radius: 14px;
+
+      margin-bottom: 18px;
+
+      color: var(--brown);
+    }
+
+    .card-pool {
+      display: flex;
+
+      flex-wrap: wrap;
+
+      justify-content: center;
+
+      gap: 11px;
+
+      padding: 17px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #fff7f9,
+          #fffaf4
+        );
+
+      border-radius: 16px;
+
+      margin-bottom: 20px;
+
+      border:
+        2px dashed #edbfd0;
+    }
+
+    .card-pool::before {
+      content: "🎀";
+
+      width: 100%;
+
+      text-align: center;
+
+      font-size: 18px;
+
+      margin-bottom: -3px;
+    }
+
+    .number-card {
+      width: 62px;
+      height: 52px;
+
+      display: grid;
+      place-items: center;
+
+      background: white;
+
+      border:
+        2px solid #e7bdcc;
+
+      border-radius: 13px;
+
+      color: var(--brown-dark);
+
+      font-weight: bold;
+
+      font-size: 1.1rem;
+
+      box-shadow:
+        0 4px 9px rgba(120, 72, 87, 0.08);
+
+      transition:
+        transform 0.2s,
+        box-shadow 0.2s;
+    }
+
+    .number-card:hover {
+      transform: translateY(-4px) rotate(-2deg);
+
+      box-shadow:
+        0 7px 14px rgba(120, 72, 87, 0.14);
+    }
+
+    .match-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+      gap: 14px;
+    }
+
+    .match-row {
+      display: grid;
+
+      grid-template-columns:
+        minmax(140px, 1fr) auto;
+
+      align-items: center;
+
+      gap: 15px;
+
+      padding: 15px;
+
+      border:
+        2px solid #f5dce5;
+
+      border-radius: 15px;
+
+      background: #fffdfd;
+    }
+
+    .match-label {
+      font-weight: bold;
+    }
+
+    .match-label span {
+      display: inline-block;
+
+      margin-left: 5px;
+
+      color: var(--pink-dark);
+
+      background: var(--pink-light);
+
+      padding: 2px 7px;
+
+      border-radius: 7px;
+    }
+
+    /* =========================================================
+       FEEDBACK
+       ========================================================= */
+
+    .input-wrapper {
+      position: relative;
+
+      display: inline-flex;
+
+      align-items: center;
+    }
+
+    .feedback-icon {
+      position: absolute;
+
+      right: -26px;
+
+      font-weight: bold;
+
+      opacity: 0;
+
+      transition: 0.2s;
+    }
+
+    .feedback-icon.show {
+      opacity: 1;
+    }
+
+    .feedback-icon.correct {
+      color: var(--green);
+    }
+
+    .feedback-icon.incorrect {
+      color: var(--red);
+    }
+
+    .question-feedback {
+      margin-top: 10px;
+
+      min-height: 24px;
+
+      font-size: 0.9rem;
+
+      font-weight: bold;
+    }
+
+    .question-feedback.good {
+      color: var(--green);
+    }
+
+    .question-feedback.bad {
+      color: var(--red);
+    }
+
+    /* =========================================================
+       CONTROLS
+       ========================================================= */
+
+    .controls {
+      position: sticky;
+
+      bottom: 15px;
+
+      z-index: 10;
+
+      display: flex;
+
+      justify-content: center;
+
+      gap: 12px;
+
+      margin-top: 30px;
+
+      padding: 14px;
+
+      background:
+        rgba(255, 247, 250, 0.94);
+
+      backdrop-filter: blur(10px);
+
+      border:
+        2px solid #f1d3de;
+
+      border-radius: 20px;
+
+      box-shadow:
+        0 9px 30px rgba(118, 70, 87, 0.15);
+    }
+
+    .btn {
+      border: 0;
+
+      border-radius: 14px;
+
+      padding: 13px 25px;
+
+      cursor: pointer;
+
+      font-weight: bold;
+
+      transition:
+        transform 0.2s,
+        box-shadow 0.2s;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+    }
+
+    .btn-check {
+      background:
+        linear-gradient(
+          135deg,
+          #f58fb1,
+          #dc6c95
+        );
+
+      color: white;
+
+      box-shadow:
+        0 5px 13px rgba(217, 95, 137, 0.28);
+    }
+
+    .btn-reset {
+      background: #f3e9ed;
+
+      color: #725c65;
+    }
+
+    /* =========================================================
+       RESULT PANEL
+       ========================================================= */
+
+    .result-panel {
+      display: none;
+
+      position: relative;
+
+      margin-top: 18px;
+
+      padding: 24px;
+
+      border-radius: 20px;
+
+      text-align: center;
+
+      background:
+        linear-gradient(
+          135deg,
+          #fff0f6,
+          #fff8ee
+        );
+
+      border:
+        2px solid #f1c2d3;
+
+      overflow: hidden;
+    }
+
+    .result-panel::before {
+      content: "🧸";
+
+      position: absolute;
+
+      left: 22px;
+      bottom: -8px;
+
+      font-size: 60px;
+
+      opacity: 0.16;
+    }
+
+    .result-panel::after {
+      content: "💕";
+
+      position: absolute;
+
+      right: 25px;
+      top: 10px;
+
+      font-size: 38px;
+
+      opacity: 0.22;
+    }
+
+    .result-panel.show {
+      display: block;
+
+      animation:
+        popIn 0.35s ease;
+    }
+
+    .result-score {
+      font-size: 2.1rem;
+
+      font-weight: bold;
+
+      color: var(--pink-dark);
+    }
+
+    .result-message {
+      margin-top: 5px;
+
+      color: var(--muted);
+    }
+
+    @keyframes popIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.98);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* =========================================================
+       RESPONSIVE
+       ========================================================= */
+
+    @media (max-width: 760px) {
+
+      .topbar-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .score-badge {
+        align-self: stretch;
+        text-align: center;
+      }
+
+      .multiple-grid,
+      .match-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .exercise-content {
+        padding: 16px;
+      }
+
+      .answer-input {
+        width: 62px;
+      }
+    }
+
+    @media (max-width: 500px) {
+
+      .container {
+        width: calc(100% - 16px);
+        margin-top: 16px;
+      }
+
+      .title-area {
+        align-items: flex-start;
+      }
+
+      .teddy {
+        width: 62px;
+        height: 62px;
+        flex-basis: 62px;
+      }
+
+      .teddy::before,
+      .teddy::after {
+        width: 24px;
+        height: 24px;
+      }
+
+      .teddy-eyes {
+        top: 25px;
+        left: 16px;
+        box-shadow: 24px 0 0 var(--brown-dark);
+      }
+
+      .teddy-nose {
+        top: 35px;
+        left: 25px;
+      }
+
+      .teddy-mouth {
+        top: 42px;
+        left: 24px;
+      }
+
+      .teddy-blush {
+        top: 37px;
+      }
+
+      .sentence {
+        font-size: 0.95rem;
+      }
+
+      .match-row {
+        grid-template-columns: 1fr;
+      }
+
+      .controls {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
+
+      .decor {
+        display: none;
+      }
+    }
+  </style>
+  <style>
+.ndx-navbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;width:100%;padding:14px 20px;background:#241b2e;box-shadow:0 4px 14px rgba(0,0,0,.18);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;box-sizing:border-box}
+.ndx-navbar *{box-sizing:border-box}
+.ndx-home{display:inline-flex;align-items:center;gap:7px;color:#fff;text-decoration:none;font-weight:800;font-size:14px;background:rgba(255,255,255,.12);padding:10px 14px;border-radius:12px;transition:background .15s ease,transform .15s ease}
+.ndx-home:hover{background:rgba(255,255,255,.22);transform:translateY(-1px)}
+.ndx-nav-buttons{display:flex;gap:10px;flex-wrap:wrap;margin-left:auto}
+.ndx-btn{display:inline-flex;align-items:center;padding:12px 18px;border-radius:14px;font-weight:900;font-size:14px;text-decoration:none;white-space:nowrap;transition:transform .15s ease,box-shadow .15s ease}
+.ndx-btn:hover{transform:translateY(-2px)}
+.ndx-back{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.28)}
+.ndx-back:hover{background:rgba(255,255,255,.2)}
+.ndx-next{background:linear-gradient(135deg,#ffb648,#ff8f5c);color:#3a2410;box-shadow:0 6px 16px rgba(255,140,70,.35)}
+.ndx-navbar.ndx-bottom{margin-top:32px}
+@media(max-width:600px){.ndx-navbar{padding:12px 14px}.ndx-home span{display:none}.ndx-btn{padding:11px 14px;font-size:13px}}
+  </style>
+</head>
+
+<body>
+<nav class="ndx-navbar" aria-label="Lesson navigation">
+  <a class="ndx-home" href="../../" title="Home">🏠<span>Home</span></a>
+  <div class="ndx-nav-buttons">
+    <a class="ndx-btn ndx-back" href="../warmup/">← Warm-Up</a>
+    <a class="ndx-btn ndx-next" href="../../primes/warmup/">Prime Warm-Up →</a>
+  </div>
+</nav>
+
+  <!-- Cute floating decorations -->
+  <div class="decor one">♡</div>
+  <div class="decor two">🌸</div>
+  <div class="decor three">✦</div>
+  <div class="decor four">♡</div>
+
+
+  <!-- =======================================================
+       HEADER
+       ======================================================== -->
+
+  <header class="topbar">
+
+    <div class="topbar-inner">
+
+      <div class="title-area">
+
+        <!-- CSS Teddy Bear -->
+        <div class="teddy" aria-hidden="true">
+          <div class="teddy-eyes"></div>
+          <div class="teddy-nose"></div>
+          <div class="teddy-mouth"></div>
+          <div class="teddy-blush"></div>
+          <div class="teddy-bow">🎀</div>
+        </div>
+
+        <div>
+          <h1>Imara's Multiples Adventure 🧸💕</h1>
+          <p>Exercises 7–10 • Learn, play & become a multiples superstar!</p>
+        </div>
+
+      </div>
+
+      <div class="score-badge" id="topScore">
+        Score: —
+      </div>
+
+    </div>
+
+  </header>
+
+
+  <main class="container">
+
+    <!-- =====================================================
+         INTRO
+         ====================================================== -->
+
+    <section class="intro-card">
+
+      <h2>🧸 Welcome to Teddy's Math Club! 🌸</h2>
+
+      <p>
+        Complete the multiples, match the numbers, and then
+        click <strong>Check Answers</strong> to see your score.
+        You can do it! 💕
+      </p>
+
+    </section>
+
+
+    <!-- =====================================================
+         EXERCISE 7
+         ====================================================== -->
+
+    <section class="exercise" id="exercise7">
+
+      <div class="exercise-header">
+
+        <div class="exercise-number">
+          7
+        </div>
+
+        <div>
+          <h2>🌸 Multiples of 3</h2>
+          <p>Look at the groups and complete the number sentences.</p>
+        </div>
+
+      </div>
+
+
+      <div class="exercise-content">
+
+        <!-- Q7A -->
+
+        <div
+          class="visual-question"
+          data-question="q7a"
+        >
+
+          <div class="question-label">
+            🎀 A. Complete the multiples of 3:
+          </div>
+
+          <div class="counter-row">
+
+            <div class="counter-group">
+              <span class="counter"></span>
+              <span class="counter"></span>
+              <span class="counter"></span>
+            </div>
+
+            <div class="counter-group">
+              <span class="counter"></span>
+              <span class="counter"></span>
+              <span class="counter"></span>
+            </div>
+
+            <div class="counter-group">
+              <span class="counter"></span>
+              <span class="counter"></span>
+              <span class="counter"></span>
+            </div>
+
+            <div class="counter-group">
+              <span class="counter"></span>
+              <span class="counter"></span>
+              <span class="counter"></span>
+            </div>
+
+            <div class="counter-group">
+              <span class="counter"></span>
+              <span class="counter"></span>
+              <span class="counter"></span>
+            </div>
+
+          </div>
+
+
+          <div class="sentence">
+
+            3,
+
+            <span class="input-wrapper">
+              <input
+                class="answer-input"
+                data-answer="6"
+                aria-label="Exercise 7A answer 2"
+              />
+              <span class="feedback-icon"></span>
+            </span>,
+
+            <span class="input-wrapper">
+              <input
+                class="answer-input"
+                data-answer="9"
+                aria-label="Exercise 7A answer 3"
+              />
+              <span class="feedback-icon"></span>
+            </span>,
+
+            <span class="input-wrapper">
+              <input
+                class="answer-input"
+                data-answer="12"
+                aria-label="Exercise 7A answer 4"
+              />
+              <span class="feedback-icon"></span>
+            </span>,
+
+            <span class="input-wrapper">
+              <input
+                class="answer-input"
+                data-answer="15"
+                aria-label="Exercise 7A answer 5"
+              />
+              <span class="feedback-icon"></span>
+            </span>
+
+          </div>
+
+          <div class="question-feedback"></div>
+
+        </div>
+
+
+        <!-- Q7B -->
+
+        <div
+          class="visual-question"
+          data-question="q7b"
+        >
+
+          <div class="question-label">
+            🎀 B. Complete the next multiples of 3:
+          </div>
+
+          <div class="counter-row">
+
+            <div class="counter-group">
+              <span class="counter"></span>
+              <span class="counter"></span>
+              <span class="counter"></span>
+            </div>
+
+            <div class="counter-group">
+              <span class="counter"></span>
+              <span class="counter"></span>
+              <span class="counter"></span>
+            </div>
+
+            <div class="counter-group">
+              <span class="counter"></span>
+              <span class="counter"></span>
+              <span class="counter"></span>
+            </div>
+
+            <div class="counter-group">
+              <span class="counter"></span>
+              <span class="counter"></span>
+              <span class="counter"></span>
+            </div>
+
+            <div class="counter-group">
+              <span class="counter"></span>
+              <span class="counter"></span>
+              <span class="counter"></span>
+            </div>
+
+          </div>
+
+
+          <div class="sentence">
+
+            3,
+
+            <span class="input-wrapper">
+              <input
+                class="answer-input"
+                data-answer="6"
+                aria-label="Exercise 7B answer 2"
+              />
+              <span class="feedback-icon"></span>
+            </span>,
+
+            <span class="input-wrapper">
+              <input
+                class="answer-input"
+                data-answer="9"
+                aria-label="Exercise 7B answer 3"
+              />
+              <span class="feedback-icon"></span>
+            </span>,
+
+            <span class="input-wrapper">
+              <input
+                class="answer-input"
+                data-answer="12"
+                aria-label="Exercise 7B answer 4"
+              />
+              <span class="feedback-icon"></span>
+            </span>,
+
+            <span class="input-wrapper">
+              <input
+                class="answer-input"
+                data-answer="15"
+                aria-label="Exercise 7B answer 5"
+              />
+              <span class="feedback-icon"></span>
+            </span>
+
+          </div>
+
+          <div class="question-feedback"></div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         EXERCISE 8
+         ====================================================== -->
+
+    <section class="exercise" id="exercise8">
+
+      <div class="exercise-header">
+
+        <div class="exercise-number">
+          8
+        </div>
+
+        <div>
+          <h2>🧸 Teddy's Multiples</h2>
+          <p>Write the first five multiples of each number.</p>
+        </div>
+
+      </div>
+
+
+      <div class="exercise-content">
+
+        <div class="multiple-grid">
+
+
+          <!-- Q8A -->
+
+          <div
+            class="multiple-row"
+            data-question="q8a"
+          >
+
+            <div class="multiple-title">
+              <span class="number-pill">4</span>
+              multiples
+            </div>
+
+            <div class="number-sequence">
+
+              <input
+                class="answer-input prefilled"
+                value="4"
+                disabled
+              />
+
+              <span class="comma">,</span>
+
+              <input
+                class="answer-input prefilled"
+                value="8"
+                disabled
+              />
+
+              <span class="comma">,</span>
+
+              <input
+                class="answer-input"
+                data-answer="12"
+              />
+
+              <span class="comma">,</span>
+
+              <input
+                class="answer-input"
+                data-answer="16"
+              />
+
+              <span class="comma">,</span>
+
+              <input
+                class="answer-input"
+                data-answer="20"
+              />
+
+            </div>
+
+            <div class="question-feedback"></div>
+
+          </div>
+
+
+          <!-- Q8B -->
+
+          <div
+            class="multiple-row"
+            data-question="q8b"
+          >
+
+            <div class="multiple-title">
+              <span class="number-pill">6</span>
+              multiples
+            </div>
+
+            <div class="number-sequence">
+
+              <input
+                class="answer-input prefilled"
+                value="6"
+                disabled
+              />
+
+              <span class="comma">,</span>
+
+              <input
+                class="answer-input"
+                data-answer="12"
+              />
+
+              <span class="comma">,</span>
+
+              <input
+                class="answer-input"
+                data-answer="18"
+              />
+
+              <span class="comma">,</span>
+
+              <input
+                class="answer-input"
+                data-answer="24"
+              />
+
+              <span class="comma">,</span>
+
+              <input
+                class="answer-input"
+                data-answer="30"
+              />
+
+            </div>
+
+            <div class="question-feedback"></div>
+
+          </div>
+
+
+          <!-- Q8C -->
+
+          <div
+            class="multiple-row"
+            data-question="q8c"
+          >
+
+            <div class="multiple-title">
+              <span class="number-pill">12</span>
+              multiples
+            </div>
+
+            <div class="number-sequence">
+
+              <input
+                class="answer-input"
+                data-answer="12"
+              />
+
+              <span class="comma">,</span>
+
+              <input
+                class="answer-input"
+                data-answer="24"
+              />
+
+              <span class="comma">,</span>
+
+              <input
+                class="answer-input"
+                data-answer="36"
+              />
+
+              <span class="comma">,</span>
+
+              <input
+                class="answer-input"
+                data-answer="48"
+              />
+
+              <span class="comma">,</span>
+
+              <input
+                class="answer-input"
+                data-answer="60"
+              />
+
+            </div>
+
+            <div class="question-feedback"></div>
+
+          </div>
+
+
+          <!-- Q8D -->
+
+          <div
+            class="multiple-row"
+            data-question="q8d"
+          >
+
+            <div class="multiple-title">
+              <span class="number-pill">25</span>
+              multiples
+            </div>
+
+            <div class="number-sequence">
+
+              <input
+                class="answer-input"
+                data-answer="25"
+              />
+
+              <span class="comma">,</span>
+
+              <input
+                class="answer-input"
+                data-answer="50"
+              />
+
+              <span class="comma">,</span>
+
+              <input
+                class="answer-input"
+                data-answer="75"
+              />
+
+              <span class="comma">,</span>
+
+              <input
+                class="answer-input"
+                data-answer="100"
+              />
+
+              <span class="comma">,</span>
+
+              <input
+                class="answer-input"
+                data-answer="125"
+              />
+
+            </div>
+
+            <div class="question-feedback"></div>
+
+          </div>
+
+
+          <!-- Q8E -->
+
+          <div
+            class="multiple-row"
+            data-question="q8e"
+          >
+
+            <div class="multiple-title">
+              <span class="number-pill">45</span>
+              multiples
+            </div>
+
+            <div class="number-sequence">
+
+              <input
+                class="answer-input"
+                data-answer="45"
+              />
+
+              <span class="comma">,</span>
+
+              <input
+                class="answer-input"
+                data-answer="90"
+              />
+
+              <span class="comma">,</span>
+
+              <input
+                class="answer-input"
+                data-answer="135"
+              />
+
+              <span class="comma">,</span>
+
+              <input
+                class="answer-input"
+                data-answer="180"
+              />
+
+              <span class="comma">,</span>
+
+              <input
+                class="answer-input"
+                data-answer="225"
+              />
+
+            </div>
+
+            <div class="question-feedback"></div>
+
+          </div>
+
+
+          <!-- Q8F -->
+
+          <div
+            class="multiple-row"
+            data-question="q8f"
+          >
+
+            <div class="multiple-title">
+              <span class="number-pill">60</span>
+              multiples
+            </div>
+
+            <div class="number-sequence">
+
+              <input
+                class="answer-input"
+                data-answer="60"
+              />
+
+              <span class="comma">,</span>
+
+              <input
+                class="answer-input"
+                data-answer="120"
+              />
+
+              <span class="comma">,</span>
+
+              <input
+                class="answer-input"
+                data-answer="180"
+              />
+
+              <span class="comma">,</span>
+
+              <input
+                class="answer-input"
+                data-answer="240"
+              />
+
+              <span class="comma">,</span>
+
+              <input
+                class="answer-input"
+                data-answer="300"
+              />
+
+            </div>
+
+            <div class="question-feedback"></div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         EXERCISE 9
+         ====================================================== -->
+
+    <section class="exercise" id="exercise9">
+
+      <div class="exercise-header">
+
+        <div class="exercise-number">
+          9
+        </div>
+
+        <div>
+          <h2>🎀 Match Teddy's Number Cards</h2>
+          <p>Choose a number card that belongs to each category.</p>
+        </div>
+
+      </div>
+
+
+      <div class="exercise-content">
+
+        <div class="matching-intro">
+          🧸 <strong>Teddy tip:</strong>
+          A number can belong to more than one group!
+          For example, <strong>48</strong> is a multiple of both
+          3 and 12. 💕
+        </div>
+
+
+        <div class="card-pool">
+
+          <div class="number-card">6</div>
+          <div class="number-card">14</div>
+          <div class="number-card">15</div>
+          <div class="number-card">48</div>
+          <div class="number-card">45</div>
+          <div class="number-card">60</div>
+          <div class="number-card">49</div>
+          <div class="number-card">30</div>
+
+        </div>
+
+
+        <div class="match-grid">
+
+
+          <!-- Q9A -->
+
+          <div
+            class="match-row"
+            data-question="q9a"
+          >
+
+            <div class="match-label">
+              🌷 A. Multiple of
+              <span>3</span>
+            </div>
+
+            <div class="input-wrapper">
+
+              <input
+                class="answer-input"
+                data-valid="6,15,45,30,48,60"
+                placeholder="?"
+                aria-label="Exercise 9A"
+              />
+
+              <span class="feedback-icon"></span>
+
+            </div>
+
+            <div class="question-feedback"></div>
+
+          </div>
+
+
+          <!-- Q9B -->
+
+          <div
+            class="match-row"
+            data-question="q9b"
+          >
+
+            <div class="match-label">
+              🌸 B. Multiple of
+              <span>7</span>
+            </div>
+
+            <div class="input-wrapper">
+
+              <input
+                class="answer-input"
+                data-valid="14,49"
+                placeholder="?"
+                aria-label="Exercise 9B"
+              />
+
+              <span class="feedback-icon"></span>
+
+            </div>
+
+            <div class="question-feedback"></div>
+
+          </div>
+
+
+          <!-- Q9C -->
+
+          <div
+            class="match-row"
+            data-question="q9c"
+          >
+
+            <div class="match-label">
+              💕 C. Multiple of
+              <span>12</span>
+            </div>
+
+            <div class="input-wrapper">
+
+              <input
+                class="answer-input"
+                data-valid="48,60"
+                placeholder="?"
+                aria-label="Exercise 9C"
+              />
+
+              <span class="feedback-icon"></span>
+
+            </div>
+
+            <div class="question-feedback"></div>
+
+          </div>
+
+
+          <!-- Q9D -->
+
+          <div
+            class="match-row"
+            data-question="q9d"
+          >
+
+            <div class="match-label">
+              🎀 D. Multiple of
+              <span>15</span>
+            </div>
+
+            <div class="input-wrapper">
+
+              <input
+                class="answer-input"
+                data-valid="15,45,60,30"
+                placeholder="?"
+                aria-label="Exercise 9D"
+              />
+
+              <span class="feedback-icon"></span>
+
+            </div>
+
+            <div class="question-feedback"></div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         EXERCISE 10
+         ====================================================== -->
+
+    <section class="exercise" id="exercise10">
+
+      <div class="exercise-header">
+
+        <div class="exercise-number">
+          10
+        </div>
+
+        <div>
+          <h2>🧸 More Multiples with Teddy!</h2>
+          <p>Write the first five multiples of each number.</p>
+        </div>
+
+      </div>
+
+
+      <div class="exercise-content">
+
+        <div class="multiple-grid">
+
+
+          <!-- Q10A -->
+
+          <div
+            class="multiple-row"
+            data-question="q10a"
+          >
+
+            <div class="multiple-title">
+              <span class="number-pill">8</span>
+              multiples
+            </div>
+
+            <div class="number-sequence">
+
+              <input
+                class="answer-input"
+                data-answer="8"
+              />
+
+              <span class="comma">,</span>
+
+              <input
+                class="answer-input"
+                data-answer="16"
+              />
+
+              <span class="comma">,</span>
+
+              <input
+                class="answer-input"
+                data-answer="24"
+              />
+
+              <span class="comma">,</span>
+
+              <input
+                class="answer-input"
+                data-answer="32"
+              />
+
+              <span class="comma">,</span>
+
+              <input
+                class="answer-input"
+                data-answer="40"
+              />
+
+            </div>
+
+            <div class="question-feedback"></div>
+
+          </div>
+
+
+          <!-- Q10B -->
+
+          <div
+            class="multiple-row"
+            data-question="q10b"
+          >
+
+            <div class="multiple-title">
+              <span class="number-pill">16</span>
+              multiples
+            </div>
+
+            <div class="number-sequence">
+
+              <input
+                class="answer-input"
+                data-answer="16"
+              />
+
+              <span class="comma">,</span>
+
+              <input
+                class="answer-input"
+                data-answer="32"
+              />
+
+              <span class="comma">,</span>
+
+              <input
+                class="answer-input"
+                data-answer="48"
+              />
+
+              <span class="comma">,</span>
+
+              <input
+                class="answer-input"
+                data-answer="64"
+              />
+
+              <span class="comma">,</span>
+
+              <input
+                class="answer-input"
+                data-answer="80"
+              />
+
+            </div>
+
+            <div class="question-feedback"></div>
+
+          </div>
+
+
+          <!-- Q10C -->
+
+          <div
+            class="multiple-row"
+            data-question="q10c"
+          >
+
+            <div class="multiple-title">
+              <span class="number-pill">24</span>
+              multiples
+            </div>
+
+            <div class="number-sequence">
+
+              <input
+                class="answer-input"
+                data-answer="24"
+              />
+
+              <span class="comma">,</span>
+
+              <input
+                class="answer-input"
+                data-answer="48"
+              />
+
+              <span class="comma">,</span>
+
+              <input
+                class="answer-input"
+                data-answer="72"
+              />
+
+              <span class="comma">,</span>
+
+              <input
+                class="answer-input"
+                data-answer="96"
+              />
+
+              <span class="comma">,</span>
+
+              <input
+                class="answer-input"
+                data-answer="120"
+              />
+
+            </div>
+
+            <div class="question-feedback"></div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         RESULT
+         ====================================================== -->
+
+    <section
+      class="result-panel"
+      id="resultPanel"
+    >
+
+      <div>🎉 Teddy says...</div>
+
+      <div
+        class="result-score"
+        id="resultScore"
+      >
+        0 / 0
+      </div>
+
+      <div
+        class="result-message"
+        id="resultMessage"
+      ></div>
+
+    </section>
+
+
+    <!-- =====================================================
+         BUTTONS
+         ====================================================== -->
+
+    <div class="controls">
+
+      <button
+        class="btn btn-check"
+        id="checkBtn"
+      >
+        🧸 ✓ Check Answers
+      </button>
+
+      <button
+        class="btn btn-reset"
+        id="resetBtn"
+      >
+        🌸 ↻ Try Again
+      </button>
+
+    </div>
+
+  </main>
+
+
+  <script>
+    /* =========================================================
+       MULTIPLES ADVENTURE
+       Interactive validation
+       ========================================================= */
+
+    document.addEventListener("DOMContentLoaded", () => {
+
+      const checkButton =
+        document.getElementById("checkBtn");
+
+      const resetButton =
+        document.getElementById("resetBtn");
+
+      const resultPanel =
+        document.getElementById("resultPanel");
+
+      const resultScore =
+        document.getElementById("resultScore");
+
+      const resultMessage =
+        document.getElementById("resultMessage");
+
+      const topScore =
+        document.getElementById("topScore");
+
+
+      /* -------------------------------------------------------
+         Normalize entered values
+         ------------------------------------------------------- */
+
+      function normalize(value) {
+        return value
+          .trim()
+          .replace(/\s+/g, "");
+      }
+
+
+      /* -------------------------------------------------------
+         Add visual feedback to an input
+         ------------------------------------------------------- */
+
+      function setInputState(input, correct) {
+
+        input.classList.remove(
+          "correct",
+          "incorrect"
+        );
+
+        const wrapper =
+          input.closest(".input-wrapper");
+
+        const icon =
+          wrapper
+            ? wrapper.querySelector(".feedback-icon")
+            : null;
+
+
+        if (correct) {
+
+          input.classList.add("correct");
+
+          if (icon) {
+
+            icon.textContent = "✓";
+
+            icon.className =
+              "feedback-icon correct show";
+          }
+
+        } else {
+
+          input.classList.add("incorrect");
+
+          if (icon) {
+
+            icon.textContent = "♡";
+
+            icon.className =
+              "feedback-icon incorrect show";
+          }
+        }
+      }
+
+
+      /* -------------------------------------------------------
+         Check sequence-style questions
+         ------------------------------------------------------- */
+
+      function checkSequenceQuestion(
+        questionElement
+      ) {
+
+        const inputs =
+          Array.from(
+            questionElement.querySelectorAll(
+              "input.answer-input:not(.prefilled)"
+            )
+          );
+
+        let correctCount = 0;
+
+
+        inputs.forEach(input => {
+
+          const expected =
+            normalize(
+              input.dataset.answer || ""
+            );
+
+          const entered =
+            normalize(input.value);
+
+
+          const correct =
+            entered !== "" &&
+            entered === expected;
+
+
+          setInputState(
+            input,
+            correct
+          );
+
+
+          if (correct) {
+            correctCount++;
+          }
+
+        });
+
+
+        const feedback =
+          questionElement.querySelector(
+            ".question-feedback"
+          );
+
+
+        if (
+          correctCount === inputs.length
+        ) {
+
+          feedback.textContent =
+            "✓ Perfect! Teddy is so proud of you! 🧸💕";
+
+          feedback.className =
+            "question-feedback good";
+
+        } else {
+
+          feedback.textContent =
+            `${correctCount} of ${inputs.length} correct — keep trying! 🌸`;
+
+          feedback.className =
+            "question-feedback bad";
+        }
+
+
+        return {
+          correct: correctCount,
+          total: inputs.length
+        };
+      }
+
+
+      /* -------------------------------------------------------
+         Check Exercise 9 matching questions
+         ------------------------------------------------------- */
+
+      function checkMatchingQuestion(
+        questionElement
+      ) {
+
+        const input =
+          questionElement.querySelector(
+            "input.answer-input"
+          );
+
+
+        const entered =
+          normalize(input.value);
+
+
+        const validAnswers =
+          (input.dataset.valid || "")
+            .split(",")
+            .map(normalize);
+
+
+        const correct =
+          entered !== "" &&
+          validAnswers.includes(entered);
+
+
+        setInputState(
+          input,
+          correct
+        );
+
+
+        const feedback =
+          questionElement.querySelector(
+            ".question-feedback"
+          );
+
+
+        if (correct) {
+
+          feedback.textContent =
+            "✓ Great match! You found one! 🧸✨";
+
+          feedback.className =
+            "question-feedback good";
+
+        } else {
+
+          feedback.textContent =
+            "Try another number card. 💕";
+
+          feedback.className =
+            "question-feedback bad";
+        }
+
+
+        return {
+          correct: correct ? 1 : 0,
+          total: 1
+        };
+      }
+
+
+      /* -------------------------------------------------------
+         Check ALL answers
+         ------------------------------------------------------- */
+
+      function checkAnswers() {
+
+        let totalCorrect = 0;
+        let totalQuestions = 0;
+
+
+        /*
+         * Exercises 7, 8 and 10
+         */
+
+        document
+          .querySelectorAll(
+            "#exercise7 .visual-question, " +
+            "#exercise8 .multiple-row, " +
+            "#exercise10 .multiple-row"
+          )
+          .forEach(question => {
+
+            const result =
+              checkSequenceQuestion(
+                question
+              );
+
+            totalCorrect +=
+              result.correct;
+
+            totalQuestions +=
+              result.total;
+          });
+
+
+        /*
+         * Exercise 9
+         */
+
+        document
+          .querySelectorAll(
+            "#exercise9 .match-row"
+          )
+          .forEach(question => {
+
+            const result =
+              checkMatchingQuestion(
+                question
+              );
+
+            totalCorrect +=
+              result.correct;
+
+            totalQuestions +=
+              result.total;
+          });
+
+
+        /*
+         * Calculate percentage
+         */
+
+        const percentage =
+          Math.round(
+            (totalCorrect / totalQuestions) * 100
+          );
+
+
+        /*
+         * Update score
+         */
+
+        resultScore.textContent =
+          `${totalCorrect} / ${totalQuestions}`;
+
+        topScore.textContent =
+          `💕 ${totalCorrect}/${totalQuestions}`;
+
+
+        /*
+         * Friendly Teddy feedback
+         */
+
+        if (percentage === 100) {
+
+          resultMessage.textContent =
+            "🌟 Well done, Imara! You got everything right! Teddy is doing a happy dance! 🧸🎀";
+
+        } else if (percentage >= 80) {
+
+          resultMessage.textContent =
+            "👏 Excellent work, Imara! You're becoming a multiples superstar! 🌸";
+
+        } else if (percentage >= 60) {
+
+          resultMessage.textContent =
+            "😊 Good job, Imara! Teddy says you're getting really close! Keep practicing! 💕";
+
+        } else {
+
+          resultMessage.textContent =
+            "💪 Don't give up, Imara! Teddy believes in you. Look for the number patterns and try again! 🧸";
+        }
+
+
+        resultPanel.classList.add("show");
+
+
+        /*
+         * Scroll to result
+         */
+
+        resultPanel.scrollIntoView({
+          behavior: "smooth",
+          block: "center"
+        });
+      }
+
+
+      /* -------------------------------------------------------
+         Reset activity
+         ------------------------------------------------------- */
+
+      function resetActivity() {
+
+        /*
+         * Clear editable inputs
+         */
+
+        document
+          .querySelectorAll(
+            "input.answer-input:not(.prefilled)"
+          )
+          .forEach(input => {
+
+            input.value = "";
+
+            input.classList.remove(
+              "correct",
+              "incorrect"
+            );
+
+
+            const wrapper =
+              input.closest(
+                ".input-wrapper"
+              );
+
+
+            const icon =
+              wrapper
+                ? wrapper.querySelector(
+                    ".feedback-icon"
+                  )
+                : null;
+
+
+            if (icon) {
+
+              icon.textContent = "";
+
+              icon.className =
+                "feedback-icon";
+            }
+
+          });
+
+
+        /*
+         * Clear feedback messages
+         */
+
+        document
+          .querySelectorAll(
+            ".question-feedback"
+          )
+          .forEach(feedback => {
+
+            feedback.textContent = "";
+
+            feedback.className =
+              "question-feedback";
+          });
+
+
+        /*
+         * Reset score
+         */
+
+        topScore.textContent =
+          "Score: —";
+
+        resultPanel.classList.remove(
+          "show"
+        );
+
+
+        /*
+         * Scroll back to top
+         */
+
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth"
+        });
+      }
+
+
+      /* -------------------------------------------------------
+         Button events
+         ------------------------------------------------------- */
+
+      checkButton.addEventListener(
+        "click",
+        checkAnswers
+      );
+
+      resetButton.addEventListener(
+        "click",
+        resetActivity
+      );
+
+
+      /* -------------------------------------------------------
+         Pressing Enter checks the activity
+         ------------------------------------------------------- */
+
+      document.addEventListener(
+        "keydown",
+        event => {
+
+          if (
+            event.key === "Enter" &&
+            event.target.matches(
+              "input.answer-input"
+            )
+          ) {
+
+            checkAnswers();
+          }
+
+        }
+      );
+
+    });
+  </script>
+
+<nav class="ndx-navbar ndx-bottom" aria-label="Lesson navigation">
+  <a class="ndx-home" href="../../" title="Home">🏠<span>Home</span></a>
+  <div class="ndx-nav-buttons">
+    <a class="ndx-btn ndx-back" href="../warmup/">← Warm-Up</a>
+    <a class="ndx-btn ndx-next" href="../../primes/warmup/">Prime Warm-Up →</a>
+  </div>
+</nav>
+</body>
+</html>

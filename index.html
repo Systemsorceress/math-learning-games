@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Number Detective — Class 9 Maths</title>
+<style>
+  :root{
+    --cream:#f7f3ea;
+    --paper:#fffdf8;
+    --ink:#263340;
+    --muted:#6b7480;
+    --line:rgba(38,51,64,.10);
+    --shadow:0 18px 45px rgba(38,51,64,.10);
+
+    --blue:#3d6fd9;
+    --blue-light:#e8eefc;
+    --purple:#8b5fd9;
+    --purple-light:#f0eafc;
+    --amber:#d99b1f;
+    --amber-light:#fbf1dd;
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%;background:var(--cream);color:var(--ink)}
+  body{
+    font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+    overflow-x:hidden;
+  }
+  body:before{
+    content:"";position:fixed;inset:0;pointer-events:none;opacity:.3;
+    background-image:radial-gradient(rgba(38,51,64,.12) 1px,transparent 1px);
+    background-size:28px 28px;
+  }
+
+  a{color:inherit}
+
+  .dashboard{
+    width:min(760px,calc(100% - 32px));
+    margin:auto;
+    padding:48px 0 60px;
+  }
+
+  .hero{
+    text-align:center;
+    margin-bottom:40px;
+  }
+  .eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:999px;
+    padding:8px 16px;
+    font-size:13px;
+    font-weight:800;
+    color:var(--muted);
+    letter-spacing:.02em;
+    box-shadow:var(--shadow);
+  }
+  .hero h1{
+    margin:16px 0 0;
+    font-size:clamp(34px,7vw,52px);
+    letter-spacing:-.03em;
+    font-weight:900;
+  }
+  .hero-sub{
+    margin:10px 0 0;
+    font-size:16px;
+    font-weight:700;
+    color:var(--muted);
+  }
+
+  .missions{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  }
+
+  .connector{
+    width:2px;
+    height:34px;
+    background:repeating-linear-gradient(to bottom,var(--line) 0 6px,transparent 6px 12px);
+    margin:2px 0;
+  }
+
+  .mission{
+    width:100%;
+    background:rgba(255,253,248,.9);
+    border:1px solid rgba(255,255,255,.95);
+    box-shadow:var(--shadow);
+    backdrop-filter:blur(18px);
+    border-radius:24px;
+    padding:26px 26px 24px;
+  }
+
+  .mission-head{
+    display:flex;
+    align-items:flex-start;
+    gap:16px;
+    margin-bottom:20px;
+  }
+
+  .mission-badge{
+    flex:0 0 48px;
+    width:48px;
+    height:48px;
+    border-radius:14px;
+    display:grid;
+    place-items:center;
+    font-size:20px;
+    font-weight:900;
+    color:#fff;
+  }
+
+  .mission-blue .mission-badge{background:var(--blue)}
+  .mission-purple .mission-badge{background:var(--purple)}
+  .mission-amber .mission-badge{background:var(--amber)}
+
+  .mission-tag{
+    font-size:11px;
+    font-weight:950;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    margin-bottom:4px;
+  }
+  .mission-blue .mission-tag{color:var(--blue)}
+  .mission-purple .mission-tag{color:var(--purple)}
+  .mission-amber .mission-tag{color:var(--amber)}
+
+  .mission-head h2{
+    margin:0;
+    font-size:24px;
+    letter-spacing:-.02em;
+  }
+  .mission-head p{
+    margin:4px 0 0;
+    font-size:14px;
+    font-weight:600;
+    color:var(--muted);
+  }
+
+  .mission-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+  }
+  .mission-actions.single{
+    grid-template-columns:1fr;
+  }
+
+  .mission-btn{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    text-decoration:none;
+    min-height:60px;
+    padding:14px 16px;
+    border-radius:16px;
+    font-size:15px;
+    font-weight:900;
+    line-height:1.3;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .mission-btn:hover{transform:translateY(-2px)}
+  .mission-btn:active{transform:scale(.98)}
+
+  .mission-blue .primary{background:var(--blue);color:#fff;box-shadow:0 10px 22px rgba(61,111,217,.28)}
+  .mission-blue .secondary{background:var(--blue-light);color:var(--blue)}
+
+  .mission-purple .primary{background:var(--purple);color:#fff;box-shadow:0 10px 22px rgba(139,95,217,.28)}
+  .mission-purple .secondary{background:var(--purple-light);color:var(--purple)}
+
+  .mission-amber .primary{background:var(--amber);color:#fff;box-shadow:0 10px 22px rgba(217,155,31,.28)}
+  .mission-amber .secondary{background:var(--amber-light);color:var(--amber)}
+
+  .dashboard-footer{
+    text-align:center;
+    margin-top:36px;
+    font-size:13px;
+    font-weight:700;
+    color:var(--muted);
+  }
+
+  @media(max-width:560px){
+    .dashboard{padding-top:30px}
+    .mission{padding:20px 18px 18px;border-radius:20px}
+    .mission-actions{grid-template-columns:1fr}
+    .mission-head h2{font-size:21px}
+  }
+</style>
+</head>
+<body>
+<main class="dashboard">
+
+  <header class="hero">
+    <span class="eyebrow">🔎 Class 9 • Factors, Multiples &amp; Primes</span>
+    <h1>NUMBER DETECTIVE</h1>
+    <p class="hero-sub">Welcome back, Imara! Work through each mission in order. Tap a card to begin.</p>
+  </header>
+
+  <div class="missions">
+
+    <section class="mission mission-blue">
+      <div class="mission-head">
+        <div class="mission-badge">1</div>
+        <div>
+          <div class="mission-tag">🔵 Mission 1</div>
+          <h2>Factors</h2>
+          <p>Find the numbers that divide exactly.</p>
+        </div>
+      </div>
+      <div class="mission-actions">
+        <a class="mission-btn primary" href="factors/warmup/">Start Factors Warm-Up</a>
+        <a class="mission-btn secondary" href="factors/worksheet/">Open Factors Worksheet</a>
+      </div>
+    </section>
+
+    <div class="connector" aria-hidden="true"></div>
+
+    <section class="mission mission-purple">
+      <div class="mission-head">
+        <div class="mission-badge">2</div>
+        <div>
+          <div class="mission-tag">🟣 Mission 2</div>
+          <h2>Multiples</h2>
+          <p>Count on to build a times table pattern.</p>
+        </div>
+      </div>
+      <div class="mission-actions">
+        <a class="mission-btn primary" href="multiples/warmup/">Start Multiples Warm-Up</a>
+        <a class="mission-btn secondary" href="multiples/worksheet/">Open Multiples Worksheet</a>
+      </div>
+    </section>
+
+    <div class="connector" aria-hidden="true"></div>
+
+    <section class="mission mission-amber">
+      <div class="mission-head">
+        <div class="mission-badge">3</div>
+        <div>
+          <div class="mission-tag">🟡 Mission 3</div>
+          <h2>Prime Numbers</h2>
+          <p>Discover numbers with exactly two factors.</p>
+        </div>
+      </div>
+      <div class="mission-actions single">
+        <a class="mission-btn primary" href="primes/warmup/">Start Prime Warm-Up</a>
+      </div>
+    </section>
+
+  </div>
+
+  <p class="dashboard-footer">🏁 Finish all three missions to complete Number Detective!</p>
+
+</main>
+</body>
+</html>

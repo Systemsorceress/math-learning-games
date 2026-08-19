@@ -1,0 +1,4613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>🌸 Factor Garden — Factors & Arrays</title>
+
+  <style>
+    /* =========================================================
+       🌸 FACTOR GARDEN
+       Combined interactive activity:
+       • Factors of 12
+       • Factors of 18
+       • Questions 3, 4 and 5
+       • Auto-checking
+       • Final score
+       • Girly / child-friendly design
+       • Fully responsive
+       • Vanilla HTML/CSS/JS only
+       ========================================================= */
+
+    :root {
+      --pink: #f58ab5;
+      --pink-dark: #d85c91;
+      --pink-light: #fff0f7;
+
+      --purple: #aa86d7;
+      --purple-light: #f5efff;
+
+      --green: #68c978;
+      --green-dark: #359b4d;
+      --green-light: #ecfaef;
+
+      --red: #ee747e;
+      --red-dark: #d5505c;
+      --red-light: #fff0f2;
+
+      --orange: #f29a55;
+      --orange-dark: #df7930;
+      --orange-light: #fff4e9;
+
+      --yellow: #ffe59b;
+
+      --text: #4c3c49;
+      --muted: #877683;
+
+      --white: #ffffff;
+      --border: #ecd9e3;
+
+      --shadow:
+        0 10px 30px rgba(175, 94, 139, 0.12);
+
+      --radius: 23px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+
+      font-family:
+        "Nunito",
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+      color: var(--text);
+
+      background:
+        radial-gradient(
+          circle at 7% 10%,
+          rgba(245, 138, 181, 0.18),
+          transparent 23%
+        ),
+        radial-gradient(
+          circle at 93% 15%,
+          rgba(170, 134, 215, 0.15),
+          transparent 24%
+        ),
+        radial-gradient(
+          circle at 85% 90%,
+          rgba(104, 201, 120, 0.12),
+          transparent 25%
+        ),
+        #fffafd;
+    }
+
+    button,
+    input,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+
+      padding: 14px 20px;
+
+      background: rgba(255, 255, 255, 0.94);
+
+      border-bottom: 1px solid var(--border);
+
+      backdrop-filter: blur(12px);
+    }
+
+    .topbar-inner {
+      width: min(1120px, 100%);
+      margin: auto;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 15px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+    }
+
+    .brand-icon {
+      width: 46px;
+      height: 46px;
+
+      display: grid;
+      place-items: center;
+
+      border-radius: 15px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #f9aacb,
+          #e778aa
+        );
+
+      box-shadow:
+        0 6px 15px rgba(216, 92, 145, 0.20);
+
+      font-size: 25px;
+    }
+
+    .brand-title {
+      color: #593f51;
+
+      font-size: 19px;
+      font-weight: 900;
+    }
+
+    .brand-subtitle {
+      margin-top: 2px;
+
+      color: var(--muted);
+
+      font-size: 12px;
+    }
+
+    .progress-pill {
+      padding: 8px 14px;
+
+      border-radius: 999px;
+
+      color: var(--pink-dark);
+
+      background: var(--pink-light);
+
+      border: 1px solid #f2d0df;
+
+      font-size: 13px;
+      font-weight: 900;
+
+      white-space: nowrap;
+    }
+
+    /* =========================================================
+       MAIN
+       ========================================================= */
+
+    main {
+      width: min(1120px, calc(100% - 28px));
+
+      margin: 32px auto 70px;
+    }
+
+    .hero {
+      text-align: center;
+
+      margin-bottom: 32px;
+    }
+
+    .hero-decoration {
+      margin-bottom: 8px;
+
+      font-size: 23px;
+      letter-spacing: 7px;
+    }
+
+    .hero h1 {
+      margin: 0;
+
+      color: #573e51;
+
+      font-size: clamp(32px, 5vw, 48px);
+      line-height: 1.08;
+      letter-spacing: -1px;
+    }
+
+    .hero h1 span {
+      color: var(--pink-dark);
+    }
+
+    .hero p {
+      max-width: 680px;
+
+      margin: 13px auto 0;
+
+      color: var(--muted);
+
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .tip {
+      width: fit-content;
+      max-width: 100%;
+
+      margin: 17px auto 0;
+
+      padding: 10px 17px;
+
+      color: #78632d;
+
+      background: #fff8dc;
+
+      border: 1px solid #efdda0;
+
+      border-radius: 999px;
+
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    /* =========================================================
+       GENERAL SECTION CARD
+       ========================================================= */
+
+    .section-card {
+      margin-bottom: 28px;
+
+      background: var(--white);
+
+      border: 1px solid var(--border);
+
+      border-radius: var(--radius);
+
+      overflow: hidden;
+
+      box-shadow: var(--shadow);
+    }
+
+    .section-header {
+      padding: 19px 23px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 15px;
+
+      background:
+        linear-gradient(
+          90deg,
+          #fff7fb,
+          #ffffff
+        );
+
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: center;
+
+      gap: 12px;
+    }
+
+    .section-number {
+      width: 44px;
+      height: 44px;
+
+      flex-shrink: 0;
+
+      display: grid;
+      place-items: center;
+
+      border-radius: 15px;
+
+      color: white;
+
+      font-size: 19px;
+      font-weight: 900;
+
+      box-shadow:
+        0 5px 12px rgba(0, 0, 0, 0.09);
+    }
+
+    .green-number {
+      background:
+        linear-gradient(
+          135deg,
+          #7edb8c,
+          #4eb962
+        );
+    }
+
+    .red-number {
+      background:
+        linear-gradient(
+          135deg,
+          #fa9ba3,
+          #e96875
+        );
+    }
+
+    .orange-number {
+      background:
+        linear-gradient(
+          135deg,
+          #ffb77a,
+          #eb8b48
+        );
+    }
+
+    .section-header h2 {
+      margin: 0;
+
+      color: #584452;
+
+      font-size: 20px;
+    }
+
+    .section-header p {
+      margin: 3px 0 0;
+
+      color: var(--muted);
+
+      font-size: 12px;
+    }
+
+    .section-body {
+      padding: 24px;
+    }
+
+    /* =========================================================
+       ARRAY ACTIVITIES
+       ========================================================= */
+
+    .instruction {
+      margin: 0 0 21px;
+
+      color: var(--muted);
+
+      text-align: center;
+
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .arrays {
+      width: 100%;
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+      gap: 15px;
+    }
+
+    .array-card {
+      min-width: 0;
+
+      padding: 15px 10px;
+
+      display: flex;
+      flex-direction: column;
+
+      align-items: center;
+      justify-content: space-between;
+
+      background:
+        linear-gradient(
+          180deg,
+          #ffffff,
+          #fff8fc
+        );
+
+      border: 2px solid #f0dfe7;
+
+      border-radius: 20px;
+
+      overflow: hidden;
+    }
+
+    .array-title {
+      margin-bottom: 10px;
+
+      color: #76566b;
+
+      font-size: 16px;
+      font-weight: 900;
+    }
+
+    .array-stage {
+      width: 100%;
+      max-width: 270px;
+
+      min-height: 108px;
+
+      padding: 9px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background: rgba(255, 255, 255, 0.9);
+
+      border: 1px dashed #e4d3dd;
+
+      border-radius: 15px;
+
+      overflow: hidden;
+    }
+
+    .array {
+      width: 100%;
+      max-width: 100%;
+
+      display: flex;
+      flex-direction: column;
+
+      align-items: center;
+      justify-content: center;
+
+      gap: clamp(3px, 1vw, 6px);
+    }
+
+    .array-row {
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+
+      display: flex;
+
+      justify-content: center;
+
+      gap: clamp(3px, 1vw, 6px);
+    }
+
+    /*
+      The counters use a responsive width.
+
+      This is especially important for 1 × 18.
+      They automatically become smaller on narrow screens,
+      ensuring that every counter stays inside the stage.
+    */
+
+    .counter {
+      width: clamp(11px, 3vw, 22px);
+
+      aspect-ratio: 1 / 1;
+
+      max-width: 22px;
+
+      min-width: 0;
+
+      flex: 0 1 auto;
+
+      border-radius: 50%;
+
+      box-shadow:
+        inset 0 -3px 0 rgba(0, 0, 0, 0.11),
+        0 2px 4px rgba(0, 0, 0, 0.10);
+
+      animation:
+        counterPop 0.28s ease both;
+    }
+
+    .green-counter {
+      background:
+        radial-gradient(
+          circle at 32% 27%,
+          #d9f9dc 0 11%,
+          transparent 12%
+        ),
+        linear-gradient(
+          145deg,
+          #91e59b,
+          #55bd67
+        );
+
+      border: 1.5px solid #3da750;
+    }
+
+    .red-counter {
+      background:
+        radial-gradient(
+          circle at 32% 27%,
+          #ffdadd 0 11%,
+          transparent 12%
+        ),
+        linear-gradient(
+          145deg,
+          #ff9da5,
+          #e96370
+        );
+
+      border: 1.5px solid #ce4d59;
+    }
+
+    @keyframes counterPop {
+      from {
+        opacity: 0;
+        transform: scale(0.45);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .array-equation {
+      margin-top: 10px;
+
+      color: var(--muted);
+
+      font-size: 12px;
+      font-weight: 800;
+
+      text-align: center;
+    }
+
+    /* =========================================================
+       QUESTION / ANSWER AREA
+       ========================================================= */
+
+    .question-box {
+      margin-top: 24px;
+
+      padding: 20px;
+
+      border-radius: 19px;
+    }
+
+    .green-box {
+      background: var(--green-light);
+      border: 1px solid #d1eed6;
+    }
+
+    .red-box {
+      background: var(--red-light);
+      border: 1px solid #f4d3d7;
+    }
+
+    .orange-box {
+      background: var(--orange-light);
+      border: 1px solid #f6dcc5;
+    }
+
+    .question-line {
+      text-align: center;
+
+      font-size: 17px;
+      font-weight: 800;
+
+      line-height: 2.8;
+    }
+
+    /* =========================================================
+       INPUTS
+       ========================================================= */
+
+    .answer-input {
+      width: 50px;
+      height: 43px;
+
+      padding: 0 5px;
+
+      border: 2px solid #dccdd6;
+
+      border-radius: 11px;
+
+      background: white;
+
+      text-align: center;
+
+      color: var(--text);
+
+      font-size: 17px;
+      font-weight: 900;
+
+      outline: none;
+
+      transition:
+        border-color 0.18s ease,
+        background 0.18s ease,
+        box-shadow 0.18s ease,
+        transform 0.18s ease;
+    }
+
+    .answer-input:focus {
+      border-color: var(--pink);
+
+      box-shadow:
+        0 0 0 4px rgba(245, 138, 181, 0.14);
+
+      transform: translateY(-1px);
+    }
+
+    .answer-input.correct {
+      border-color: var(--green-dark);
+
+      background: #e7f9e9;
+
+      color: var(--green-dark);
+
+      box-shadow:
+        0 0 0 3px rgba(53, 155, 77, 0.08);
+    }
+
+    .answer-input.incorrect {
+      border-color: #e7a9ae;
+
+      background: #fff7f7;
+    }
+
+    /* Prevent number spinner controls */
+
+    .answer-input::-webkit-inner-spin-button,
+    .answer-input::-webkit-outer-spin-button {
+      appearance: none;
+      margin: 0;
+    }
+
+    .answer-input[type="number"] {
+      appearance: textfield;
+    }
+
+    /* =========================================================
+       CHECKMARK
+       ========================================================= */
+
+    .input-wrap {
+      position: relative;
+
+      display: inline-flex;
+
+      vertical-align: middle;
+    }
+
+    .input-check {
+      position: absolute;
+
+      right: -5px;
+      top: -7px;
+
+      width: 17px;
+      height: 17px;
+
+      display: none;
+      place-items: center;
+
+      border-radius: 50%;
+
+      color: white;
+
+      background: var(--green-dark);
+
+      border: 2px solid white;
+
+      font-size: 10px;
+      font-weight: 900;
+
+      pointer-events: none;
+    }
+
+    .input-wrap.correct .input-check {
+      display: grid;
+    }
+
+    /* =========================================================
+       FACTOR TEXT INPUTS
+       ========================================================= */
+
+    .factor-list-input {
+      width: min(600px, 100%);
+
+      min-height: 48px;
+
+      margin: 8px auto;
+
+      display: block;
+
+      padding: 9px 14px;
+
+      border: 2px solid #dccdd6;
+
+      border-radius: 13px;
+
+      background: white;
+
+      color: var(--text);
+
+      text-align: center;
+
+      font-size: 16px;
+      font-weight: 800;
+
+      outline: none;
+
+      transition: 0.2s ease;
+    }
+
+    .factor-list-input:focus {
+      border-color: var(--pink);
+
+      box-shadow:
+        0 0 0 4px rgba(245, 138, 181, 0.13);
+    }
+
+    .factor-list-input.correct {
+      border-color: var(--green-dark);
+      background: #e7f9e9;
+    }
+
+    .factor-list-input.incorrect {
+      border-color: #e7a9ae;
+      background: #fff7f7;
+    }
+
+    /* =========================================================
+       MULTIPLICATION ROWS
+       ========================================================= */
+
+    .multiplication-list {
+      max-width: 680px;
+
+      margin: 0 auto;
+
+      display: flex;
+      flex-direction: column;
+
+      gap: 11px;
+    }
+
+    .multiplication-row {
+      min-height: 61px;
+
+      padding: 9px 13px;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      gap: 9px;
+
+      background: rgba(255, 255, 255, 0.8);
+
+      border: 1px solid #f0d9c8;
+
+      border-radius: 15px;
+
+      color: #614d42;
+
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .multiplication-row .given {
+      min-width: 42px;
+
+      display: inline-flex;
+      justify-content: center;
+    }
+
+    .multiply-symbol {
+      color: var(--orange-dark);
+    }
+
+    .equals-symbol {
+      color: #8e7568;
+    }
+
+    /* =========================================================
+       Q5 PAIRS
+       ========================================================= */
+
+    .pair-inputs {
+      display: inline-flex;
+
+      align-items: center;
+
+      gap: 6px;
+    }
+
+    .pair-x {
+      color: var(--orange-dark);
+
+      font-weight: 900;
+    }
+
+    .pair-option-note {
+      max-width: 650px;
+
+      margin: 14px auto 0;
+
+      padding: 10px 13px;
+
+      border-radius: 12px;
+
+      background: #fff9f2;
+
+      color: #866e5e;
+
+      text-align: center;
+
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /* =========================================================
+       BUTTONS
+       ========================================================= */
+
+    .controls {
+      display: flex;
+
+      justify-content: center;
+
+      flex-wrap: wrap;
+
+      gap: 9px;
+
+      margin-top: 17px;
+    }
+
+    .btn {
+      border: 0;
+
+      padding: 11px 19px;
+
+      border-radius: 13px;
+
+      font-size: 13px;
+      font-weight: 900;
+
+      transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn-check {
+      color: white;
+
+      background:
+        linear-gradient(
+          135deg,
+          #f29b57,
+          #df7930
+        );
+
+      box-shadow:
+        0 5px 12px rgba(223, 121, 48, 0.18);
+    }
+
+    .btn-green {
+      background:
+        linear-gradient(
+          135deg,
+          #70d181,
+          #45af5c
+        );
+    }
+
+    .btn-red {
+      background:
+        linear-gradient(
+          135deg,
+          #f58a94,
+          #dd5b67
+        );
+    }
+
+    .btn-reset {
+      color: #725f6b;
+
+      background: #f2ebef;
+    }
+
+    .btn-reset:hover {
+      background: #e8dfe5;
+    }
+
+    /* =========================================================
+       FEEDBACK
+       ========================================================= */
+
+    .feedback {
+      display: none;
+
+      max-width: 650px;
+
+      margin: 14px auto 0;
+
+      padding: 11px 15px;
+
+      border-radius: 13px;
+
+      text-align: center;
+
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .feedback.show {
+      display: block;
+
+      animation:
+        feedbackIn 0.25s ease;
+    }
+
+    .feedback.success {
+      color: #328144;
+
+      background: #e5f8e8;
+
+      border: 1px solid #b9e5c0;
+    }
+
+    .feedback.retry {
+      color: #a64b53;
+
+      background: #ffe9eb;
+
+      border: 1px solid #f1c1c6;
+    }
+
+    @keyframes feedbackIn {
+      from {
+        opacity: 0;
+        transform: translateY(-5px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* =========================================================
+       FINAL CHECK
+       ========================================================= */
+
+    .final-check-area {
+      margin-top: 35px;
+
+      padding: 30px 20px;
+
+      text-align: center;
+
+      background:
+        linear-gradient(
+          135deg,
+          #fff0f7,
+          #f8f1ff
+        );
+
+      border: 2px solid #efd6e4;
+
+      border-radius: 27px;
+
+      box-shadow: var(--shadow);
+    }
+
+    .final-check-area h2 {
+      margin: 0;
+
+      color: #614454;
+
+      font-size: 25px;
+    }
+
+    .final-check-area p {
+      max-width: 600px;
+
+      margin: 8px auto 18px;
+
+      color: var(--muted);
+
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .check-all-button {
+      padding: 14px 27px;
+
+      border: 0;
+
+      border-radius: 15px;
+
+      color: white;
+
+      background:
+        linear-gradient(
+          135deg,
+          #f58ab5,
+          #d95d91
+        );
+
+      box-shadow:
+        0 7px 17px rgba(217, 93, 145, 0.22);
+
+      font-size: 15px;
+      font-weight: 900;
+
+      transition: 0.2s ease;
+    }
+
+    .check-all-button:hover {
+      transform: translateY(-2px);
+
+      box-shadow:
+        0 10px 20px rgba(217, 93, 145, 0.27);
+    }
+
+    /* =========================================================
+       SCORE CARD
+       ========================================================= */
+
+    .score-card {
+      display: none;
+
+      margin-top: 20px;
+
+      padding: 22px;
+
+      border-radius: 20px;
+
+      background: white;
+
+      border: 2px solid #edc8d9;
+
+      animation:
+        feedbackIn 0.3s ease;
+    }
+
+    .score-card.show {
+      display: block;
+    }
+
+    .score-stars {
+      font-size: 28px;
+      letter-spacing: 5px;
+    }
+
+    .score-number {
+      margin: 5px 0;
+
+      color: var(--pink-dark);
+
+      font-size: 32px;
+      font-weight: 900;
+    }
+
+    .score-message {
+      color: var(--muted);
+
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    /* =========================================================
+       RESPONSIVE
+       ========================================================= */
+
+    @media (max-width: 800px) {
+
+      .arrays {
+        grid-template-columns: 1fr;
+      }
+
+      .array-card {
+        max-width: 100%;
+      }
+
+      .array-stage {
+        max-width: 340px;
+      }
+    }
+
+    @media (max-width: 560px) {
+
+      .topbar {
+        padding: 12px 14px;
+      }
+
+      .brand-subtitle {
+        display: none;
+      }
+
+      .progress-pill {
+        font-size: 11px;
+
+        padding:
+          7px 10px;
+      }
+
+      main {
+        width: calc(100% - 18px);
+
+        margin-top: 22px;
+      }
+
+      .hero h1 {
+        font-size: 32px;
+      }
+
+      .hero p {
+        font-size: 14px;
+      }
+
+      .section-header {
+        padding: 16px;
+      }
+
+      .section-header h2 {
+        font-size: 17px;
+      }
+
+      .section-body {
+        padding: 14px;
+      }
+
+      .counter {
+        width: clamp(12px, 6vw, 20px);
+      }
+
+      .array-row {
+        gap: clamp(2px, 1vw, 5px);
+      }
+
+      .question-line {
+        font-size: 15px;
+
+        line-height: 2.7;
+      }
+
+      .answer-input {
+        width: 45px;
+        height: 40px;
+      }
+
+      .multiplication-row {
+        font-size: 16px;
+      }
+
+      .pair-inputs .answer-input {
+        width: 46px;
+      }
+    }
+
+    @media (max-width: 370px) {
+
+      .counter {
+        width: 13px;
+      }
+
+      .array-row {
+        gap: 2px;
+      }
+
+      .array-stage {
+        padding: 7px;
+      }
+
+      .answer-input {
+        width: 40px;
+      }
+    }
+
+    /* =========================================================
+       EXERCISE 6 — merged from the former "List Factors" activity
+       Namespaced with an "lf-" prefix so its styles never collide
+       with the rest of the worksheet.
+       ========================================================= */
+
+    .purple-number {
+      background: linear-gradient(135deg, #c9a6ef, #9b7bd4);
+    }
+
+    .lf-questions {
+      display: grid;
+      gap: 14px;
+    }
+
+    .lf-question-card {
+      background: rgba(255, 255, 255, 0.97);
+      border: 2px solid #f0d8e3;
+      border-radius: 22px;
+      padding: 18px;
+      box-shadow: 0 10px 28px rgba(151, 83, 112, 0.12);
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .lf-question-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px rgba(151, 83, 112, 0.15);
+    }
+
+    .lf-question-card.lf-correct-card {
+      border-color: #9ad9b4;
+      background: linear-gradient(135deg, #ffffff, #f5fff9);
+    }
+
+    .lf-question-card.lf-incorrect-card {
+      border-color: #f2b0b9;
+      background: linear-gradient(135deg, #ffffff, #fff8f8);
+    }
+
+    .lf-question-header {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      margin-bottom: 12px;
+    }
+
+    .lf-number-badge {
+      width: 44px;
+      height: 44px;
+      flex: 0 0 44px;
+      border-radius: 50%;
+      background: #f59a23;
+      color: white;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 17px;
+      box-shadow: 0 5px 10px rgba(245, 154, 35, 0.22);
+    }
+
+    .lf-question-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: #493d4a;
+    }
+
+    .lf-factor-hint {
+      color: #806f7d;
+      font-size: 13px;
+      margin-top: 2px;
+    }
+
+    .lf-answer-area {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .lf-input-wrapper {
+      position: relative;
+      flex: 1;
+    }
+
+    .lf-answer-input {
+      width: 100%;
+      min-height: 52px;
+      border: 2px solid #decbd5;
+      border-radius: 15px;
+      outline: none;
+      padding: 12px 45px 12px 15px;
+      font-size: 16px;
+      font-family: inherit;
+      color: #493d4a;
+      background: #fffafd;
+      transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .lf-answer-input::placeholder {
+      color: #b7a5af;
+    }
+
+    .lf-answer-input:focus {
+      border-color: #f58bb5;
+      background: white;
+      box-shadow: 0 0 0 4px rgba(245, 139, 181, 0.13);
+    }
+
+    .lf-status-icon {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%) scale(0.7);
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 15px;
+      font-weight: bold;
+      opacity: 0;
+      transition: all 0.2s ease;
+    }
+
+    .lf-status-icon.lf-show {
+      opacity: 1;
+      transform: translateY(-50%) scale(1);
+    }
+
+    .lf-status-icon.lf-correct {
+      background: #48b878;
+      color: white;
+    }
+
+    .lf-status-icon.lf-incorrect {
+      background: #e86d7d;
+      color: white;
+    }
+
+    .lf-answer-input.lf-correct {
+      border-color: #48b878;
+      background: #e5f8ed;
+    }
+
+    .lf-answer-input.lf-incorrect {
+      border-color: #e86d7d;
+      background: #fff0f1;
+    }
+
+    .lf-feedback {
+      min-height: 22px;
+      margin: 9px 3px 0;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .lf-feedback.lf-success {
+      color: #2c9960;
+    }
+
+    .lf-feedback.lf-retry {
+      color: #c75a68;
+    }
+
+    @media (max-width: 600px) {
+      .lf-question-card {
+        padding: 15px;
+      }
+
+      .lf-question-title {
+        font-size: 15px;
+      }
+
+      .lf-answer-input {
+        font-size: 15px;
+      }
+    }
+  </style>
+  <style>
+.ndx-navbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;width:100%;padding:14px 20px;background:#241b2e;box-shadow:0 4px 14px rgba(0,0,0,.18);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;box-sizing:border-box}
+.ndx-navbar *{box-sizing:border-box}
+.ndx-home{display:inline-flex;align-items:center;gap:7px;color:#fff;text-decoration:none;font-weight:800;font-size:14px;background:rgba(255,255,255,.12);padding:10px 14px;border-radius:12px;transition:background .15s ease,transform .15s ease}
+.ndx-home:hover{background:rgba(255,255,255,.22);transform:translateY(-1px)}
+.ndx-nav-buttons{display:flex;gap:10px;flex-wrap:wrap;margin-left:auto}
+.ndx-btn{display:inline-flex;align-items:center;padding:12px 18px;border-radius:14px;font-weight:900;font-size:14px;text-decoration:none;white-space:nowrap;transition:transform .15s ease,box-shadow .15s ease}
+.ndx-btn:hover{transform:translateY(-2px)}
+.ndx-back{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.28)}
+.ndx-back:hover{background:rgba(255,255,255,.2)}
+.ndx-next{background:linear-gradient(135deg,#ffb648,#ff8f5c);color:#3a2410;box-shadow:0 6px 16px rgba(255,140,70,.35)}
+.ndx-navbar.ndx-bottom{margin-top:32px}
+@media(max-width:600px){.ndx-navbar{padding:12px 14px}.ndx-home span{display:none}.ndx-btn{padding:11px 14px;font-size:13px}}
+  </style>
+</head>
+
+
+<body>
+<nav class="ndx-navbar" aria-label="Lesson navigation">
+  <a class="ndx-home" href="../../" title="Home">🏠<span>Home</span></a>
+  <div class="ndx-nav-buttons">
+    <a class="ndx-btn ndx-back" href="../warmup/">← Warm-Up</a>
+    <a class="ndx-btn ndx-next" href="../../multiples/warmup/">Multiples Warm-Up →</a>
+  </div>
+</nav>
+
+  <!-- =========================================================
+       🌸 HEADER
+       ========================================================= -->
+
+  <header class="topbar">
+
+    <div class="topbar-inner">
+
+      <div class="brand">
+
+        <div class="brand-icon">
+          🌸
+        </div>
+
+        <div>
+          <div class="brand-title">
+            Imara's Factor Garden
+          </div>
+
+          <div class="brand-subtitle">
+            Explore • Arrange • Discover
+          </div>
+        </div>
+
+      </div>
+
+      <div
+        class="progress-pill"
+        id="progressText"
+      >
+        🌷 0 / 6 activities complete
+      </div>
+
+    </div>
+
+  </header>
+
+
+  <!-- =========================================================
+       🌸 MAIN
+       ========================================================= -->
+
+  <main>
+
+    <section class="hero">
+
+      <div class="hero-decoration">
+        🌸 ✨ 🌷 ✨ 🌸
+      </div>
+
+      <h1>
+        Let's Explore
+        <span>Factors!</span>
+      </h1>
+
+      <p>
+        Look carefully at the counters, multiplication facts,
+        and number lists. Use what you see to discover the factors.
+      </p>
+
+      <p style="margin-top:6px;font-weight:800;color:var(--pink-dark);">
+        You've got this, Imara! 💪
+      </p>
+
+      <div class="tip">
+        💕 Remember: factors divide a number exactly!
+      </div>
+
+    </section>
+
+
+    <!-- =======================================================
+         EXERCISE 1 — FACTORS OF 12
+         ======================================================= -->
+
+    <section
+      class="section-card"
+      id="exercise12"
+    >
+
+      <div class="section-header">
+
+        <div class="section-heading">
+
+          <div class="section-number green-number">
+            1
+          </div>
+
+          <div>
+
+            <h2>
+              🌿 Find the factors of 12
+            </h2>
+
+            <p>
+              Use the green counters to help you.
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="section-body">
+
+        <p class="instruction">
+          Look at the different ways 12 counters can make equal rows. 💚
+        </p>
+
+        <div
+          class="arrays"
+          id="arrays12"
+        ></div>
+
+
+        <div class="question-box green-box">
+
+          <div class="question-line">
+
+            The factors of 12 are
+
+            <span class="input-wrap">
+              <input
+                class="answer-input factor12-input"
+                type="number"
+                min="1"
+                max="12"
+                data-answer="1"
+              />
+              <span class="input-check">✓</span>
+            </span>
+
+            <span class="input-wrap">
+              <input
+                class="answer-input factor12-input"
+                type="number"
+                min="1"
+                max="12"
+                data-answer="2"
+              />
+              <span class="input-check">✓</span>
+            </span>
+
+            <span class="input-wrap">
+              <input
+                class="answer-input factor12-input"
+                type="number"
+                min="1"
+                max="12"
+                data-answer="3"
+              />
+              <span class="input-check">✓</span>
+            </span>
+
+            <span class="input-wrap">
+              <input
+                class="answer-input factor12-input"
+                type="number"
+                min="1"
+                max="12"
+                data-answer="4"
+              />
+              <span class="input-check">✓</span>
+            </span>
+
+            <span class="input-wrap">
+              <input
+                class="answer-input factor12-input"
+                type="number"
+                min="1"
+                max="12"
+                data-answer="6"
+              />
+              <span class="input-check">✓</span>
+            </span>
+
+            <span class="input-wrap">
+              <input
+                class="answer-input factor12-input"
+                type="number"
+                min="1"
+                max="12"
+                data-answer="12"
+              />
+              <span class="input-check">✓</span>
+            </span>
+
+          </div>
+
+
+          <div class="controls">
+
+            <button
+              class="btn btn-green"
+              onclick="checkFactorInputs(12)"
+            >
+              🌸 Check Answer
+            </button>
+
+            <button
+              class="btn btn-reset"
+              onclick="resetExercise('exercise12')"
+            >
+              ↻ Try Again
+            </button>
+
+          </div>
+
+
+          <div
+            class="feedback"
+            id="feedback12"
+          ></div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =======================================================
+         EXERCISE 2 — FACTORS OF 18
+         ======================================================= -->
+
+    <section
+      class="section-card"
+      id="exercise18"
+    >
+
+      <div class="section-header">
+
+        <div class="section-heading">
+
+          <div class="section-number red-number">
+            2
+          </div>
+
+          <div>
+
+            <h2>
+              🌷 Find the factors of 18
+            </h2>
+
+            <p>
+              Use the red counters to help you.
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="section-body">
+
+        <p class="instruction">
+          Can you find every number that makes equal groups? ❤️
+        </p>
+
+        <div
+          class="arrays"
+          id="arrays18"
+        ></div>
+
+
+        <div class="question-box red-box">
+
+          <div class="question-line">
+
+            The factors of 18 are
+
+            <span class="input-wrap">
+              <input
+                class="answer-input factor18-input"
+                type="number"
+                min="1"
+                max="18"
+                data-answer="1"
+              />
+              <span class="input-check">✓</span>
+            </span>
+
+            <span class="input-wrap">
+              <input
+                class="answer-input factor18-input"
+                type="number"
+                min="1"
+                max="18"
+                data-answer="2"
+              />
+              <span class="input-check">✓</span>
+            </span>
+
+            <span class="input-wrap">
+              <input
+                class="answer-input factor18-input"
+                type="number"
+                min="1"
+                max="18"
+                data-answer="3"
+              />
+              <span class="input-check">✓</span>
+            </span>
+
+            <span class="input-wrap">
+              <input
+                class="answer-input factor18-input"
+                type="number"
+                min="1"
+                max="18"
+                data-answer="6"
+              />
+              <span class="input-check">✓</span>
+            </span>
+
+            <span class="input-wrap">
+              <input
+                class="answer-input factor18-input"
+                type="number"
+                min="1"
+                max="18"
+                data-answer="9"
+              />
+              <span class="input-check">✓</span>
+            </span>
+
+            <span class="input-wrap">
+              <input
+                class="answer-input factor18-input"
+                type="number"
+                min="1"
+                max="18"
+                data-answer="18"
+              />
+              <span class="input-check">✓</span>
+            </span>
+
+          </div>
+
+
+          <div class="controls">
+
+            <button
+              class="btn btn-red"
+              onclick="checkFactorInputs(18)"
+            >
+              🌷 Check Answer
+            </button>
+
+            <button
+              class="btn btn-reset"
+              onclick="resetExercise('exercise18')"
+            >
+              ↻ Try Again
+            </button>
+
+          </div>
+
+
+          <div
+            class="feedback"
+            id="feedback18"
+          ></div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =======================================================
+         QUESTION 3
+         ======================================================= -->
+
+    <section
+      class="section-card"
+      id="question3"
+    >
+
+      <div class="section-header">
+
+        <div class="section-heading">
+
+          <div class="section-number orange-number">
+            3
+          </div>
+
+          <div>
+
+            <h2>
+              🍊 Let's investigate 6
+            </h2>
+
+            <p>
+              Complete the multiplication facts and list the factors.
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="section-body">
+
+        <!-- Q3a -->
+
+        <div class="question-box orange-box">
+
+          <h3>
+            3a. Complete the multiplication facts
+          </h3>
+
+          <div class="multiplication-list">
+
+            <div class="multiplication-row">
+
+              <span class="given">1</span>
+
+              <span class="multiply-symbol">×</span>
+
+              <span class="input-wrap">
+
+                <input
+                  class="answer-input q3a"
+                  type="number"
+                  data-answer="6"
+                  aria-label="Question 3a first missing factor"
+                />
+
+                <span class="input-check">✓</span>
+
+              </span>
+
+              <span class="equals-symbol">=</span>
+
+              <span class="given">6</span>
+
+            </div>
+
+
+            <div class="multiplication-row">
+
+              <span class="given">2</span>
+
+              <span class="multiply-symbol">×</span>
+
+              <span class="input-wrap">
+
+                <input
+                  class="answer-input q3a"
+                  type="number"
+                  data-answer="3"
+                  aria-label="Question 3a second missing factor"
+                />
+
+                <span class="input-check">✓</span>
+
+              </span>
+
+              <span class="equals-symbol">=</span>
+
+              <span class="given">6</span>
+
+            </div>
+
+          </div>
+
+
+          <div class="controls">
+
+            <button
+              class="btn btn-check"
+              onclick="checkSimpleInputs('q3a', 'feedback3a')"
+            >
+              🍊 Check 3a
+            </button>
+
+          </div>
+
+
+          <div
+            class="feedback"
+            id="feedback3a"
+          ></div>
+
+        </div>
+
+
+        <!-- Q3b -->
+
+        <div class="question-box orange-box">
+
+          <h3>
+            3b. What are all the factors of 6?
+          </h3>
+
+          <p class="instruction">
+            Type the factors separated by commas.
+            The order does not matter.
+          </p>
+
+
+          <input
+            id="q3b"
+            class="factor-list-input"
+            type="text"
+            placeholder="Example: 1, 2, 3, 6"
+            autocomplete="off"
+          />
+
+
+          <div class="controls">
+
+            <button
+              class="btn btn-check"
+              onclick="checkFactorList(
+                'q3b',
+                [1, 2, 3, 6],
+                'feedback3b'
+              )"
+            >
+              🍊 Check 3b
+            </button>
+
+          </div>
+
+
+          <div
+            class="feedback"
+            id="feedback3b"
+          ></div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =======================================================
+         QUESTION 4
+         ======================================================= -->
+
+    <section
+      class="section-card"
+      id="question4"
+    >
+
+      <div class="section-header">
+
+        <div class="section-heading">
+
+          <div class="section-number orange-number">
+            4
+          </div>
+
+          <div>
+
+            <h2>
+              🍊 Let's investigate 24
+            </h2>
+
+            <p>
+              Complete the arrays and find every factor.
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="section-body">
+
+        <!-- Q4a -->
+
+        <div class="question-box orange-box">
+
+          <h3>
+            4a. Complete the multiplication facts
+          </h3>
+
+          <div class="multiplication-list">
+
+            <div class="multiplication-row">
+
+              <span class="given">1</span>
+              <span class="multiply-symbol">×</span>
+
+              <span class="input-wrap">
+
+                <input
+                  class="answer-input q4a"
+                  type="number"
+                  data-answer="24"
+                />
+
+                <span class="input-check">✓</span>
+
+              </span>
+
+              <span class="equals-symbol">=</span>
+              <span class="given">24</span>
+
+            </div>
+
+
+            <div class="multiplication-row">
+
+              <span class="given">2</span>
+              <span class="multiply-symbol">×</span>
+
+              <span class="input-wrap">
+
+                <input
+                  class="answer-input q4a"
+                  type="number"
+                  data-answer="12"
+                />
+
+                <span class="input-check">✓</span>
+
+              </span>
+
+              <span class="equals-symbol">=</span>
+              <span class="given">24</span>
+
+            </div>
+
+
+            <div class="multiplication-row">
+
+              <span class="given">3</span>
+              <span class="multiply-symbol">×</span>
+
+              <span class="input-wrap">
+
+                <input
+                  class="answer-input q4a"
+                  type="number"
+                  data-answer="8"
+                />
+
+                <span class="input-check">✓</span>
+
+              </span>
+
+              <span class="equals-symbol">=</span>
+              <span class="given">24</span>
+
+            </div>
+
+
+            <div class="multiplication-row">
+
+              <span class="given">4</span>
+              <span class="multiply-symbol">×</span>
+
+              <span class="input-wrap">
+
+                <input
+                  class="answer-input q4a"
+                  type="number"
+                  data-answer="6"
+                />
+
+                <span class="input-check">✓</span>
+
+              </span>
+
+              <span class="equals-symbol">=</span>
+              <span class="given">24</span>
+
+            </div>
+
+          </div>
+
+
+          <div class="controls">
+
+            <button
+              class="btn btn-check"
+              onclick="checkSimpleInputs('q4a', 'feedback4a')"
+            >
+              🍊 Check 4a
+            </button>
+
+          </div>
+
+
+          <div
+            class="feedback"
+            id="feedback4a"
+          ></div>
+
+        </div>
+
+
+        <!-- Q4b -->
+
+        <div class="question-box orange-box">
+
+          <h3>
+            4b. What are all the factors of 24?
+          </h3>
+
+          <p class="instruction">
+            Type all eight factors, separated by commas.
+          </p>
+
+
+          <input
+            id="q4b"
+            class="factor-list-input"
+            type="text"
+            placeholder="Example: 1, 2, 3, 4, 6, 8, 12, 24"
+            autocomplete="off"
+          />
+
+
+          <div class="controls">
+
+            <button
+              class="btn btn-check"
+              onclick="checkFactorList(
+                'q4b',
+                [1, 2, 3, 4, 6, 8, 12, 24],
+                'feedback4b'
+              )"
+            >
+              🍊 Check 4b
+            </button>
+
+          </div>
+
+
+          <div
+            class="feedback"
+            id="feedback4b"
+          ></div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =======================================================
+         QUESTION 5
+         ======================================================= -->
+
+    <section
+      class="section-card"
+      id="question5"
+    >
+
+      <div class="section-header">
+
+        <div class="section-heading">
+
+          <div class="section-number orange-number">
+            5
+          </div>
+
+          <div>
+
+            <h2>
+              🍊 Let's investigate 20
+            </h2>
+
+            <p>
+              Find the three factor pairs and then list all factors.
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="section-body">
+
+        <!-- Q5a -->
+
+        <div class="question-box orange-box">
+
+          <h3>
+            5a. Find three factor pairs for 20
+          </h3>
+
+          <p class="instruction">
+            Complete each pair. The three pairs are
+            1 × 20, 2 × 10 and 4 × 5.
+          </p>
+
+
+          <div class="multiplication-list">
+
+            <!-- Pair 1 -->
+
+            <div class="multiplication-row">
+
+              <span class="pair-inputs">
+
+                <input
+                  class="answer-input q5a-pair"
+                  type="number"
+                  data-pair="1"
+                  data-allowed="1,20"
+                  aria-label="Question 5 pair 1 first number"
+                />
+
+                <span class="pair-x">×</span>
+
+                <input
+                  class="answer-input q5a-pair"
+                  type="number"
+                  data-pair="1"
+                  data-allowed="1,20"
+                  aria-label="Question 5 pair 1 second number"
+                />
+
+              </span>
+
+            </div>
+
+
+            <!-- Pair 2 -->
+
+            <div class="multiplication-row">
+
+              <span class="pair-inputs">
+
+                <input
+                  class="answer-input q5a-pair"
+                  type="number"
+                  data-pair="2"
+                  data-allowed="2,10"
+                  aria-label="Question 5 pair 2 first number"
+                />
+
+                <span class="pair-x">×</span>
+
+                <input
+                  class="answer-input q5a-pair"
+                  type="number"
+                  data-pair="2"
+                  data-allowed="2,10"
+                  aria-label="Question 5 pair 2 second number"
+                />
+
+              </span>
+
+            </div>
+
+
+            <!-- Pair 3 -->
+
+            <div class="multiplication-row">
+
+              <span class="pair-inputs">
+
+                <input
+                  class="answer-input q5a-pair"
+                  type="number"
+                  data-pair="3"
+                  data-allowed="4,5"
+                  aria-label="Question 5 pair 3 first number"
+                />
+
+                <span class="pair-x">×</span>
+
+                <input
+                  class="answer-input q5a-pair"
+                  type="number"
+                  data-pair="3"
+                  data-allowed="4,5"
+                  aria-label="Question 5 pair 3 second number"
+                />
+
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <div class="pair-option-note">
+            💡 You may write each pair in either order.
+            For example, 20 × 1 is also accepted as the pair 1 × 20.
+          </div>
+
+
+          <div class="controls">
+
+            <button
+              class="btn btn-check"
+              onclick="checkQ5Pairs()"
+            >
+              🍊 Check 5a
+            </button>
+
+          </div>
+
+
+          <div
+            class="feedback"
+            id="feedback5a"
+          ></div>
+
+        </div>
+
+
+        <!-- Q5b -->
+
+        <div class="question-box orange-box">
+
+          <h3>
+            5b. What are all the factors of 20?
+          </h3>
+
+          <p class="instruction">
+            Type all six factors, separated by commas.
+            Remember: order does not matter.
+          </p>
+
+
+          <input
+            id="q5b"
+            class="factor-list-input"
+            type="text"
+            placeholder="Example: 1, 2, 4, 5, 10, 20"
+            autocomplete="off"
+          />
+
+
+          <div class="controls">
+
+            <button
+              class="btn btn-check"
+              onclick="checkFactorList(
+                'q5b',
+                [1, 2, 4, 5, 10, 20],
+                'feedback5b'
+              )"
+            >
+              🍊 Check 5b
+            </button>
+
+          </div>
+
+
+          <div
+            class="feedback"
+            id="feedback5b"
+          ></div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =======================================================
+         EXERCISE 6 — List every factor
+         (merged from the former standalone "List Factors" activity)
+         ======================================================= -->
+
+    <section
+      class="section-card"
+      id="exercise6"
+    >
+
+      <div class="section-header">
+
+        <div class="section-heading">
+
+          <div class="section-number purple-number">
+            6
+          </div>
+
+          <div>
+
+            <h2>
+              🌸 List every factor
+            </h2>
+
+            <p>
+              Type all the factors for each number below.
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="section-body">
+
+        <p class="instruction">
+          List all the factors of each number. Commas or spaces both work, and order doesn't matter. 🌷
+        </p>
+
+        <div class="lf-questions" id="lfQuestions">
+
+          <article class="lf-question-card" data-lf-question="a">
+            <div class="lf-question-header">
+              <div class="lf-number-badge">a</div>
+              <div>
+                <div class="lf-question-title">Find the factors of 8</div>
+                <div class="lf-factor-hint">Think: Which numbers divide 8 exactly?</div>
+              </div>
+            </div>
+            <div class="lf-answer-area">
+              <div class="lf-input-wrapper">
+                <input class="lf-answer-input" type="text" data-lf-answer="8" placeholder="Example: 1, 2, 4, 8" autocomplete="off" spellcheck="false">
+                <div class="lf-status-icon"></div>
+              </div>
+            </div>
+            <div class="lf-feedback"></div>
+          </article>
+
+          <article class="lf-question-card" data-lf-question="b">
+            <div class="lf-question-header">
+              <div class="lf-number-badge">b</div>
+              <div>
+                <div class="lf-question-title">Find the factors of 10</div>
+                <div class="lf-factor-hint">Look for numbers that make 10 in a multiplication.</div>
+              </div>
+            </div>
+            <div class="lf-answer-area">
+              <div class="lf-input-wrapper">
+                <input class="lf-answer-input" type="text" data-lf-answer="10" placeholder="Type the factors..." autocomplete="off" spellcheck="false">
+                <div class="lf-status-icon"></div>
+              </div>
+            </div>
+            <div class="lf-feedback"></div>
+          </article>
+
+          <article class="lf-question-card" data-lf-question="c">
+            <div class="lf-question-header">
+              <div class="lf-number-badge">c</div>
+              <div>
+                <div class="lf-question-title">Find the factors of 22</div>
+                <div class="lf-factor-hint">Remember: every number has 1 and itself as factors.</div>
+              </div>
+            </div>
+            <div class="lf-answer-area">
+              <div class="lf-input-wrapper">
+                <input class="lf-answer-input" type="text" data-lf-answer="22" placeholder="Type the factors..." autocomplete="off" spellcheck="false">
+                <div class="lf-status-icon"></div>
+              </div>
+            </div>
+            <div class="lf-feedback"></div>
+          </article>
+
+          <article class="lf-question-card" data-lf-question="d">
+            <div class="lf-question-header">
+              <div class="lf-number-badge">d</div>
+              <div>
+                <div class="lf-question-title">Find the factors of 27</div>
+                <div class="lf-factor-hint">Can you spot the multiplication facts for 27?</div>
+              </div>
+            </div>
+            <div class="lf-answer-area">
+              <div class="lf-input-wrapper">
+                <input class="lf-answer-input" type="text" data-lf-answer="27" placeholder="Type the factors..." autocomplete="off" spellcheck="false">
+                <div class="lf-status-icon"></div>
+              </div>
+            </div>
+            <div class="lf-feedback"></div>
+          </article>
+
+          <article class="lf-question-card" data-lf-question="e">
+            <div class="lf-question-header">
+              <div class="lf-number-badge">e</div>
+              <div>
+                <div class="lf-question-title">Find the factors of 30</div>
+                <div class="lf-factor-hint">This one has lots of factors — take your time!</div>
+              </div>
+            </div>
+            <div class="lf-answer-area">
+              <div class="lf-input-wrapper">
+                <input class="lf-answer-input" type="text" data-lf-answer="30" placeholder="Type all 8 factors..." autocomplete="off" spellcheck="false">
+                <div class="lf-status-icon"></div>
+              </div>
+            </div>
+            <div class="lf-feedback"></div>
+          </article>
+
+          <article class="lf-question-card" data-lf-question="f">
+            <div class="lf-question-header">
+              <div class="lf-number-badge">f</div>
+              <div>
+                <div class="lf-question-title">Find the factors of 35</div>
+                <div class="lf-factor-hint">Try building multiplication pairs for 35.</div>
+              </div>
+            </div>
+            <div class="lf-answer-area">
+              <div class="lf-input-wrapper">
+                <input class="lf-answer-input" type="text" data-lf-answer="35" placeholder="Type the factors..." autocomplete="off" spellcheck="false">
+                <div class="lf-status-icon"></div>
+              </div>
+            </div>
+            <div class="lf-feedback"></div>
+          </article>
+
+          <article class="lf-question-card" data-lf-question="g">
+            <div class="lf-question-header">
+              <div class="lf-number-badge">g</div>
+              <div>
+                <div class="lf-question-title">Find the factors of 9</div>
+                <div class="lf-factor-hint">Think about your 3 times table.</div>
+              </div>
+            </div>
+            <div class="lf-answer-area">
+              <div class="lf-input-wrapper">
+                <input class="lf-answer-input" type="text" data-lf-answer="9" placeholder="Type the factors..." autocomplete="off" spellcheck="false">
+                <div class="lf-status-icon"></div>
+              </div>
+            </div>
+            <div class="lf-feedback"></div>
+          </article>
+
+          <article class="lf-question-card" data-lf-question="h">
+            <div class="lf-question-header">
+              <div class="lf-number-badge">h</div>
+              <div>
+                <div class="lf-question-title">Find the factors of 36</div>
+                <div class="lf-factor-hint">Challenge yourself — there are 9 factors!</div>
+              </div>
+            </div>
+            <div class="lf-answer-area">
+              <div class="lf-input-wrapper">
+                <input class="lf-answer-input" type="text" data-lf-answer="36" placeholder="Type all 9 factors..." autocomplete="off" spellcheck="false">
+                <div class="lf-status-icon"></div>
+              </div>
+            </div>
+            <div class="lf-feedback"></div>
+          </article>
+
+        </div>
+
+        <div class="controls">
+
+          <button
+            class="btn btn-check"
+            onclick="lfCheckAll()"
+          >
+            🌸 Check Exercise 6
+          </button>
+
+          <button
+            class="btn btn-reset"
+            onclick="lfResetAll()"
+          >
+            ↻ Try Again
+          </button>
+
+        </div>
+
+        <div
+          class="feedback"
+          id="feedback6"
+        ></div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =======================================================
+         CHECK EVERYTHING
+         ======================================================= -->
+
+    <section class="final-check-area">
+
+      <div class="score-stars">
+        🌸 ✨ 🎀 ✨ 🌸
+      </div>
+
+      <h2>
+        Ready to check everything?
+      </h2>
+
+      <p>
+        You can use the individual check buttons while working.
+        When you are finished, click the button below for your final score.
+      </p>
+
+
+      <button
+        class="check-all-button"
+        onclick="checkAllWork()"
+      >
+        🌷 Check All My Work
+      </button>
+
+
+      <div
+        class="score-card"
+        id="scoreCard"
+      >
+
+        <div class="score-stars">
+          ⭐ 🌸 ⭐
+        </div>
+
+        <div
+          class="score-number"
+          id="scoreNumber"
+        >
+        </div>
+
+        <div
+          class="score-message"
+          id="scoreMessage"
+        >
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <script>
+
+    /* =========================================================
+       🌸 FACTOR GARDEN JAVASCRIPT
+       ========================================================= */
+
+
+    /* =========================================================
+       ACTIVITY STATUS
+       =========================================================
+
+       There are 5 main activities:
+
+       1. Factors of 12
+       2. Factors of 18
+       3. Question 3
+       4. Question 4
+       5. Question 5
+
+       The final score counts individual answer fields.
+    */
+
+    const activityStatus = {
+      factors12: false,
+      factors18: false,
+      q3: false,
+      q4: false,
+      q5: false,
+      q6: false
+    };
+
+
+    /* =========================================================
+       ARRAY DATA
+       ========================================================= */
+
+    const arrayConfigurations = {
+
+      12: [
+        [1, 12],
+        [2, 6],
+        [3, 4]
+      ],
+
+      18: [
+        [1, 18],
+        [2, 9],
+        [3, 6]
+      ]
+
+    };
+
+
+    /* =========================================================
+       CORRECT FACTORS
+       ========================================================= */
+
+    const correctFactors = {
+
+      12: [1, 2, 3, 4, 6, 12],
+
+      18: [1, 2, 3, 6, 9, 18],
+
+      6: [1, 2, 3, 6],
+
+      24: [1, 2, 3, 4, 6, 8, 12, 24],
+
+      20: [1, 2, 4, 5, 10, 20]
+
+    };
+
+
+    /* =========================================================
+       SCORE SYSTEM
+       =========================================================
+
+       Every individual answer field counts as one point.
+
+       Factors of 12 = 6
+       Factors of 18 = 6
+
+       Q3a = 2
+       Q3b = 1
+
+       Q4a = 4
+       Q4b = 1
+
+       Q5a = 6 individual pair fields
+       Q5b = 1
+
+       Exercise 6 = 8 individual factor-list answers (a-h)
+
+       Total = 35 individual answer fields.
+
+       Factor-list questions are counted as one completed
+       answer because they are a single text response.
+    */
+
+    const scoreTotal = 35;
+
+
+    /* =========================================================
+       CREATE ARRAY VISUALS
+       ========================================================= */
+
+    function createArrays(number) {
+
+      const container =
+        document.getElementById(`arrays${number}`);
+
+      if (!container) return;
+
+      container.innerHTML = "";
+
+      const green =
+        number === 12;
+
+
+      arrayConfigurations[number].forEach(
+        ([rows, columns]) => {
+
+          const card =
+            document.createElement("div");
+
+          card.className =
+            "array-card";
+
+
+          const title =
+            document.createElement("div");
+
+          title.className =
+            "array-title";
+
+          title.textContent =
+            `${rows} × ${columns}`;
+
+
+          /*
+            The array-stage is the clipping container.
+
+            This ensures counters cannot overflow.
+          */
+
+          const stage =
+            document.createElement("div");
+
+          stage.className =
+            "array-stage";
+
+
+          const array =
+            document.createElement("div");
+
+          array.className =
+            "array";
+
+
+          for (
+            let rowNumber = 0;
+            rowNumber < rows;
+            rowNumber++
+          ) {
+
+            const row =
+              document.createElement("div");
+
+            row.className =
+              "array-row";
+
+
+            for (
+              let columnNumber = 0;
+              columnNumber < columns;
+              columnNumber++
+            ) {
+
+              const counter =
+                document.createElement("div");
+
+              counter.className =
+                `counter ${
+                  green
+                    ? "green-counter"
+                    : "red-counter"
+                }`;
+
+
+              counter.style.animationDelay =
+                `${
+                  (
+                    rowNumber * columns +
+                    columnNumber
+                  ) * 0.025
+                }s`;
+
+
+              row.appendChild(counter);
+
+            }
+
+
+            array.appendChild(row);
+
+          }
+
+
+          stage.appendChild(array);
+
+
+          const equation =
+            document.createElement("div");
+
+          equation.className =
+            "array-equation";
+
+          equation.textContent =
+            `${rows} rows × ${columns} = ${number}`;
+
+
+          card.appendChild(title);
+
+          card.appendChild(stage);
+
+          card.appendChild(equation);
+
+
+          container.appendChild(card);
+
+        }
+      );
+
+    }
+
+
+    /* =========================================================
+       IMMEDIATE CHECK FOR SIMPLE NUMBER INPUTS
+       =========================================================
+
+       Used by:
+
+       Q3a
+       Q4a
+
+       As the child types:
+       correct → green + checkmark
+       incorrect → subtle reddish border
+    */
+
+    document.addEventListener(
+      "input",
+      event => {
+
+        const input =
+          event.target;
+
+
+        if (
+          !input.classList.contains(
+            "answer-input"
+          )
+        ) {
+          return;
+        }
+
+
+        /*
+          Remove previous state.
+        */
+
+        input.classList.remove(
+          "correct",
+          "incorrect"
+        );
+
+
+        const wrapper =
+          input.closest(".input-wrap");
+
+
+        if (wrapper) {
+
+          wrapper.classList.remove(
+            "correct"
+          );
+
+        }
+
+
+        /*
+          Blank input should not be marked wrong.
+        */
+
+        if (
+          input.value.trim() === ""
+        ) {
+          return;
+        }
+
+
+        /*
+          Q3a / Q4a have direct data-answer values.
+        */
+
+        if (
+          input.dataset.answer
+        ) {
+
+          const value =
+            Number(input.value);
+
+          const answer =
+            Number(input.dataset.answer);
+
+
+          if (value === answer) {
+
+            input.classList.add(
+              "correct"
+            );
+
+
+            if (wrapper) {
+
+              wrapper.classList.add(
+                "correct"
+              );
+
+            }
+
+          } else {
+
+            input.classList.add(
+              "incorrect"
+            );
+
+          }
+
+        }
+
+      }
+    );
+
+
+    /* =========================================================
+       CHECK SIMPLE INPUT GROUP
+       ========================================================= */
+
+    function checkSimpleInputs(
+      className,
+      feedbackId
+    ) {
+
+      const inputs =
+        [
+          ...document.querySelectorAll(
+            `.${className}`
+          )
+        ];
+
+
+      let correct = 0;
+
+      let empty = 0;
+
+
+      inputs.forEach(input => {
+
+        const value =
+          input.value.trim();
+
+
+        if (!value) {
+
+          empty++;
+
+          input.classList.remove(
+            "correct",
+            "incorrect"
+          );
+
+          return;
+
+        }
+
+
+        const isCorrect =
+          Number(value) ===
+          Number(input.dataset.answer);
+
+
+        if (isCorrect) {
+
+          correct++;
+
+          input.classList.add(
+            "correct"
+          );
+
+        } else {
+
+          input.classList.add(
+            "incorrect"
+          );
+
+        }
+
+      });
+
+
+      const feedback =
+        document.getElementById(
+          feedbackId
+        );
+
+
+      if (
+        correct === inputs.length
+      ) {
+
+        feedback.className =
+          "feedback show success";
+
+        feedback.textContent =
+          "🎀 Perfect! Every multiplication fact is correct!";
+
+
+      } else if (empty > 0) {
+
+        feedback.className =
+          "feedback show retry";
+
+        feedback.textContent =
+          "🌷 Fill in the missing boxes and try again.";
+
+
+      } else {
+
+        feedback.className =
+          "feedback show retry";
+
+        feedback.textContent =
+          `💕 You have ${correct} of ${inputs.length} correct. Check the ones without a green checkmark.`;
+
+      }
+
+
+      updateActivityStatus();
+
+    }
+
+
+    /* =========================================================
+       CHECK FACTOR INPUTS
+       =========================================================
+
+       This allows factors in ANY order.
+
+       Example:
+
+       1,2,3,6
+
+       and
+
+       6,3,1,2
+
+       are both accepted.
+    */
+
+    function checkFactorInputs(number) {
+
+      const inputs =
+        [
+          ...document.querySelectorAll(
+            `.factor${number}-input`
+          )
+        ];
+
+
+      const correct =
+        [...correctFactors[number]]
+          .sort((a, b) => a - b);
+
+
+      const values =
+        inputs
+          .map(input =>
+            input.value.trim()
+              ? Number(input.value)
+              : null
+          );
+
+
+      if (
+        values.some(
+          value => value === null
+        )
+      ) {
+
+        const feedback =
+          document.getElementById(
+            `feedback${number}`
+          );
+
+        feedback.className =
+          "feedback show retry";
+
+        feedback.textContent =
+          "🌷 Fill in all the boxes first. You can do it!";
+
+        return;
+
+      }
+
+
+      const sortedValues =
+        [...values]
+          .sort((a, b) => a - b);
+
+
+      const isCorrect =
+        sortedValues.length ===
+          correct.length &&
+        sortedValues.every(
+          (value, index) =>
+            value === correct[index]
+        );
+
+
+      inputs.forEach(
+        input => {
+
+          input.classList.remove(
+            "correct",
+            "incorrect"
+          );
+
+        }
+      );
+
+
+      const feedback =
+        document.getElementById(
+          `feedback${number}`
+        );
+
+
+      if (isCorrect) {
+
+        inputs.forEach(
+          input =>
+            input.classList.add(
+              "correct"
+            )
+        );
+
+
+        feedback.className =
+          "feedback show success";
+
+        feedback.textContent =
+          `🌸 Wonderful! You found all the factors of ${number}!`;
+
+        activityStatus[
+          `factors${number}`
+        ] = true;
+
+
+      } else {
+
+        inputs.forEach(
+          input => {
+
+            const value =
+              Number(input.value);
+
+
+            if (
+              correct.includes(value)
+            ) {
+
+              input.classList.add(
+                "correct"
+              );
+
+            } else {
+
+              input.classList.add(
+                "incorrect"
+              );
+
+            }
+
+          }
+        );
+
+
+        feedback.className =
+          "feedback show retry";
+
+        feedback.textContent =
+          "💕 Not quite. Look at the equal rows again and try another arrangement.";
+
+        activityStatus[
+          `factors${number}`
+        ] = false;
+
+      }
+
+
+      updateActivityStatus();
+
+    }
+
+
+    /* =========================================================
+       CHECK FACTOR LIST TEXT INPUT
+       ========================================================= */
+
+    function checkFactorList(
+      inputId,
+      correctArray,
+      feedbackId
+    ) {
+
+      const input =
+        document.getElementById(
+          inputId
+        );
+
+
+      const feedback =
+        document.getElementById(
+          feedbackId
+        );
+
+
+      const raw =
+        input.value.trim();
+
+
+      if (!raw) {
+
+        input.classList.remove(
+          "correct"
+        );
+
+        input.classList.add(
+          "incorrect"
+        );
+
+        feedback.className =
+          "feedback show retry";
+
+        feedback.textContent =
+          "🌷 Type the factors separated by commas.";
+
+        updateActivityStatus();
+
+        return false;
+
+      }
+
+
+      /*
+        Accept commas, spaces and semicolons.
+
+        Examples accepted:
+
+        1, 2, 3, 6
+        1,3,6,2
+        6, 3, 1, 2
+        1; 2; 3; 6
+      */
+
+      const values =
+        raw
+          .split(/[,\s;]+/)
+          .filter(Boolean)
+          .map(Number);
+
+
+      const sortedValues =
+        [...values]
+          .sort((a, b) => a - b);
+
+
+      const sortedCorrect =
+        [...correctArray]
+          .sort((a, b) => a - b);
+
+
+      const isCorrect =
+        sortedValues.length ===
+          sortedCorrect.length &&
+        sortedValues.every(
+          (value, index) =>
+            value === sortedCorrect[index]
+        );
+
+
+      input.classList.remove(
+        "correct",
+        "incorrect"
+      );
+
+
+      if (isCorrect) {
+
+        input.classList.add(
+          "correct"
+        );
+
+        feedback.className =
+          "feedback show success";
+
+        feedback.textContent =
+          "🎀 Excellent! You found every factor!";
+
+      } else {
+
+        input.classList.add(
+          "incorrect"
+        );
+
+        feedback.className =
+          "feedback show retry";
+
+        feedback.textContent =
+          "💕 Check your list again. Remember that every factor must divide the number exactly.";
+
+      }
+
+
+      updateActivityStatus();
+
+      return isCorrect;
+
+    }
+
+
+    /* =========================================================
+       Q5a — FACTOR PAIRS
+       =========================================================
+
+       Required pairs:
+
+       1 × 20
+       2 × 10
+       4 × 5
+
+       Each pair can be entered either way.
+
+       Example:
+
+       20 × 1
+
+       is accepted as the same pair as
+
+       1 × 20.
+    */
+
+    function checkQ5Pairs() {
+
+      const rows =
+        [...document.querySelectorAll(
+          ".q5a-pair"
+        )];
+
+
+      const grouped = {};
+
+
+      rows.forEach(input => {
+
+        const pair =
+          input.dataset.pair;
+
+
+        if (!grouped[pair]) {
+
+          grouped[pair] = [];
+
+        }
+
+
+        grouped[pair].push(
+          input
+        );
+
+      });
+
+
+      let correctCount = 0;
+
+      let emptyCount = 0;
+
+
+      Object.keys(grouped)
+        .forEach(pairNumber => {
+
+          const pairInputs =
+            grouped[pairNumber];
+
+
+          const values =
+            pairInputs.map(
+              input =>
+                input.value.trim()
+                  ? Number(input.value)
+                  : null
+            );
+
+
+          if (
+            values.some(
+              value => value === null
+            )
+          ) {
+
+            emptyCount++;
+
+            pairInputs.forEach(
+              input =>
+                input.classList.add(
+                  "incorrect"
+                )
+            );
+
+            return;
+
+          }
+
+
+          const expected =
+            pairInputs[0]
+              .dataset
+              .allowed
+              .split(",")
+              .map(Number)
+              .sort(
+                (a, b) => a - b
+              );
+
+
+          const actual =
+            [...values]
+              .sort(
+                (a, b) => a - b
+              );
+
+
+          const isCorrect =
+            actual[0] === expected[0] &&
+            actual[1] === expected[1];
+
+
+          pairInputs.forEach(
+            input => {
+
+              input.classList.remove(
+                "correct",
+                "incorrect"
+              );
+
+
+              if (isCorrect) {
+
+                input.classList.add(
+                  "correct"
+                );
+
+              } else {
+
+                input.classList.add(
+                  "incorrect"
+                );
+
+              }
+
+            }
+          );
+
+
+          if (isCorrect) {
+
+            correctCount++;
+
+          }
+
+        });
+
+
+      const feedback =
+        document.getElementById(
+          "feedback5a"
+        );
+
+
+      if (
+        correctCount === 3
+      ) {
+
+        feedback.className =
+          "feedback show success";
+
+        feedback.textContent =
+          "🌸 Perfect! You found all three factor pairs for 20.";
+
+        activityStatus.q5 = true;
+
+
+      } else {
+
+        feedback.className =
+          "feedback show retry";
+
+        feedback.textContent =
+          `💕 ${correctCount} of 3 pairs are correct. Remember the factor pairs of 20.`;
+
+        activityStatus.q5 = false;
+
+      }
+
+
+      updateActivityStatus();
+
+    }
+
+
+    /* =========================================================
+       ACTIVITY STATUS
+       ========================================================= */
+
+    function updateActivityStatus() {
+
+      /*
+        Q3 is complete when both 3a and 3b are correct.
+        Q4 is complete when both 4a and 4b are correct.
+        Q5 is complete when both 5a and 5b are correct.
+      */
+
+      const q3a =
+        areInputsCorrect(
+          ".q3a"
+        );
+
+      const q3b =
+        isFactorListCorrect(
+          "q3b",
+          correctFactors[6]
+        );
+
+
+      activityStatus.q3 =
+        q3a && q3b;
+
+
+      const q4a =
+        areInputsCorrect(
+          ".q4a"
+        );
+
+      const q4b =
+        isFactorListCorrect(
+          "q4b",
+          correctFactors[24]
+        );
+
+
+      activityStatus.q4 =
+        q4a && q4b;
+
+
+      const q5a =
+        areQ5PairsCorrect();
+
+
+      const q5b =
+        isFactorListCorrect(
+          "q5b",
+          correctFactors[20]
+        );
+
+
+      activityStatus.q5 =
+        q5a && q5b;
+
+
+      activityStatus.q6 =
+        lfAllCorrect();
+
+
+      const count =
+        Object.values(
+          activityStatus
+        ).filter(Boolean).length;
+
+
+      document.getElementById(
+        "progressText"
+      ).textContent =
+        `🌷 ${count} / 6 activities complete`;
+
+    }
+
+
+    /* =========================================================
+       HELPERS
+       ========================================================= */
+
+    function areInputsCorrect(
+      selector
+    ) {
+
+      const inputs =
+        [
+          ...document.querySelectorAll(
+            selector
+          )
+        ];
+
+
+      if (!inputs.length) {
+        return false;
+      }
+
+
+      return inputs.every(
+        input =>
+          input.value.trim() !== "" &&
+          Number(input.value) ===
+            Number(input.dataset.answer)
+      );
+
+    }
+
+
+    function isFactorListCorrect(
+      id,
+      correct
+    ) {
+
+      const input =
+        document.getElementById(id);
+
+
+      if (
+        !input ||
+        !input.value.trim()
+      ) {
+        return false;
+      }
+
+
+      const values =
+        input.value
+          .trim()
+          .split(/[,\s;]+/)
+          .filter(Boolean)
+          .map(Number)
+          .sort(
+            (a, b) => a - b
+          );
+
+
+      const expected =
+        [...correct]
+          .sort(
+            (a, b) => a - b
+          );
+
+
+      return (
+        values.length ===
+          expected.length &&
+        values.every(
+          (value, index) =>
+            value === expected[index]
+        )
+      );
+
+    }
+
+
+    function areQ5PairsCorrect() {
+
+      const rows =
+        [
+          ...document.querySelectorAll(
+            ".q5a-pair"
+          )
+        ];
+
+
+      const grouped = {};
+
+
+      rows.forEach(input => {
+
+        const pair =
+          input.dataset.pair;
+
+
+        if (!grouped[pair]) {
+
+          grouped[pair] = [];
+
+        }
+
+
+        grouped[pair].push(
+          input
+        );
+
+      });
+
+
+      return Object.values(
+        grouped
+      ).every(pairInputs => {
+
+        if (
+          pairInputs.some(
+            input =>
+              input.value.trim() === ""
+          )
+        ) {
+          return false;
+        }
+
+
+        const actual =
+          pairInputs
+            .map(
+              input =>
+                Number(input.value)
+            )
+            .sort(
+              (a, b) => a - b
+            );
+
+
+        const expected =
+          pairInputs[0]
+            .dataset
+            .allowed
+            .split(",")
+            .map(Number)
+            .sort(
+              (a, b) => a - b
+            );
+
+
+        return (
+          actual[0] === expected[0] &&
+          actual[1] === expected[1]
+        );
+
+      });
+
+    }
+
+
+    /* =========================================================
+       CHECK ALL WORK
+       =========================================================
+
+       The final score is based on individual answer fields.
+
+       Total:
+
+       Q1 factors of 12       = 6
+       Q2 factors of 18       = 6
+       Q3a                    = 2
+       Q3b                    = 1
+       Q4a                    = 4
+       Q4b                    = 1
+       Q5a                    = 6
+       Q5b                    = 1
+
+       TOTAL                  = 27
+    */
+
+    function checkAllWork() {
+
+      /*
+        First check every answer.
+      */
+
+      checkFactorInputs(12);
+
+      checkFactorInputs(18);
+
+      checkSimpleInputs(
+        "q3a",
+        "feedback3a"
+      );
+
+      checkFactorList(
+        "q3b",
+        correctFactors[6],
+        "feedback3b"
+      );
+
+      checkSimpleInputs(
+        "q4a",
+        "feedback4a"
+      );
+
+      checkFactorList(
+        "q4b",
+        correctFactors[24],
+        "feedback4b"
+      );
+
+      checkQ5Pairs();
+
+      checkFactorList(
+        "q5b",
+        correctFactors[20],
+        "feedback5b"
+      );
+
+      lfCheckAll();
+
+
+      /*
+        Count every individual answer field.
+      */
+
+      let score = 0;
+
+
+      /* Q1 */
+
+      document
+        .querySelectorAll(
+          ".factor12-input"
+        )
+        .forEach(input => {
+
+          if (
+            Number(input.value) ===
+            Number(input.dataset.answer)
+          ) {
+
+            score++;
+
+          }
+
+        });
+
+
+      /* Q2 */
+
+      document
+        .querySelectorAll(
+          ".factor18-input"
+        )
+        .forEach(input => {
+
+          if (
+            Number(input.value) ===
+            Number(input.dataset.answer)
+          ) {
+
+            score++;
+
+          }
+
+        });
+
+
+      /* Q3a */
+
+      score +=
+        countCorrectInputs(
+          ".q3a"
+        );
+
+
+      /* Q3b */
+
+      if (
+        isFactorListCorrect(
+          "q3b",
+          correctFactors[6]
+        )
+      ) {
+
+        score++;
+
+      }
+
+
+      /* Q4a */
+
+      score +=
+        countCorrectInputs(
+          ".q4a"
+        );
+
+
+      /* Q4b */
+
+      if (
+        isFactorListCorrect(
+          "q4b",
+          correctFactors[24]
+        )
+      ) {
+
+        score++;
+
+      }
+
+
+      /* Q5a */
+
+      score +=
+        countCorrectPairFields();
+
+
+      /* Q5b */
+
+      if (
+        isFactorListCorrect(
+          "q5b",
+          correctFactors[20]
+        )
+      ) {
+
+        score++;
+
+      }
+
+
+      /* Exercise 6 (a-h) */
+
+      score +=
+        countCorrectLF();
+
+
+      /*
+        Display score.
+      */
+
+      const scoreCard =
+        document.getElementById(
+          "scoreCard"
+        );
+
+
+      const scoreNumber =
+        document.getElementById(
+          "scoreNumber"
+        );
+
+
+      const scoreMessage =
+        document.getElementById(
+          "scoreMessage"
+        );
+
+
+      scoreNumber.textContent =
+        `${score} out of ${scoreTotal}`;
+
+
+      let message;
+
+
+      const percentage =
+        Math.round(
+          (score / scoreTotal) * 100
+        );
+
+
+      if (percentage === 100) {
+
+        message =
+          "🎀 Well done, Imara! Every answer is correct. You are a Factor Superstar! 🌸";
+
+      } else if (percentage >= 80) {
+
+        message =
+          "🌷 Fantastic work, Imara! You are very close to becoming a Factor Superstar!";
+
+      } else if (percentage >= 60) {
+
+        message =
+          "💕 Great effort, Imara! Look again at the arrays and multiplication facts.";
+
+      } else {
+
+        message =
+          "🌸 Keep going, Imara! Use the counters to help you discover the factors.";
+
+      }
+
+
+      scoreMessage.textContent =
+        message;
+
+
+      scoreCard.classList.add(
+        "show"
+      );
+
+
+      /*
+        Bring score into view.
+      */
+
+      setTimeout(() => {
+
+        scoreCard.scrollIntoView({
+          behavior: "smooth",
+          block: "center"
+        });
+
+      }, 150);
+
+    }
+
+
+    /* =========================================================
+       COUNT CORRECT SIMPLE INPUTS
+       ========================================================= */
+
+    function countCorrectInputs(
+      selector
+    ) {
+
+      let count = 0;
+
+
+      document
+        .querySelectorAll(selector)
+        .forEach(input => {
+
+          if (
+            input.value.trim() !== "" &&
+            Number(input.value) ===
+              Number(input.dataset.answer)
+          ) {
+
+            count++;
+
+          }
+
+        });
+
+
+      return count;
+
+    }
+
+
+    /* =========================================================
+       COUNT CORRECT Q5 PAIR FIELDS
+       ========================================================= */
+
+    function countCorrectPairFields() {
+
+      const rows =
+        [
+          ...document.querySelectorAll(
+            ".q5a-pair"
+          )
+        ];
+
+
+      const grouped = {};
+
+
+      rows.forEach(input => {
+
+        const pair =
+          input.dataset.pair;
+
+
+        if (!grouped[pair]) {
+
+          grouped[pair] = [];
+
+        }
+
+
+        grouped[pair].push(
+          input
+        );
+
+      });
+
+
+      let count = 0;
+
+
+      Object.values(grouped)
+        .forEach(pairInputs => {
+
+          if (
+            pairInputs.length !== 2
+          ) {
+            return;
+          }
+
+
+          if (
+            pairInputs.some(
+              input =>
+                input.value.trim() === ""
+            )
+          ) {
+            return;
+          }
+
+
+          const actual =
+            pairInputs
+              .map(
+                input =>
+                  Number(input.value)
+              )
+              .sort(
+                (a, b) => a - b
+              );
+
+
+          const expected =
+            pairInputs[0]
+              .dataset
+              .allowed
+              .split(",")
+              .map(Number)
+              .sort(
+                (a, b) => a - b
+              );
+
+
+          if (
+            actual[0] === expected[0] &&
+            actual[1] === expected[1]
+          ) {
+
+            /*
+              Both fields in the pair receive
+              a point.
+            */
+
+            count += 2;
+
+          }
+
+        });
+
+
+      return count;
+
+    }
+
+
+    /* =========================================================
+       RESET AN ENTIRE EXERCISE
+       ========================================================= */
+
+    function resetExercise(
+      sectionId
+    ) {
+
+      const section =
+        document.getElementById(
+          sectionId
+        );
+
+
+      if (!section) {
+        return;
+      }
+
+
+      section
+        .querySelectorAll(
+          "input"
+        )
+        .forEach(input => {
+
+          input.value = "";
+
+          input.classList.remove(
+            "correct",
+            "incorrect"
+          );
+
+
+          const wrapper =
+            input.closest(
+              ".input-wrap"
+            );
+
+
+          if (wrapper) {
+
+            wrapper.classList.remove(
+              "correct"
+            );
+
+          }
+
+        });
+
+
+      section
+        .querySelectorAll(
+          ".feedback"
+        )
+        .forEach(feedback => {
+
+          feedback.className =
+            "feedback";
+
+          feedback.textContent =
+            "";
+
+        });
+
+
+      updateActivityStatus();
+
+    }
+
+
+    /* =========================================================
+       IMMEDIATE FACTOR-LIST FEEDBACK
+       ========================================================= */
+
+    document.addEventListener(
+      "input",
+      event => {
+
+        const input =
+          event.target;
+
+
+        /*
+          Factor list fields are text inputs.
+        */
+
+        if (
+          input.classList.contains(
+            "factor-list-input"
+          )
+        ) {
+
+          input.classList.remove(
+            "correct",
+            "incorrect"
+          );
+
+        }
+
+      }
+    );
+
+
+    /* =========================================================
+       ENTER KEY SUPPORT
+       ========================================================= */
+
+    document.addEventListener(
+      "keydown",
+      event => {
+
+        if (
+          event.key !== "Enter"
+        ) {
+          return;
+        }
+
+
+        const input =
+          event.target;
+
+
+        if (
+          input.classList.contains(
+            "factor-list-input"
+          )
+        ) {
+
+          event.preventDefault();
+
+          /*
+            Automatically find the matching
+            check button is unnecessary here;
+            simply trigger the appropriate
+            question checker.
+          */
+
+          if (input.id === "q3b") {
+
+            checkFactorList(
+              "q3b",
+              correctFactors[6],
+              "feedback3b"
+            );
+
+          } else if (
+            input.id === "q4b"
+          ) {
+
+            checkFactorList(
+              "q4b",
+              correctFactors[24],
+              "feedback4b"
+            );
+
+          } else if (
+            input.id === "q5b"
+          ) {
+
+            checkFactorList(
+              "q5b",
+              correctFactors[20],
+              "feedback5b"
+            );
+
+          }
+
+        }
+
+      }
+    );
+
+
+    /* =========================================================
+       EXERCISE 6 — merged from the former "List Factors" activity
+       =========================================================
+
+       Namespaced with an "lf" prefix (functions, classes and
+       data attributes) so it cannot collide with the rest of
+       the worksheet's logic.
+
+       Behaviour is identical to the original standalone activity:
+       real-time feedback as the student types, order and spacing
+       of the typed factors do not matter, duplicates are ignored.
+    */
+
+    const lfAnswerKey = {
+      a: [1, 2, 4, 8],
+      b: [1, 2, 5, 10],
+      c: [1, 2, 11, 22],
+      d: [1, 3, 9, 27],
+      e: [1, 2, 3, 5, 6, 10, 15, 30],
+      f: [1, 5, 7, 35],
+      g: [1, 3, 9],
+      h: [1, 2, 3, 4, 6, 9, 12, 18, 36]
+    };
+
+    const lfCards = document.querySelectorAll(".lf-question-card");
+
+    function lfParseInput(value) {
+      return value
+        .trim()
+        .split(/[\s,]+/)
+        .filter(item => item !== "")
+        .map(Number)
+        .filter(number => Number.isFinite(number));
+    }
+
+    function lfArraysMatch(studentAnswers, correctAnswers) {
+      const student = [...new Set(studentAnswers)].sort((a, b) => a - b);
+      const correct = [...new Set(correctAnswers)].sort((a, b) => a - b);
+
+      if (student.length !== correct.length) {
+        return false;
+      }
+
+      return student.every((number, index) => number === correct[index]);
+    }
+
+    function lfCheckQuestion(card, showFeedback = true) {
+      const question = card.dataset.lfQuestion;
+      const input = card.querySelector(".lf-answer-input");
+      const feedback = card.querySelector(".lf-feedback");
+      const statusIcon = card.querySelector(".lf-status-icon");
+
+      const studentAnswers = lfParseInput(input.value);
+      const correctAnswers = lfAnswerKey[question];
+
+      const isCorrect =
+        studentAnswers.length > 0 &&
+        lfArraysMatch(studentAnswers, correctAnswers);
+
+      input.classList.remove("lf-correct", "lf-incorrect");
+      statusIcon.classList.remove("lf-show", "lf-correct", "lf-incorrect");
+      feedback.classList.remove("lf-success", "lf-retry");
+      card.classList.remove("lf-correct-card", "lf-incorrect-card");
+
+      if (isCorrect) {
+
+        input.classList.add("lf-correct");
+        statusIcon.textContent = "✓";
+        statusIcon.classList.add("lf-show", "lf-correct");
+        card.classList.add("lf-correct-card");
+
+        if (showFeedback) {
+          feedback.textContent = "✨ Perfect! You found all the factors.";
+          feedback.classList.add("lf-success");
+        }
+
+      } else if (input.value.trim() !== "") {
+
+        input.classList.add("lf-incorrect");
+        statusIcon.textContent = "!";
+        statusIcon.classList.add("lf-show", "lf-incorrect");
+        card.classList.add("lf-incorrect-card");
+
+        if (showFeedback) {
+          feedback.textContent = "🌱 Almost there! Check that you have all the factors.";
+          feedback.classList.add("lf-retry");
+        }
+
+      }
+
+      return isCorrect;
+    }
+
+    lfCards.forEach(card => {
+      const input = card.querySelector(".lf-answer-input");
+
+      input.addEventListener("input", () => {
+        input.classList.remove("lf-correct", "lf-incorrect");
+
+        const statusIcon = card.querySelector(".lf-status-icon");
+        const feedback = card.querySelector(".lf-feedback");
+
+        statusIcon.classList.remove("lf-show", "lf-correct", "lf-incorrect");
+        feedback.textContent = "";
+        feedback.classList.remove("lf-success", "lf-retry");
+        card.classList.remove("lf-correct-card", "lf-incorrect-card");
+
+        if (input.value.trim() !== "") {
+          lfCheckQuestion(card, true);
+        }
+
+        updateActivityStatus();
+      });
+    });
+
+    function lfAllCorrect() {
+      return [...lfCards].every(card => {
+        const input = card.querySelector(".lf-answer-input");
+        const answers = lfParseInput(input.value);
+        return (
+          answers.length > 0 &&
+          lfArraysMatch(answers, lfAnswerKey[card.dataset.lfQuestion])
+        );
+      });
+    }
+
+    function countCorrectLF() {
+      let count = 0;
+
+      lfCards.forEach(card => {
+        const input = card.querySelector(".lf-answer-input");
+        const answers = lfParseInput(input.value);
+
+        if (
+          answers.length > 0 &&
+          lfArraysMatch(answers, lfAnswerKey[card.dataset.lfQuestion])
+        ) {
+          count++;
+        }
+      });
+
+      return count;
+    }
+
+    function lfCheckAll() {
+      let score = 0;
+
+      lfCards.forEach(card => {
+        if (lfCheckQuestion(card, true)) {
+          score++;
+        }
+      });
+
+      const feedback = document.getElementById("feedback6");
+
+      if (score === lfCards.length) {
+        feedback.className = "feedback show success";
+        feedback.textContent = "🌸🎉 Amazing! Every factor list is correct!";
+      } else {
+        feedback.className = "feedback show retry";
+        feedback.textContent =
+          `💕 You have ${score} of ${lfCards.length} correct. Check the ones without a green checkmark.`;
+      }
+
+      updateActivityStatus();
+    }
+
+    function lfResetAll() {
+      lfCards.forEach(card => {
+        const input = card.querySelector(".lf-answer-input");
+        const feedback = card.querySelector(".lf-feedback");
+        const statusIcon = card.querySelector(".lf-status-icon");
+
+        input.value = "";
+        input.classList.remove("lf-correct", "lf-incorrect");
+
+        statusIcon.className = "lf-status-icon";
+        statusIcon.textContent = "";
+
+        feedback.textContent = "";
+        feedback.className = "lf-feedback";
+
+        card.classList.remove("lf-correct-card", "lf-incorrect-card");
+      });
+
+      const feedback6 = document.getElementById("feedback6");
+      feedback6.className = "feedback";
+      feedback6.textContent = "";
+
+      updateActivityStatus();
+    }
+
+
+    /* =========================================================
+       INITIALISE PAGE
+       ========================================================= */
+
+    createArrays(12);
+
+    createArrays(18);
+
+    updateActivityStatus();
+
+  </script>
+
+<nav class="ndx-navbar ndx-bottom" aria-label="Lesson navigation">
+  <a class="ndx-home" href="../../" title="Home">🏠<span>Home</span></a>
+  <div class="ndx-nav-buttons">
+    <a class="ndx-btn ndx-back" href="../warmup/">← Warm-Up</a>
+    <a class="ndx-btn ndx-next" href="../../multiples/warmup/">Multiples Warm-Up →</a>
+  </div>
+</nav>
+</body>
+</html>

@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bear-y Cute Multiples Lab</title>
+<style>
+:root{
+  --pink:#f7a8c4; --pink2:#ffdce9; --rose:#e978a4;
+  --cream:#fff8f5; --paper:#fffdfc; --ink:#553b48; --muted:#9a7787;
+  --lav:#d9c7f4; --mint:#cfeee1; --yellow:#ffe7a9;
+  --line:rgba(110,64,88,.12);
+  --shadow:0 18px 45px rgba(126,72,99,.14);
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--cream);color:var(--ink)}
+body{
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  overflow-x:hidden;
+}
+body:before{
+  content:"";position:fixed;inset:0;pointer-events:none;opacity:.42;
+  background-image:radial-gradient(rgba(233,120,164,.18) 1px,transparent 1px);
+  background-size:26px 26px;
+}
+.app{width:min(1180px,calc(100% - 24px));margin:auto;padding:24px 0 40px}
+.board-card{
+  position:relative;background:rgba(255,253,252,.9);border:1px solid #fff;
+  box-shadow:var(--shadow);backdrop-filter:blur(16px);border-radius:30px;padding:22px;
+  overflow:hidden;
+}
+.decor{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.cloud{position:absolute;background:#fff;border-radius:999px;opacity:.65}
+.cloud:before,.cloud:after{content:"";position:absolute;background:#fff;border-radius:50%}
+.cloud:before{width:42px;height:42px;left:18px;top:-20px}
+.cloud:after{width:58px;height:58px;left:43px;top:-30px}
+.cloud.one{width:95px;height:25px;left:-10px;top:105px}
+.cloud.two{width:120px;height:30px;right:-15px;top:180px}
+.bear{
+  position:absolute;width:90px;height:80px;opacity:.92;
+}
+.bear .head{position:absolute;width:58px;height:52px;border-radius:48% 48% 44% 44%;background:#c99172;left:16px;top:16px;box-shadow:inset 0 -4px rgba(92,55,40,.1)}
+.bear .ear{position:absolute;width:25px;height:25px;border-radius:50%;background:#b97d61;top:4px}
+.bear .ear.l{left:13px}.bear .ear.r{right:13px}
+.bear .ear:after{content:"";position:absolute;inset:6px;border-radius:50%;background:#efb5b0}
+.bear .eye{position:absolute;width:5px;height:7px;border-radius:50%;background:#553b48;top:36px;z-index:2}
+.bear .eye.l{left:34px}.bear .eye.r{left:55px}
+.bear .muzzle{position:absolute;width:25px;height:18px;border-radius:50%;background:#f0c6a8;left:33px;top:47px;z-index:1}
+.bear .nose{position:absolute;width:8px;height:5px;border-radius:50%;background:#553b48;left:42px;top:51px;z-index:2}
+.bear .bow{position:absolute;width:18px;height:18px;left:68px;top:48px;z-index:3}
+.bear .bow:before,.bear .bow:after{content:"";position:absolute;width:12px;height:12px;background:#e978a4;border-radius:8px 2px 8px 2px}
+.bear .bow:before{transform:rotate(35deg)}.bear .bow:after{transform:rotate(55deg);left:8px}
+.bear.a{left:8px;bottom:6px;transform:rotate(-7deg)} 
+.bear.b{right:7px;bottom:5px;transform:scale(.9) rotate(6deg)}
+.board-heading{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:flex-start;gap:20px;margin-bottom:13px}
+.badge{
+  display:inline-flex;align-items:center;gap:6px;background:var(--pink2);color:#b44c78;
+  border-radius:999px;padding:6px 10px;font-size:9px;font-weight:950;letter-spacing:.12em;
+  text-transform:uppercase;margin-bottom:7px;
+}
+.board-heading h1{margin:0 0 4px;font-size:clamp(25px,3vw,35px);letter-spacing:-.045em;color:#5b4050}
+.board-heading p{margin:0;color:var(--muted);font-size:12px;font-weight:750}
+.btn{
+  min-height:40px;border:0;border-radius:13px;padding:0 14px;font-size:11px;font-weight:900;
+  transition:.18s ease;box-shadow:0 5px 12px rgba(110,64,88,.07)
+}
+.btn:hover{transform:translateY(-2px)}.btn:active{transform:scale(.97)}
+.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.primary{background:var(--rose);color:#fff}.success{background:var(--mint);color:#416759}
+.yellow{background:var(--yellow);color:#765b25}.lav{background:var(--lav);color:#604c80}
+.board{
+  position:relative;z-index:2;width:100%;height:640px;overflow:hidden;border-radius:24px;
+  background:
+    radial-gradient(circle at 50% 55%,rgba(255,255,255,.85),transparent 44%),
+    linear-gradient(rgba(233,120,164,.055) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(233,120,164,.055) 1px,transparent 1px),
+    #fffafc;
+  background-size:auto,34px 34px,34px 34px;
+  border:1px solid rgba(233,120,164,.12);touch-action:none;
+}
+.case-label{
+  position:absolute;left:16px;top:13px;z-index:1;pointer-events:none;font-size:9px;
+  font-weight:950;letter-spacing:.14em;color:var(--muted)
+}
+.target{
+  position:absolute;right:16px;top:10px;z-index:1;pointer-events:none;text-align:right;color:#c95784;
+  font-size:22px;font-weight:950
+}
+.target small{display:block;font-size:8px;letter-spacing:.12em;color:var(--muted)}
+.tip{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);pointer-events:none;
+  text-align:center;color:var(--muted);font-size:13px;line-height:1.55;font-weight:750;width:78%;
+  z-index:1;transition:.25s
+}.tip.hidden{opacity:0}
+.bear-label{
+  position:absolute;left:50%;top:77px;transform:translateX(-50%);z-index:1;
+  padding:7px 13px;border-radius:999px;background:rgba(255,220,233,.8);
+  color:#a65376;font-size:10px;font-weight:900;pointer-events:none
+}
+.ball{
+  position:absolute;width:30px;height:30px;border-radius:50%;
+  background:radial-gradient(circle at 30% 24%,#fff 0 7%,transparent 8%),linear-gradient(145deg,#f8b3cd,#e978a4);
+  box-shadow:inset 0 -4px 0 rgba(125,45,80,.12),0 6px 11px rgba(126,72,99,.14);
+  touch-action:none;user-select:none;z-index:3;transition:left .12s ease,top .12s ease,transform .16s,box-shadow .16s
+}
+.ball:after{content:"♡";position:absolute;left:9px;top:5px;color:#fff;font-size:10px;font-weight:900}
+.ball:hover{transform:scale(1.07)}
+.ball.dragging{transition:none;transform:scale(1.18);box-shadow:0 15px 28px rgba(126,72,99,.24);z-index:30}
+.group{
+  position:absolute;z-index:2;border:2px dashed rgba(233,120,164,.26);border-radius:18px;
+  pointer-events:none;transition:.2s
+}
+.status{
+  min-height:47px;margin-top:11px;border-radius:14px;padding:10px 14px;display:flex;
+  align-items:center;justify-content:center;text-align:center;background:#fff;color:var(--muted);
+  font-size:11px;font-weight:800;border:1px solid var(--line)
+}
+.status.good{background:#e7f5ef;color:#416759}.status.hint{background:#fff1c9;color:#735b2a}
+.controls{position:relative;z-index:2;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:11px}
+.inspect{
+  display:none;margin-top:12px;padding:16px;border-radius:18px;background:#fff7fa;
+  border:1px solid rgba(233,120,164,.16);position:relative;z-index:2
+}.inspect.show{display:block}
+.inspect-title{text-align:center;text-transform:uppercase;font-size:9px;letter-spacing:.14em;color:#bd5c83;font-weight:950;margin-bottom:8px}
+.instruction{text-align:center;font-size:14px;font-weight:850;color:#684b5b;margin-bottom:12px}
+.multiple-sentence{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px;font-size:15px;font-weight:800}
+.answer{
+ width:52px;height:38px;border-radius:10px;border:2px solid rgba(233,120,164,.2);background:#fff;
+ text-align:center;font-size:16px;font-weight:950;color:#b84f79
+}
+.inspect-actions{text-align:center;margin-top:14px}
+.next-wrap{display:none;justify-content:center;margin-top:10px;position:relative;z-index:2}.next-wrap.show{display:flex}
+.progress{position:relative;z-index:2;display:flex;justify-content:center;gap:6px;margin-top:10px}
+.dot{width:8px;height:8px;border-radius:50%;background:#f0d9e2}.dot.active{background:var(--rose);transform:scale(1.2)}
+@media(max-width:700px){
+ .app{width:min(100% - 12px,1180px);padding-top:12px}.board-card{padding:13px;border-radius:20px}
+ .board-heading{align-items:center}.board-heading h1{font-size:22px}.board{height:600px}.target{font-size:18px}
+ .bear{display:none}
+}
+</style>
+<style>
+.ndx-navbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;width:100%;padding:14px 20px;background:#241b2e;box-shadow:0 4px 14px rgba(0,0,0,.18);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;box-sizing:border-box}
+.ndx-navbar *{box-sizing:border-box}
+.ndx-home{display:inline-flex;align-items:center;gap:7px;color:#fff;text-decoration:none;font-weight:800;font-size:14px;background:rgba(255,255,255,.12);padding:10px 14px;border-radius:12px;transition:background .15s ease,transform .15s ease}
+.ndx-home:hover{background:rgba(255,255,255,.22);transform:translateY(-1px)}
+.ndx-nav-buttons{display:flex;gap:10px;flex-wrap:wrap;margin-left:auto}
+.ndx-btn{display:inline-flex;align-items:center;padding:12px 18px;border-radius:14px;font-weight:900;font-size:14px;text-decoration:none;white-space:nowrap;transition:transform .15s ease,box-shadow .15s ease}
+.ndx-btn:hover{transform:translateY(-2px)}
+.ndx-back{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.28)}
+.ndx-back:hover{background:rgba(255,255,255,.2)}
+.ndx-next{background:linear-gradient(135deg,#ffb648,#ff8f5c);color:#3a2410;box-shadow:0 6px 16px rgba(255,140,70,.35)}
+.ndx-navbar.ndx-bottom{margin-top:32px}
+@media(max-width:600px){.ndx-navbar{padding:12px 14px}.ndx-home span{display:none}.ndx-btn{padding:11px 14px;font-size:13px}}
+</style>
+</head>
+<body>
+<nav class="ndx-navbar" aria-label="Lesson navigation">
+  <a class="ndx-home" href="../../" title="Home">🏠<span>Home</span></a>
+  <div class="ndx-nav-buttons">
+    <a class="ndx-btn ndx-back" href="../../factors/worksheet/">← Factors Worksheet</a>
+    <a class="ndx-btn ndx-next" href="../worksheet/">Start Worksheet →</a>
+  </div>
+</nav>
+<main class="app">
+<section class="board-card">
+<div class="decor">
+  <div class="cloud one"></div><div class="cloud two"></div>
+  <div class="bear a"><div class="ear l"></div><div class="ear r"></div><div class="head"></div><div class="eye l"></div><div class="eye r"></div><div class="muzzle"></div><div class="nose"></div><div class="bow"></div></div>
+  <div class="bear b"><div class="ear l"></div><div class="ear r"></div><div class="head"></div><div class="eye l"></div><div class="eye r"></div><div class="muzzle"></div><div class="nose"></div><div class="bow"></div></div>
+</div>
+
+<div class="board-heading">
+ <div>
+   <div class="badge">🐻 Bear-y Cute Maths Lab</div>
+   <h1>Multiples Adventure Board</h1>
+   <p>Drag • group • count on • discover • check</p>
+ </div>
+ <button class="btn ghost" onclick="resetBoard()">Reset bears</button>
+</div>
+
+<div class="board" id="board">
+ <div class="case-label">BEAR CASE <span id="caseNumber">4</span> • MULTIPLE MISSION</div>
+ <div class="target"><span id="targetNumber">4</span><small>COUNTING NUMBER</small></div>
+ <div class="bear-label">🐻 Make equal groups of <span id="groupLabel">4</span>!</div>
+ <div class="tip" id="centerHint">
+   <strong>Drag the pink hearts out of the corner.</strong><br>
+   Make equal groups of the target number to discover its multiples!
+ </div>
+</div>
+
+<div class="status" id="status">
+  You have 60 hearts. Make equal groups to build multiples of 4.
+</div>
+
+<div class="controls">
+ <button class="btn primary" onclick="inspect()">🔎 Check my multiples</button>
+ <button class="btn yellow" onclick="giveHint()">💭 Bear-y helpful hint</button>
+ <button class="btn lav" onclick="newCase()">🐻 New number</button>
+</div>
+
+<div class="inspect" id="inspectBox">
+ <div class="inspect-title">Bear Checkpoint</div>
+ <div class="instruction">Write the first 5 multiples of <b id="targetEquation">4</b>:</div>
+ <div class="multiple-sentence" id="sentenceContainer"></div>
+ <div class="inspect-actions"><button class="btn success" onclick="checkAnswer()">Check my answer</button></div>
+</div>
+
+<div class="next-wrap" id="nextWrap">
+ <button class="btn primary" onclick="newCase()">Next bear mission →</button>
+</div>
+<div class="progress" id="progress"></div>
+</section>
+</main>
+
+<script>
+"use strict";
+
+const CASES=[2,3,4,5,6,7,8,9,10,12];
+const TOTAL_BALLS=60;
+const board=document.getElementById("board");
+const statusBox=document.getElementById("status");
+const centerHint=document.getElementById("centerHint");
+const inspectBox=document.getElementById("inspectBox");
+const nextWrap=document.getElementById("nextWrap");
+const targetNumber=document.getElementById("targetNumber");
+const targetEquation=document.getElementById("targetEquation");
+const caseNumber=document.getElementById("caseNumber");
+const groupLabel=document.getElementById("groupLabel");
+const sentenceContainer=document.getElementById("sentenceContainer");
+const progress=document.getElementById("progress");
+
+const BALL_SIZE=30, GAP=34, MAGNET_RANGE=54;
+let target=4, balls=[], mission=0;
+
+function setStatus(text,kind=""){
+ statusBox.textContent=text;
+ statusBox.className="status "+kind;
+}
+
+function chooseRandomCase(){
+ let next=CASES[Math.floor(Math.random()*CASES.length)];
+ if(CASES.length>1) while(next===target) next=CASES[Math.floor(Math.random()*CASES.length)];
+ return next;
+}
+
+function makeBalls(){
+ board.querySelectorAll(".ball,.group").forEach(x=>x.remove());
+ balls=[];
+ const startX=14,startY=34,cols=10;
+ for(let i=0;i<TOTAL_BALLS;i++){
+   const row=Math.floor(i/cols),col=i%cols;
+   const x=startX+col*22,y=startY+row*22;
+   const el=document.createElement("div");
+   el.className="ball"; el.dataset.index=i;
+   el.style.left=x+"px"; el.style.top=y+"px";
+   board.appendChild(el);
+   const item={el,x,y};
+   balls.push(item); enableDrag(item);
+ }
+}
+
+function enableDrag(item){
+ let drag=null;
+ item.el.addEventListener("pointerdown",e=>{
+   e.preventDefault(); item.el.setPointerCapture(e.pointerId);
+   const br=board.getBoundingClientRect();
+   drag={pointer:e.pointerId,ox:e.clientX-br.left-item.x,oy:e.clientY-br.top-item.y};
+   item.el.classList.add("dragging"); centerHint.classList.add("hidden");
+ });
+ item.el.addEventListener("pointermove",e=>{
+   if(!drag||e.pointerId!==drag.pointer)return;
+   const br=board.getBoundingClientRect();
+   let x=e.clientX-br.left-drag.ox,y=e.clientY-br.top-drag.oy;
+   x=Math.max(5,Math.min(br.width-BALL_SIZE-5,x));
+   y=Math.max(35,Math.min(br.height-BALL_SIZE-5,y));
+   item.x=x;item.y=y;item.el.style.left=x+"px";item.el.style.top=y+"px";
+   magnet(item);
+ });
+ item.el.addEventListener("pointerup",e=>{
+   if(!drag||e.pointerId!==drag.pointer)return;
+   item.el.classList.remove("dragging");snapIfNear(item);drag=null;
+ });
+ item.el.addEventListener("pointercancel",()=>{
+   if(drag){item.el.classList.remove("dragging");drag=null}
+ });
+}
+
+function magnet(current){
+ let nearest=null,distance=Infinity;
+ balls.forEach(other=>{
+   if(other===current)return;
+   const d=Math.hypot(other.x-current.x,other.y-current.y);
+   if(d<distance&&d<MAGNET_RANGE){nearest=other;distance=d}
+ });
+ if(!nearest)return;
+ if(Math.abs(nearest.y-current.y)<17){
+   const direction=current.x>=nearest.x?1:-1,desired=nearest.x+direction*GAP;
+   if(Math.abs(current.x-desired)<24){current.x=desired;current.y=nearest.y}
+ }else if(Math.abs(nearest.x-current.x)<17){
+   const direction=current.y>=nearest.y?1:-1,desired=nearest.y+direction*GAP;
+   if(Math.abs(current.y-desired)<24){current.y=desired;current.x=nearest.x}
+ }
+ current.el.style.left=current.x+"px";current.el.style.top=current.y+"px";
+}
+
+function snapIfNear(current){
+ let closest=null,best=999;
+ balls.forEach(other=>{
+   if(other===current)return;
+   const d=Math.hypot(other.x-current.x,other.y-current.y);
+   if(d<best&&d<48){best=d;closest=other}
+ });
+ if(!closest)return;
+ const dx=current.x-closest.x,dy=current.y-closest.y;
+ if(Math.abs(dx)>=Math.abs(dy)){current.x=closest.x+(dx>=0?GAP:-GAP);current.y=closest.y}
+ else{current.y=closest.y+(dy>=0?GAP:-GAP);current.x=closest.x}
+ current.el.style.left=current.x+"px";current.el.style.top=current.y+"px";
+}
+
+function inspect(){
+ targetEquation.textContent=target;
+ sentenceContainer.innerHTML="";
+ for(let i=1;i<=5;i++){
+   const input=document.createElement("input");
+   input.className="answer";input.inputMode="numeric";input.maxLength=3;input.placeholder="?";
+   input.dataset.index=i-1;sentenceContainer.appendChild(input);
+   if(i<5){const comma=document.createElement("span");comma.textContent=",";sentenceContainer.appendChild(comma)}
+ }
+ inspectBox.classList.add("show");
+ setStatus("Use your equal groups to work out the first five multiples.", "hint");
+}
+
+function checkAnswer(){
+ const inputs=[...sentenceContainer.querySelectorAll(".answer")];
+ const expected=Array.from({length:5},(_,i)=>target*(i+1));
+ const values=inputs.map(x=>Number(x.value.trim()));
+ if(inputs.some(x=>x.value.trim()==="")){
+   setStatus("🐻 Fill in all five spaces first. Count on in equal jumps!", "hint");return;
+ }
+ if(values.every((v,i)=>v===expected[i])){
+   setStatus(`🎀 Amazing! The first five multiples of ${target} are ${expected.join(", ")}. Bear-y brilliant!`,"good");
+   nextWrap.classList.add("show");mission++;
+ }else{
+   setStatus(`Almost! Start at ${target} and keep adding ${target} each time.`,"hint");
+ }
+}
+
+function giveHint(){
+ const m=Array.from({length:5},(_,i)=>target*(i+1));
+ setStatus(`💭 Bear hint: ${target}, ${m[1]}, ${m[2]}, ${m[3]}, ${m[4]} — add ${target} each time.`,"hint");
+}
+
+function resetBoard(){
+ makeBalls();inspectBox.classList.remove("show");nextWrap.classList.remove("show");
+ centerHint.classList.remove("hidden");
+ setStatus(`All 60 hearts are back! Make equal groups of ${target}.`);
+}
+
+function newCase(){
+ target=chooseRandomCase();
+ caseNumber.textContent=target;targetNumber.textContent=target;groupLabel.textContent=target;
+ inspectBox.classList.remove("show");nextWrap.classList.remove("show");
+ centerHint.classList.remove("hidden");makeBalls();
+ setStatus(`🐻 New mission! Make equal groups of ${target} and discover its multiples.`);
+ updateProgress();
+}
+
+function updateProgress(){
+ progress.innerHTML="";
+ for(let i=0;i<5;i++){
+   const d=document.createElement("span");d.className="dot"+(i<Math.min(mission,5)?" active":"");progress.appendChild(d);
+ }
+}
+
+window.addEventListener("resize",()=>{
+ const br=board.getBoundingClientRect();
+ balls.forEach(b=>{
+   b.x=Math.max(5,Math.min(br.width-BALL_SIZE-5,b.x));
+   b.y=Math.max(35,Math.min(br.height-BALL_SIZE-5,b.y));
+   b.el.style.left=b.x+"px";b.el.style.top=b.y+"px";
+ });
+});
+
+makeBalls();updateProgress();
+</script>
+<nav class="ndx-navbar ndx-bottom" aria-label="Lesson navigation">
+  <a class="ndx-home" href="../../" title="Home">🏠<span>Home</span></a>
+  <div class="ndx-nav-buttons">
+    <a class="ndx-btn ndx-back" href="../../factors/worksheet/">← Factors Worksheet</a>
+    <a class="ndx-btn ndx-next" href="../worksheet/">Start Worksheet →</a>
+  </div>
+</nav>
+</body>
+</html>

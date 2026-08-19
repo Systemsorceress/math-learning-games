@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Prime Detective Investigation Board</title>
+<style>
+:root{
+  --cream:#f7f3ea;
+  --paper:#fffdf8;
+  --ink:#263340;
+  --muted:#737c83;
+  --indigo:#505083;
+  --amber:#d99b42;
+  --amber2:#f3dfb9;
+  --sage2:#dce7dc;
+  --line:rgba(38,51,64,.11);
+  --shadow:0 18px 45px rgba(38,51,64,.10);
+}*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--cream);color:var(--ink)}body{
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  overflow-x:hidden;
+}body:before{
+  content:"";position:fixed;inset:0;pointer-events:none;opacity:.3;
+  background-image:radial-gradient(rgba(38,51,64,.12) 1px,transparent 1px);
+  background-size:28px 28px;
+}button,input{font:inherit}button{cursor:pointer}button:focus-visible{outline:3px solid rgba(80,80,131,.25);outline-offset:3px}
+
+.app{
+  width:min(1180px,calc(100% - 28px));
+  margin:auto;
+  padding:35px 0 45px;
+}
+
+.board-card{
+  background:rgba(255,253,248,.82);
+  border:1px solid rgba(255,255,255,.95);
+  box-shadow:var(--shadow);
+  backdrop-filter:blur(18px);
+  border-radius:25px;
+  padding:24px;
+}
+
+.board-heading{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:20px;
+  margin-bottom:14px;
+}
+.board-heading h1{
+  margin:0 0 5px;
+  font-size:clamp(23px,3vw,32px);
+  letter-spacing:-.04em;
+}
+.board-heading p{
+  margin:0;
+  color:var(--muted);
+  font-size:12px;
+  font-weight:700;
+}
+
+.btn{
+  min-height:40px;
+  border:0;
+  border-radius:12px;
+  padding:0 14px;
+  font-size:11px;
+  font-weight:900;
+  transition:.18s ease;
+}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:scale(.97)}
+.ghost{
+  background:rgba(255,255,255,.75);
+  color:var(--ink);
+  border:1px solid var(--line);
+}
+.amber{background:var(--amber2);color:#654b20}
+.primary{background:var(--ink);color:#fff}
+.success{background:var(--sage2);color:#3d5942}
+
+.board{
+  position:relative;
+  width:100%;
+  height:650px;
+  overflow:hidden;
+  border-radius:20px;
+  background:
+    linear-gradient(rgba(38,51,64,.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(38,51,64,.045) 1px,transparent 1px),
+    rgba(255,255,255,.45);
+  background-size:34px 34px;
+  border:1px solid rgba(38,51,64,.08);
+  touch-action:none;
+}
+
+.case-label{
+  position:absolute;
+  left:16px;
+  top:14px;
+  z-index:1;
+  pointer-events:none;
+  font-size:9px;
+  font-weight:950;
+  letter-spacing:.14em;
+  color:var(--muted);
+}
+
+.target{
+  position:absolute;
+  right:16px;
+  top:12px;
+  z-index:1;
+  pointer-events:none;
+  color:var(--indigo);
+  font-size:22px;
+  font-weight:950;
+}
+.target small{
+  display:block;
+  text-align:right;
+  font-size:8px;
+  letter-spacing:.12em;
+  color:var(--muted);
+}
+
+.hint-center{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  pointer-events:none;
+  text-align:center;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.55;
+  font-weight:750;
+  width:80%;
+  z-index:1;
+  transition:.25s;
+}
+.hint-center.hidden{opacity:0}
+
+.ball{
+  position:absolute;
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 30% 24%,#fff0ca 0 7%,transparent 8%),
+    linear-gradient(145deg,#e4b15e,#c47e2c);
+  box-shadow:
+    inset 0 -4px 0 rgba(70,43,12,.14),
+    0 6px 11px rgba(38,51,64,.14);
+  touch-action:none;
+  user-select:none;
+  z-index:3;
+  transition:
+    left .12s ease,
+    top .12s ease,
+    transform .16s,
+    box-shadow .16s;
+}
+.ball:hover{transform:scale(1.06)}
+.ball.dragging{
+  transition:none;
+  transform:scale(1.18);
+  box-shadow:0 15px 28px rgba(38,51,64,.24);
+  z-index:30;
+}
+
+.status{
+  min-height:45px;
+  margin-top:11px;
+  border-radius:13px;
+  padding:10px 14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  background:rgba(255,255,255,.65);
+  color:var(--muted);
+  font-size:11px;
+  font-weight:800;
+}
+.status.good{background:var(--sage2);color:#3d5942}
+.status.hint{background:var(--amber2);color:#6b5128}
+
+.controls{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:8px;
+  margin-top:11px;
+}
+
+.inspect{
+  display:none;
+  margin-top:12px;
+  padding:16px;
+  border-radius:17px;
+  background:rgba(80,80,131,.055);
+  border:1px solid rgba(80,80,131,.11);
+}
+.inspect.show{display:block}
+.inspect-title{
+  text-align:center;
+  text-transform:uppercase;
+  font-size:9px;
+  letter-spacing:.14em;
+  color:var(--indigo);
+  font-weight:950;
+  margin-bottom:8px;
+}
+.instruction-text{
+  text-align:center;
+  font-size:14px;
+  font-weight:800;
+  color:var(--indigo);
+  margin-bottom:12px;
+}
+.factors-sentence{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  align-items:center;
+  gap:6px;
+  font-size:15px;
+  font-weight:800;
+  color:var(--ink);
+}
+.factor-input{
+  width:46px;
+  height:38px;
+  border-radius:8px;
+  border:2px solid rgba(80,80,131,.17);
+  background:white;
+  text-align:center;
+  font-size:16px;
+  font-weight:950;
+  color:var(--indigo);
+}
+.inspect-actions{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  margin-top:14px;
+}
+
+.prime-choice{
+  display:flex;
+  justify-content:center;
+  gap:15px;
+  margin-top:10px;
+}
+.choice-btn{
+  padding:8px 20px;
+  border-radius:10px;
+  border:2px solid rgba(80,80,131,.2);
+  background:white;
+  font-weight:900;
+  color:var(--indigo);
+}
+.choice-btn.selected{
+  background:var(--indigo);
+  color:white;
+  border-color:var(--indigo);
+}
+
+.next-wrap{
+  display:none;
+  justify-content:center;
+  margin-top:10px;
+}
+.next-wrap.show{display:flex}@media(max-width:700px){
+  .app{width:min(100% - 16px,1180px);padding-top:18px}
+  .board-card{padding:14px;border-radius:18px}
+  .board-heading{align-items:center}
+  .board-heading h1{font-size:21px}
+  .board{height:590px}
+  .target{font-size:18px}
+}</style>
+<style>
+.ndx-navbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;width:100%;padding:14px 20px;background:#241b2e;box-shadow:0 4px 14px rgba(0,0,0,.18);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;box-sizing:border-box}
+.ndx-navbar *{box-sizing:border-box}
+.ndx-home{display:inline-flex;align-items:center;gap:7px;color:#fff;text-decoration:none;font-weight:800;font-size:14px;background:rgba(255,255,255,.12);padding:10px 14px;border-radius:12px;transition:background .15s ease,transform .15s ease}
+.ndx-home:hover{background:rgba(255,255,255,.22);transform:translateY(-1px)}
+.ndx-nav-buttons{display:flex;gap:10px;flex-wrap:wrap;margin-left:auto}
+.ndx-btn{display:inline-flex;align-items:center;padding:12px 18px;border-radius:14px;font-weight:900;font-size:14px;text-decoration:none;white-space:nowrap;transition:transform .15s ease,box-shadow .15s ease}
+.ndx-btn:hover{transform:translateY(-2px)}
+.ndx-back{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.28)}
+.ndx-back:hover{background:rgba(255,255,255,.2)}
+.ndx-next{background:linear-gradient(135deg,#ffb648,#ff8f5c);color:#3a2410;box-shadow:0 6px 16px rgba(255,140,70,.35)}
+.ndx-finish{background:linear-gradient(135deg,#7edb8c,#4eb962);color:#1c3a22;box-shadow:0 6px 16px rgba(78,185,98,.35)}
+.ndx-navbar.ndx-bottom{margin-top:32px}
+@media(max-width:600px){.ndx-navbar{padding:12px 14px}.ndx-home span{display:none}.ndx-btn{padding:11px 14px;font-size:13px}}
+</style>
+</head><body>
+<nav class="ndx-navbar" aria-label="Lesson navigation">
+  <a class="ndx-home" href="../../" title="Home">🏠<span>Home</span></a>
+  <div class="ndx-nav-buttons">
+    <a class="ndx-btn ndx-back" href="../../multiples/worksheet/">← Multiples Worksheet</a>
+    <a class="ndx-btn ndx-finish" href="../../">Finish Mission 🏁</a>
+  </div>
+</nav>
+<main class="app">
+  <section class="board-card">
+
+    <div class="board-heading">
+      <div>
+        <h1>Prime Detective Board</h1>
+        <p>Investigate factors • test rectangles • discover primes</p>
+      </div>
+      <button class="btn ghost" onclick="resetBoard()">Reset pool</button>
+    </div>
+
+    <div class="board" id="board">
+      <div class="case-label">PRIME CASE <span id="caseNumber">7</span> • DETECTIVE INVESTIGATION</div>
+
+      <div class="target">
+        <span id="targetNumber">7</span>
+        <small>TARGET</small>
+      </div>
+
+      <div class="hint-center" id="centerHint">
+        <strong>Drag balls from the top-left pool.</strong><br>
+        Can you build any other rectangular arrangement besides a single straight line?
+      </div>
+    </div>
+
+    <div class="status" id="status">
+      Fixed pool of 60 balls available in the corner. Test if this number can form alternative rectangles!
+    </div>
+
+    <div class="controls">
+      <button class="btn amber" onclick="inspect()">🔎 Prime Detective Check</button>
+      <button class="btn ghost" onclick="giveHint()">💭 Detective hint</button>
+      <button class="btn ghost" onclick="newCase()">↻ New target</button>
+    </div>
+
+    <div class="inspect" id="inspectBox">
+      <div class="inspect-title">Prime Detective Report</div>
+      <div class="instruction-text">1. Complete the list of factors for <b id="targetEquation">7</b>:</div>
+
+      <div class="factors-sentence" id="sentenceContainer">
+        <!-- Dynamic inputs inserted here -->
+      </div>
+
+      <div class="instruction-text" style="margin-top:16px;">2. Is this number Prime (exactly two factors)?</div>
+      <div class="prime-choice">
+        <button class="choice-btn" id="primeYes" onclick="selectPrime(true)">Yes, Prime ✓</button>
+        <button class="choice-btn" id="primeNo" onclick="selectPrime(false)">No, Composite ✗</button>
+      </div>
+
+      <div class="inspect-actions">
+        <button class="btn success" onclick="checkAnswer()">Submit Detective Verdict</button>
+      </div>
+    </div>
+
+    <div class="next-wrap" id="nextWrap">
+      <button class="btn primary" onclick="newCase()">Next investigation number →</button>
+    </div>
+
+  </section></main><script>"use strict";
+const CASES = [5, 6, 7, 9, 11, 12, 13, 15];
+const TOTAL_BALLS = 60;
+const board = document.getElementById("board");
+const statusBox = document.getElementById("status");
+const centerHint = document.getElementById("centerHint");
+const inspectBox = document.getElementById("inspectBox");
+const nextWrap = document.getElementById("nextWrap");
+const targetNumber = document.getElementById("targetNumber");
+const targetEquation = document.getElementById("targetEquation");
+const caseNumber = document.getElementById("caseNumber");
+const sentenceContainer = document.getElementById("sentenceContainer");
+const BALL_SIZE = 32;
+const GAP = 36;
+const MAGNET_RANGE = 58;
+const ALIGN_TOLERANCE = 14;
+
+let target = 7;
+let balls = [];
+let userPrimeChoice = null;
+
+function getValidFactors(num){
+  const factors = [];
+  for(let i = 1; i <= num; i++){
+    if(num % i === 0){
+      factors.push(i);
+    }
+  }
+  return factors.sort((a,b) => a - b);
+}
+
+function chooseRandomCase(){
+  return CASES[Math.floor(Math.random()*CASES.length)];
+}
+
+function setStatus(text,kind=""){
+  statusBox.textContent=text;
+  statusBox.className="status "+kind;
+}
+
+function makeBalls(){
+  board.querySelectorAll(".ball").forEach(x=>x.remove());
+  balls=[];
+
+  const startX = 16;
+  const startY = 36;
+  const cols = 10;
+
+  for(let i=0; i<TOTAL_BALLS; i++){
+    const row = Math.floor(i / cols);
+    const col = i % cols;
+    const x = startX + (col * 22);
+    const y = startY + (row * 22);
+
+    const el=document.createElement("div");
+    el.className="ball";
+    el.dataset.index=i;
+    el.style.left=x+"px";
+    el.style.top=y+"px";
+
+    board.appendChild(el);
+
+    const item={
+      el,
+      x: x,
+      y: y
+    };
+
+    balls.push(item);
+    enableDrag(item);
+  }
+}
+
+function enableDrag(item){
+  let drag=null;
+
+  item.el.addEventListener("pointerdown",e=>{
+    e.preventDefault();
+    item.el.setPointerCapture(e.pointerId);
+
+    const br=board.getBoundingClientRect();
+
+    drag={
+      pointer:e.pointerId,
+      ox:e.clientX-br.left-item.x,
+      oy:e.clientY-br.top-item.y
+    };
+
+    item.el.classList.add("dragging");
+    centerHint.classList.add("hidden");
+  });
+
+  item.el.addEventListener("pointermove",e=>{
+    if(!drag || e.pointerId!==drag.pointer)return;
+
+    const br=board.getBoundingClientRect();
+
+    let x=e.clientX-br.left-drag.ox;
+    let y=e.clientY-br.top-drag.oy;
+
+    x=Math.max(5,Math.min(br.width-BALL_SIZE-5,x));
+    y=Math.max(5,Math.min(br.height-BALL_SIZE-5,y));
+
+    item.x=x;
+    item.y=y;
+
+    item.el.style.left=x+"px";
+    item.el.style.top=y+"px";
+
+    magnet(item);
+  });
+
+  item.el.addEventListener("pointerup",e=>{
+    if(!drag || e.pointerId!==drag.pointer)return;
+
+    item.el.classList.remove("dragging");
+    snapIfNear(item);
+    drag=null;
+  });
+
+  item.el.addEventListener("pointercancel",()=>{
+    if(drag){
+      item.el.classList.remove("dragging");
+      drag=null;
+    }
+  });
+}
+
+function magnet(current){
+  let nearest=null;
+  let distance=Infinity;
+
+  balls.forEach(other=>{
+    if(other===current)return;
+
+    const d=Math.hypot(
+      other.x-current.x,
+      other.y-current.y
+    );
+
+    if(d<distance && d<MAGNET_RANGE){
+      nearest=other;
+      distance=d;
+    }
+  });
+
+  if(!nearest)return;
+
+  if(Math.abs(nearest.y-current.y)<18){
+    const direction=current.x>=nearest.x?1:-1;
+    const desired=nearest.x+direction*GAP;
+
+    if(Math.abs(current.x-desired)<25){
+      current.x=desired;
+      current.y=nearest.y;
+    }
+  }
+  else if(Math.abs(nearest.x-current.x)<18){
+    const direction=current.y>=nearest.y?1:-1;
+    const desired=nearest.y+direction*GAP;
+
+    if(Math.abs(current.y-desired)<25){
+      current.y=desired;
+      current.x=nearest.x;
+    }
+  }
+
+  current.el.style.left=current.x+"px";
+  current.el.style.top=current.y+"px";
+}
+
+function snapIfNear(current){
+  let closest=null;
+  let best=999;
+
+  balls.forEach(other=>{
+    if(other===current)return;
+
+    const d=Math.hypot(
+      other.x-current.x,
+      other.y-current.y
+    );
+
+    if(d<best && d<52){
+      best=d;
+      closest=other;
+    }
+  });
+
+  if(!closest)return;
+
+  const dx=current.x-closest.x;
+  const dy=current.y-closest.y;
+
+  if(Math.abs(dx)>=Math.abs(dy)){
+    current.x=closest.x+(dx>=0?GAP:-GAP);
+    current.y=closest.y;
+  }else{
+    current.y=closest.y+(dy>=0?GAP:-GAP);
+    current.x=closest.x;
+  }
+
+  current.el.style.left=current.x+"px";
+  current.el.style.top=current.y+"px";
+}
+
+function inspect(){
+  targetEquation.textContent = target;
+  const factors = getValidFactors(target);
+
+  let html = `<span>Factors of ${target} =</span>`;
+  factors.forEach((_, idx) => {
+    html += `<input class="factor-input" data-factor-index="${idx}" inputmode="numeric" maxlength="3" placeholder="?">`;
+    if(idx < factors.length - 1) {
+      html += `<span>,</span>`;
+    }
+  });
+
+  sentenceContainer.innerHTML = html;
+  userPrimeChoice = null;
+  document.getElementById("primeYes").classList.remove("selected");
+  document.getElementById("primeNo").classList.remove("selected");
+
+  inspectBox.classList.add("show");
+  setStatus("Test arranging the balls, list the factors, and decide if it's prime!", "hint");
+}
+
+function selectPrime(is把它Prime){
+  userPrimeChoice = is把它Prime;
+  if(is把它Prime){
+    document.getElementById("primeYes").classList.add("selected");
+    document.getElementById("primeNo").classList.remove("selected");
+  } else {
+    document.getElementById("primeNo").classList.add("selected");
+    document.getElementById("primeYes").classList.remove("selected");
+  }
+}
+
+function checkAnswer(){
+  const inputs = sentenceContainer.querySelectorAll(".factor-input");
+  const userFactors = [];
+  let allFilled = true;
+
+  inputs.forEach(input => {
+    const val = input.value.trim();
+    if(val === "") {
+      allFilled = false;
+    } else {
+      userFactors.push(Number(val));
+    }
+  });
+
+  if(!allFilled || userPrimeChoice === null){
+    setStatus("Please fill in all factor blanks and select whether it is Prime or Composite.", "hint");
+    return;
+  }
+
+  const correctFactors = getValidFactors(target);
+  const userSorted = [...userFactors].sort((a,b) => a - b);
+  const factorsMatch = userSorted.length === correctFactors.length && 
+                       userSorted.every((val, idx) => val === correctFactors[idx]);
+
+  const isActuallyPrime = correctFactors.length === 2;
+  const choiceMatch = (userPrimeChoice === isActuallyPrime);
+
+  if(factorsMatch && choiceMatch){
+    const primeText = isActuallyPrime ? "a Prime number (exactly two factors: 1 and itself)" : "not prime (has more than two factors)";
+    setStatus(
+      `🎯 Brilliant Detective Work! ${target} has factors ${correctFactors.join(", ")} and is ${primeText}.`,
+      "good"
+    );
+    nextWrap.classList.add("show");
+  } else {
+    setStatus(
+      `Not quite. Double-check your factors or test if you can build more than one type of rectangle!`,
+      "hint"
+    );
+  }
+}
+
+function giveHint(){
+  const factors = getValidFactors(target);
+  const isPrime = factors.length === 2;
+  setStatus(
+    `💭 Detective Hint: ${target} has factors: ${factors.join(", ")}. It has ${factors.length} factor(s), so it is ${isPrime ? "Prime ✓" : "not prime ✗"}.`,
+    "hint"
+  );
+}
+
+function resetBoard(){
+  makeBalls();
+  inspectBox.classList.remove("show");
+  nextWrap.classList.remove("show");
+  centerHint.classList.remove("hidden");
+  setStatus("Board pool reset. All 60 balls returned to the corner pool.");
+}
+
+function newCase(){
+  target = chooseRandomCase();
+
+  caseNumber.textContent = target;
+  targetNumber.textContent = target;
+
+  inspectBox.classList.remove("show");
+  nextWrap.classList.remove("show");
+  centerHint.classList.remove("hidden");
+
+  makeBalls();
+
+  setStatus(
+    `New target: ${target}. Test if you can make alternative rectangles or only a single line.`
+  );
+}
+
+window.addEventListener("resize",()=>{
+  const br = board.getBoundingClientRect();
+
+  balls.forEach(b => {
+    b.x = Math.max(5, Math.min(br.width - BALL_SIZE - 5, b.x));
+    b.y = Math.max(35, Math.min(br.height - BALL_SIZE - 5, b.y));
+
+    b.el.style.left = b.x + "px";
+    b.el.style.top = b.y + "px";
+  });
+});
+
+makeBalls();
+</script>
+<nav class="ndx-navbar ndx-bottom" aria-label="Lesson navigation">
+  <a class="ndx-home" href="../../" title="Home">🏠<span>Home</span></a>
+  <div class="ndx-nav-buttons">
+    <a class="ndx-btn ndx-back" href="../../multiples/worksheet/">← Multiples Worksheet</a>
+    <a class="ndx-btn ndx-finish" href="../../">Finish Mission 🏁</a>
+  </div>
+</nav>
+</body></html>
