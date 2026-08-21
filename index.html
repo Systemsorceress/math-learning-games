@@ -19,6 +19,8 @@
     --purple-light:#f0eafc;
     --amber:#d99b1f;
     --amber-light:#fbf1dd;
+    --pink:#e0568a;
+    --pink-light:#fce8f0;
   }
 
   *{box-sizing:border-box}
@@ -117,6 +119,7 @@
   .mission-blue .mission-badge{background:var(--blue)}
   .mission-purple .mission-badge{background:var(--purple)}
   .mission-amber .mission-badge{background:var(--amber)}
+  .mission-pink .mission-badge{background:var(--pink)}
 
   .mission-tag{
     font-size:11px;
@@ -128,6 +131,7 @@
   .mission-blue .mission-tag{color:var(--blue)}
   .mission-purple .mission-tag{color:var(--purple)}
   .mission-amber .mission-tag{color:var(--amber)}
+  .mission-pink .mission-tag{color:var(--pink)}
 
   .mission-head h2{
     margin:0;
@@ -175,6 +179,9 @@
 
   .mission-amber .primary{background:var(--amber);color:#fff;box-shadow:0 10px 22px rgba(217,155,31,.28)}
   .mission-amber .secondary{background:var(--amber-light);color:var(--amber)}
+
+  .mission-pink .primary{background:var(--pink);color:#fff;box-shadow:0 10px 22px rgba(224,86,138,.28)}
+  .mission-pink .secondary{background:var(--pink-light);color:var(--pink)}
 
   .dashboard-footer{
     text-align:center;
@@ -251,9 +258,25 @@
       </div>
     </section>
 
+    <div class="connector" aria-hidden="true"></div>
+
+    <section class="mission mission-pink">
+      <div class="mission-head">
+        <div class="mission-badge">4</div>
+        <div>
+          <div class="mission-tag">🎀 Mission 4</div>
+          <h2>Prime Factorisation</h2>
+          <p>Break numbers down into their prime building blocks with a factor tree.</p>
+        </div>
+      </div>
+      <div class="mission-actions single">
+        <a class="mission-btn primary" href="factorisation/warmup/">Start Factor Tree</a>
+      </div>
+    </section>
+
   </div>
 
-  <p class="dashboard-footer">🏁 Finish all three missions to complete Number Detective!</p>
+  <p class="dashboard-footer">🏁 Finish all four missions to complete Number Detective!</p>
 
 </main>
 </body>

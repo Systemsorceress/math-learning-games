@@ -1,0 +1,3418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>The Factorisation Boutique 🎀</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <style>
+    /* =========================================================
+       THE FACTORISATION BOUTIQUE 🎀
+       ADHD-FRIENDLY PRIME FACTORISATION WEB APP
+       ========================================================= */
+
+    :root {
+      --pink-light: #FFD1DC;
+      --pink-main: #FF85A1;
+      --pink-dark: #D36B86;
+      --lavender: #E4C1F9;
+      --cream: #FAF6F0;
+      --white: #FFFFFF;
+
+      --text: #513C46;
+      --muted: #826B74;
+
+      --success: #4D9363;
+      --success-bg: #EAF8EE;
+
+      --error: #C85C78;
+      --error-bg: #FFF0F3;
+
+      --border: #F0DCE2;
+
+      --shadow:
+        0 12px 32px rgba(211, 107, 134, 0.12);
+    }
+
+
+    /* =========================================================
+       RESET
+       ========================================================= */
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+
+      font-family: "Quicksand", sans-serif;
+
+      color: var(--text);
+
+      background:
+        radial-gradient(
+          circle at top left,
+          rgba(228, 193, 249, 0.45),
+          transparent 30%
+        ),
+        radial-gradient(
+          circle at bottom right,
+          rgba(255, 209, 220, 0.65),
+          transparent 32%
+        ),
+        var(--cream);
+    }
+
+    button,
+    input {
+      font-family: inherit;
+    }
+
+    button {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+
+    /* =========================================================
+       APP CONTAINER
+       ========================================================= */
+
+    .app-container {
+      width: min(1150px, 93%);
+      margin: 0 auto;
+      padding: 28px 0 70px;
+    }
+
+
+    /* =========================================================
+       HERO
+       ========================================================= */
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+
+      text-align: center;
+
+      background: var(--white);
+
+      border: 2px solid var(--pink-light);
+
+      border-radius: 30px;
+
+      padding: 42px 25px;
+
+      box-shadow: var(--shadow);
+
+      margin-bottom: 28px;
+    }
+
+    .hero::before,
+    .hero::after {
+      content: "✦";
+
+      position: absolute;
+
+      font-size: 2rem;
+
+      color: var(--pink-main);
+
+      opacity: 0.55;
+    }
+
+    .hero::before {
+      top: 18px;
+      left: 32px;
+    }
+
+    .hero::after {
+      bottom: 18px;
+      right: 32px;
+    }
+
+    h1 {
+      margin: 0;
+
+      color: var(--pink-dark);
+
+      font-size: clamp(2rem, 5vw, 3.5rem);
+
+      line-height: 1.2;
+    }
+
+    .subtitle {
+      margin: 12px 0 0;
+
+      color: var(--muted);
+
+      font-size: clamp(1rem, 2vw, 1.25rem);
+
+      font-weight: 600;
+    }
+
+
+    /* =========================================================
+       GENERAL CARD
+       ========================================================= */
+
+    .card {
+      background: var(--white);
+
+      border: 1px solid var(--border);
+
+      border-radius: 24px;
+
+      padding: 28px;
+
+      box-shadow: var(--shadow);
+
+      margin-bottom: 28px;
+    }
+
+    .section-title {
+      margin: 0 0 14px;
+
+      color: var(--pink-dark);
+
+      font-size: clamp(1.4rem, 3vw, 2rem);
+    }
+
+    .section-intro {
+      color: var(--muted);
+
+      margin-top: 0;
+
+      margin-bottom: 20px;
+
+      line-height: 1.6;
+    }
+
+
+    /* =========================================================
+       OPENING MISSION
+       ========================================================= */
+
+    .mission-list {
+      list-style: none;
+
+      padding: 0;
+
+      margin: 0;
+
+      display: grid;
+
+      gap: 12px;
+    }
+
+    .mission-list li {
+      background: #FFF8FA;
+
+      border-left: 5px solid var(--pink-main);
+
+      padding: 14px 17px;
+
+      border-radius: 14px;
+
+      font-weight: 600;
+    }
+
+
+    /* =========================================================
+       4 STEP PRINCESS RULE
+       ========================================================= */
+
+    .rule-grid {
+      display: grid;
+
+      grid-template-columns: repeat(4, 1fr);
+
+      gap: 16px;
+    }
+
+    .rule {
+      padding: 22px 16px;
+
+      border-radius: 20px;
+
+      text-align: center;
+
+      border: 1px solid var(--border);
+
+      background:
+        linear-gradient(
+          180deg,
+          #FFFFFF,
+          #FFF8FA
+        );
+
+      transition: 0.2s ease;
+    }
+
+    .rule:hover {
+      transform: translateY(-4px);
+
+      box-shadow:
+        0 12px 24px
+        rgba(211, 107, 134, 0.12);
+    }
+
+    .rule-number {
+      width: 44px;
+      height: 44px;
+
+      display: grid;
+
+      place-items: center;
+
+      margin: 0 auto 12px;
+
+      border-radius: 50%;
+
+      background: var(--lavender);
+
+      color: var(--pink-dark);
+
+      font-weight: 700;
+    }
+
+    .rule h3 {
+      margin: 0 0 8px;
+
+      color: var(--pink-dark);
+    }
+
+    .rule p {
+      margin: 0;
+
+      color: var(--muted);
+
+      font-size: 0.93rem;
+
+      line-height: 1.5;
+    }
+
+
+    /* =========================================================
+       WORKED EXAMPLE
+       ========================================================= */
+
+    .example-layout {
+      display: grid;
+
+      grid-template-columns: 1fr 1fr;
+
+      gap: 24px;
+
+      align-items: center;
+    }
+
+    .example-tree {
+      background: #FFF8FA;
+
+      border: 2px dashed var(--pink-light);
+
+      border-radius: 22px;
+
+      padding: 28px;
+
+      text-align: center;
+    }
+
+    .tree-number {
+      display: inline-block;
+
+      background: var(--pink-main);
+
+      color: white;
+
+      font-size: 1.8rem;
+
+      font-weight: 700;
+
+      padding: 10px 25px;
+
+      border-radius: 18px;
+    }
+
+    .tree-line {
+      font-size: 1.5rem;
+
+      color: var(--pink-dark);
+
+      margin: 10px 0;
+
+      font-weight: 700;
+    }
+
+    .tree-factors {
+      display: flex;
+
+      justify-content: center;
+
+      align-items: center;
+
+      flex-wrap: wrap;
+
+      gap: 10px;
+
+      margin-top: 12px;
+    }
+
+    .mini-factor {
+      min-width: 58px;
+
+      padding: 10px 15px;
+
+      background: var(--lavender);
+
+      border-radius: 14px;
+
+      font-weight: 700;
+
+      font-size: 1.2rem;
+
+      text-align: center;
+    }
+
+    .multiply {
+      font-weight: 700;
+
+      color: var(--pink-dark);
+    }
+
+    .example-explanation h3 {
+      color: var(--pink-dark);
+    }
+
+    .example-explanation p {
+      color: var(--muted);
+
+      line-height: 1.6;
+    }
+
+    .final-answer {
+      display: inline-block;
+
+      margin-top: 8px;
+
+      padding: 14px 20px;
+
+      background: var(--pink-light);
+
+      color: var(--pink-dark);
+
+      border-radius: 16px;
+
+      font-size: 1.35rem;
+
+      font-weight: 700;
+    }
+
+
+    /* =========================================================
+       PRACTICE AREA
+       ========================================================= */
+
+    .practice-card {
+      border: 2px solid var(--pink-light);
+    }
+
+
+    /* =========================================================
+       PROGRESS BAR
+       ========================================================= */
+
+    .progress-area {
+      margin-bottom: 25px;
+    }
+
+    .progress-top {
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+
+      gap: 15px;
+
+      margin-bottom: 12px;
+
+      color: var(--pink-dark);
+
+      font-weight: 700;
+    }
+
+    .progress-track {
+      height: 12px;
+
+      background: #F5EAF0;
+
+      border-radius: 999px;
+
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+
+      width: 10%;
+
+      border-radius: inherit;
+
+      background:
+        linear-gradient(
+          90deg,
+          var(--pink-main),
+          var(--lavender)
+        );
+
+      transition: width 0.4s ease;
+    }
+
+    .progress-dots {
+      display: flex;
+
+      justify-content: space-between;
+
+      gap: 6px;
+
+      margin-top: 13px;
+    }
+
+    .progress-dot {
+      width: 30px;
+      height: 30px;
+
+      display: grid;
+
+      place-items: center;
+
+      border-radius: 50%;
+
+      background: #F3EDF0;
+
+      color: var(--muted);
+
+      font-size: 0.75rem;
+
+      font-weight: 700;
+
+      transition: 0.25s ease;
+    }
+
+    .progress-dot.current {
+      background: var(--pink-main);
+
+      color: white;
+
+      transform: scale(1.1);
+    }
+
+    .progress-dot.completed {
+      background: var(--success);
+
+      color: white;
+    }
+
+
+    /* =========================================================
+       DIFFICULTY BADGE
+       ========================================================= */
+
+    .difficulty-badge {
+      display: inline-block;
+
+      padding: 8px 14px;
+
+      background: var(--lavender);
+
+      color: var(--pink-dark);
+
+      border-radius: 999px;
+
+      font-weight: 700;
+
+      margin-bottom: 14px;
+    }
+
+
+    /* =========================================================
+       TARGET NUMBER
+       ========================================================= */
+
+    .target-box {
+      text-align: center;
+
+      padding: 22px;
+
+      background:
+        linear-gradient(
+          135deg,
+          var(--lavender),
+          #F9E8FF
+        );
+
+      border-radius: 20px;
+
+      margin-bottom: 24px;
+    }
+
+    .target-label {
+      display: block;
+
+      font-size: 0.85rem;
+
+      color: var(--muted);
+
+      font-weight: 700;
+
+      letter-spacing: 0.08em;
+
+      text-transform: uppercase;
+    }
+
+    .target-number {
+      display: block;
+
+      font-size: 4rem;
+
+      line-height: 1;
+
+      color: var(--pink-dark);
+
+      font-weight: 700;
+
+      margin-top: 8px;
+    }
+
+    .instruction {
+      text-align: center;
+
+      color: var(--muted);
+
+      font-weight: 600;
+
+      margin-bottom: 20px;
+    }
+
+
+    /* =========================================================
+       FACTOR TREE WORKSPACE
+       ========================================================= */
+
+    .factor-tree-workspace {
+      background: #FFF9FB;
+
+      border: 2px dashed var(--pink-light);
+
+      border-radius: 24px;
+
+      padding: 22px;
+
+      margin-bottom: 24px;
+
+      overflow-x: auto;
+    }
+
+    .tree-header {
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+
+      gap: 15px;
+
+      margin-bottom: 20px;
+
+      font-weight: 700;
+
+      color: var(--pink-dark);
+    }
+
+    .dynamic-factor-tree {
+      min-height: 240px;
+
+      min-width: max-content;
+
+      display: flex;
+
+      justify-content: center;
+
+      align-items: flex-start;
+
+      padding: 15px;
+    }
+
+    .tree-node {
+      position: relative;
+
+      display: flex;
+
+      flex-direction: column;
+
+      align-items: center;
+
+      min-width: 72px;
+    }
+
+    .tree-value {
+      width: 66px;
+      height: 66px;
+
+      border-radius: 18px;
+
+      display: grid;
+
+      place-items: center;
+
+      background: var(--pink-light);
+
+      color: var(--pink-dark);
+
+      font-size: 1.25rem;
+
+      font-weight: 700;
+
+      border: 2px solid transparent;
+
+      cursor: pointer;
+
+      transition: 0.2s ease;
+
+      box-shadow:
+        0 5px 12px
+        rgba(211, 107, 134, 0.12);
+
+      position: relative;
+
+      z-index: 2;
+    }
+
+    .tree-value:hover:not(.prime) {
+      transform: translateY(-3px);
+
+      background: var(--pink-main);
+
+      color: white;
+    }
+
+    .tree-value.selected {
+      border-color: var(--pink-dark);
+
+      transform: scale(1.08);
+
+      box-shadow:
+        0 0 0 5px
+        rgba(255, 133, 161, 0.18);
+    }
+
+    .tree-value.prime {
+      background: var(--lavender);
+
+      color: var(--pink-dark);
+
+      cursor: default;
+    }
+
+    .tree-value.prime::after {
+      content: "✨";
+
+      position: absolute;
+
+      top: -15px;
+
+      right: -13px;
+
+      font-size: 1rem;
+    }
+
+    .tree-children {
+      display: flex;
+
+      gap: 35px;
+
+      position: relative;
+
+      margin-top: 55px;
+    }
+
+    .tree-node.has-children > .tree-value::before {
+      content: "";
+
+      position: absolute;
+
+      width: 2px;
+
+      height: 36px;
+
+      background: var(--pink-main);
+
+      top: 64px;
+
+      left: 50%;
+
+      transform: translateX(-50%);
+
+      z-index: -1;
+    }
+
+    .tree-children::before {
+      content: "";
+
+      position: absolute;
+
+      height: 2px;
+
+      background: var(--pink-main);
+
+      top: -19px;
+
+      left: 25%;
+
+      right: 25%;
+    }
+
+    .tree-children > .tree-node::before {
+      content: "";
+
+      position: absolute;
+
+      width: 2px;
+
+      height: 20px;
+
+      background: var(--pink-main);
+
+      top: -20px;
+
+      left: 50%;
+    }
+
+
+    /* =========================================================
+       SPLIT PANEL
+       ========================================================= */
+
+    .split-panel {
+      background: white;
+
+      border: 1px solid var(--border);
+
+      border-radius: 22px;
+
+      padding: 24px;
+
+      text-align: center;
+    }
+
+    .split-panel h3 {
+      margin-top: 0;
+
+      color: var(--pink-dark);
+    }
+
+    .selected-number-display {
+      display: inline-block;
+
+      min-width: 260px;
+
+      padding: 13px 20px;
+
+      background: #FFF4F7;
+
+      border-radius: 14px;
+
+      color: var(--muted);
+
+      font-weight: 700;
+
+      margin-bottom: 20px;
+    }
+
+    .split-input-row {
+      display: flex;
+
+      justify-content: center;
+
+      align-items: flex-end;
+
+      gap: 15px;
+
+      flex-wrap: wrap;
+    }
+
+    .number-choice-group {
+      display: flex;
+
+      flex-direction: column;
+
+      gap: 8px;
+
+      text-align: left;
+    }
+
+    .number-choice-group label {
+      font-size: 0.85rem;
+
+      font-weight: 700;
+
+      color: var(--muted);
+    }
+
+    .factor-input {
+      width: 165px;
+
+      padding: 14px;
+
+      border-radius: 14px;
+
+      border: 2px solid var(--pink-light);
+
+      font-family: inherit;
+
+      font-weight: 700;
+
+      font-size: 1.1rem;
+
+      text-align: center;
+
+      color: var(--pink-dark);
+
+      background: white;
+
+      outline: none;
+
+      transition: 0.2s ease;
+    }
+
+    .factor-input:focus {
+      border-color: var(--pink-main);
+
+      box-shadow:
+        0 0 0 4px
+        rgba(255, 133, 161, 0.15);
+    }
+
+    .factor-input::placeholder {
+      color: #C9B0B8;
+
+      font-size: 0.85rem;
+
+      font-weight: 600;
+    }
+
+    .big-times {
+      font-size: 1.8rem;
+
+      color: var(--pink-dark);
+
+      font-weight: 700;
+
+      padding-bottom: 9px;
+    }
+
+
+    /* =========================================================
+       BUTTONS
+       ========================================================= */
+
+    .split-button,
+    .check-answer-btn,
+    .next-question-btn,
+    .play-again-btn {
+      border: none;
+
+      background: var(--pink-main);
+
+      color: white;
+
+      padding: 14px 28px;
+
+      border-radius: 16px;
+
+      font-family: inherit;
+
+      font-size: 1rem;
+
+      font-weight: 700;
+
+      cursor: pointer;
+
+      box-shadow:
+        0 5px 0
+        rgba(211, 107, 134, 0.2);
+
+      transition: 0.2s ease;
+    }
+
+    .split-button {
+      margin-top: 22px;
+    }
+
+    .split-button:hover,
+    .check-answer-btn:hover,
+    .next-question-btn:hover,
+    .play-again-btn:hover {
+      background: var(--pink-dark);
+
+      transform: translateY(-2px);
+    }
+
+    .split-button:active,
+    .check-answer-btn:active,
+    .next-question-btn:active,
+    .play-again-btn:active {
+      transform: translateY(2px);
+    }
+
+    .reset-btn {
+      border: none;
+
+      background: #F2EDF5;
+
+      color: var(--muted);
+
+      font-family: inherit;
+
+      font-weight: 700;
+
+      padding: 11px 17px;
+
+      border-radius: 13px;
+
+      cursor: pointer;
+
+      transition: 0.2s ease;
+    }
+
+    .reset-btn:hover {
+      background: var(--lavender);
+
+      color: var(--pink-dark);
+    }
+
+
+    /* =========================================================
+       TREE FEEDBACK
+       ========================================================= */
+
+    .feedback {
+      margin-top: 18px;
+
+      min-height: 50px;
+
+      padding: 13px 18px;
+
+      border-radius: 14px;
+
+      text-align: center;
+
+      font-weight: 700;
+
+      display: flex;
+
+      justify-content: center;
+
+      align-items: center;
+    }
+
+    .feedback.neutral {
+      background: #F8F4F6;
+
+      color: var(--muted);
+    }
+
+    .feedback.positive {
+      background: var(--success-bg);
+
+      color: var(--success);
+    }
+
+    .feedback.try-again {
+      background: var(--error-bg);
+
+      color: var(--error);
+    }
+
+
+    /* =========================================================
+       FINAL ANSWER PANEL
+       ========================================================= */
+
+    .solution-panel {
+      display: none;
+
+      margin-top: 22px;
+
+      padding: 28px;
+
+      border-radius: 22px;
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(255, 209, 220, 0.8),
+          rgba(228, 193, 249, 0.8)
+        );
+
+      text-align: center;
+    }
+
+    .solution-panel.show {
+      display: block;
+
+      animation: popIn 0.45s ease;
+    }
+
+    @keyframes popIn {
+      from {
+        opacity: 0;
+        transform: scale(0.94);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .solution-title {
+      font-size: 1.5rem;
+
+      font-weight: 700;
+
+      color: var(--pink-dark);
+
+      margin-bottom: 8px;
+    }
+
+    .solution-subtitle {
+      color: var(--muted);
+
+      font-weight: 600;
+
+      margin-bottom: 24px;
+    }
+
+    .answer-card {
+      background: rgba(255, 255, 255, 0.9);
+
+      border-radius: 20px;
+
+      padding: 22px;
+
+      margin-bottom: 18px;
+    }
+
+    .answer-label {
+      display: block;
+
+      margin-bottom: 15px;
+
+      color: var(--pink-dark);
+
+      font-size: 1.05rem;
+
+      font-weight: 700;
+    }
+
+    .equation-row {
+      display: flex;
+
+      justify-content: center;
+
+      align-items: center;
+
+      gap: 8px;
+
+      flex-wrap: wrap;
+
+      font-size: 1.25rem;
+
+      font-weight: 700;
+
+      color: var(--pink-dark);
+    }
+
+    .blank-input {
+      width: 58px;
+
+      height: 52px;
+
+      border: 2px solid var(--pink-light);
+
+      border-radius: 13px;
+
+      background: white;
+
+      color: var(--pink-dark);
+
+      font-family: inherit;
+
+      font-size: 1.15rem;
+
+      font-weight: 700;
+
+      text-align: center;
+
+      outline: none;
+
+      transition: 0.2s ease;
+    }
+
+    .blank-input:focus {
+      border-color: var(--pink-main);
+
+      box-shadow:
+        0 0 0 4px
+        rgba(255, 133, 161, 0.15);
+    }
+
+    .blank-input.correct {
+      border-color: var(--success);
+
+      background: var(--success-bg);
+    }
+
+    .blank-input.incorrect {
+      border-color: var(--error);
+
+      background: var(--error-bg);
+    }
+
+    .index-group {
+      display: inline-flex;
+
+      align-items: flex-start;
+
+      margin-right: 2px;
+    }
+
+    .index-power-input {
+      width: 45px;
+
+      height: 38px;
+
+      font-size: 1rem;
+
+      margin-left: 3px;
+
+      transform: translateY(-8px);
+    }
+
+    .answer-feedback {
+      min-height: 48px;
+
+      margin-top: 16px;
+
+      padding: 12px;
+
+      border-radius: 14px;
+
+      font-weight: 700;
+    }
+
+    .answer-feedback:empty {
+      display: none;
+    }
+
+    .answer-feedback.success {
+      display: block;
+
+      background: var(--success-bg);
+
+      color: var(--success);
+    }
+
+    .answer-feedback.error {
+      display: block;
+
+      background: var(--error-bg);
+
+      color: var(--error);
+    }
+
+    .celebration {
+      display: none;
+
+      margin-top: 18px;
+
+      font-size: 1.1rem;
+
+      font-weight: 700;
+
+      color: var(--pink-dark);
+
+      animation: popIn 0.4s ease;
+    }
+
+    .celebration.show {
+      display: block;
+    }
+
+    .next-question-btn {
+      display: none;
+
+      margin-top: 18px;
+    }
+
+    .next-question-btn.show {
+      display: inline-block;
+    }
+
+
+    /* =========================================================
+       FINAL COMPLETION SCREEN
+       ========================================================= */
+
+    .final-screen {
+      display: none;
+
+      text-align: center;
+
+      padding: 38px 25px;
+
+      border-radius: 25px;
+
+      background:
+        linear-gradient(
+          135deg,
+          var(--pink-light),
+          var(--lavender)
+        );
+
+      animation: popIn 0.5s ease;
+    }
+
+    .final-screen.show {
+      display: block;
+    }
+
+    .final-screen h2 {
+      color: var(--pink-dark);
+
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+
+      margin-top: 0;
+    }
+
+    .final-screen p {
+      color: var(--text);
+
+      font-size: 1.1rem;
+
+      line-height: 1.7;
+
+      font-weight: 600;
+    }
+
+    .final-crown {
+      font-size: 4rem;
+
+      margin-bottom: 12px;
+    }
+
+
+    /* =========================================================
+       MEMORY CARD
+       ========================================================= */
+
+    .memory-card {
+      background:
+        linear-gradient(
+          135deg,
+          rgba(255, 209, 220, 0.75),
+          rgba(228, 193, 249, 0.7)
+        ),
+        var(--white);
+
+      border: 2px solid white;
+
+      text-align: center;
+    }
+
+    .memory-grid {
+      display: grid;
+
+      grid-template-columns: repeat(3, 1fr);
+
+      gap: 15px;
+
+      text-align: left;
+
+      margin-top: 20px;
+    }
+
+    .memory-item {
+      background: rgba(255, 255, 255, 0.85);
+
+      padding: 18px;
+
+      border-radius: 18px;
+    }
+
+    .memory-item h3 {
+      margin-top: 0;
+
+      color: var(--pink-dark);
+
+      font-size: 1rem;
+    }
+
+    .memory-item p {
+      margin-bottom: 0;
+
+      color: var(--muted);
+
+      font-size: 0.92rem;
+
+      line-height: 1.5;
+    }
+
+
+    /* =========================================================
+       RESPONSIVE
+       ========================================================= */
+
+    @media (max-width: 850px) {
+
+      .rule-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .example-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .memory-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .progress-dots {
+        flex-wrap: wrap;
+
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 550px) {
+
+      .app-container {
+        width: 94%;
+
+        padding-top: 16px;
+      }
+
+      .hero,
+      .card {
+        border-radius: 20px;
+
+        padding: 22px 17px;
+      }
+
+      .rule-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .target-number {
+        font-size: 3.3rem;
+      }
+
+      .tree-header {
+        flex-direction: column;
+      }
+
+      .tree-children {
+        gap: 20px;
+      }
+
+      .tree-value {
+        width: 54px;
+        height: 54px;
+
+        font-size: 1rem;
+      }
+
+      .split-input-row {
+        flex-direction: column;
+
+        align-items: center;
+      }
+
+      .big-times {
+        padding: 0;
+      }
+
+      .number-choice-group {
+        width: 100%;
+      }
+
+      .factor-input {
+        width: 100%;
+      }
+
+      .selected-number-display {
+        min-width: 100%;
+      }
+
+      .equation-row {
+        gap: 5px;
+      }
+
+      .blank-input {
+        width: 52px;
+      }
+
+      .progress-dot {
+        width: 27px;
+        height: 27px;
+      }
+    }
+
+  </style>
+<style>
+.ndx-navbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;width:100%;padding:14px 20px;background:#241b2e;box-shadow:0 4px 14px rgba(0,0,0,.18);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;box-sizing:border-box}
+.ndx-navbar *{box-sizing:border-box}
+.ndx-home{display:inline-flex;align-items:center;gap:7px;color:#fff;text-decoration:none;font-weight:800;font-size:14px;background:rgba(255,255,255,.12);padding:10px 14px;border-radius:12px;transition:background .15s ease,transform .15s ease}
+.ndx-home:hover{background:rgba(255,255,255,.22);transform:translateY(-1px)}
+.ndx-nav-buttons{display:flex;gap:10px;flex-wrap:wrap;margin-left:auto}
+.ndx-btn{display:inline-flex;align-items:center;padding:12px 18px;border-radius:14px;font-weight:900;font-size:14px;text-decoration:none;white-space:nowrap;transition:transform .15s ease,box-shadow .15s ease}
+.ndx-btn:hover{transform:translateY(-2px)}
+.ndx-back{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.28)}
+.ndx-back:hover{background:rgba(255,255,255,.2)}
+.ndx-finish{background:linear-gradient(135deg,#7edb8c,#4eb962);color:#1c3a22;box-shadow:0 6px 16px rgba(78,185,98,.35)}
+.ndx-navbar.ndx-bottom{margin-top:32px}
+@media(max-width:600px){.ndx-navbar{padding:12px 14px}.ndx-home span{display:none}.ndx-btn{padding:11px 14px;font-size:13px}}
+</style>
+</head><body>
+<nav class="ndx-navbar" aria-label="Lesson navigation">
+  <a class="ndx-home" href="../../" title="Home">🏠<span>Home</span></a>
+  <div class="ndx-nav-buttons">
+    <a class="ndx-btn ndx-back" href="../../primes/warmup/">← Prime Numbers</a>
+    <a class="ndx-btn ndx-finish" href="../../">Finish Mission 🏁</a>
+  </div>
+</nav>
+
+  <main class="app-container">
+
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <header class="hero">
+      <h1>🎀 The Factorisation Boutique 🎀</h1>
+
+      <p class="subtitle">
+        Welcome, Prime Factor Princess! 👑✨
+      </p>
+    </header>
+
+
+    <!-- =====================================================
+         OPENING MISSION
+         ===================================================== -->
+
+    <section class="card">
+
+      <h2 class="section-title">💗 Your Mission</h2>
+
+      <p class="section-intro">
+        Turn numbers into their beautiful prime-factor outfits!
+      </p>
+
+      <ul class="mission-list">
+        <li>✨ Break the number into smaller factors.</li>
+        <li>🔎 Keep splitting until every factor is prime.</li>
+        <li>🎀 Look carefully for repeated prime factors.</li>
+        <li>👑 Use index notation to make repeated factors neat.</li>
+      </ul>
+
+    </section>
+
+
+    <!-- =====================================================
+         4 STEP RULE
+         ===================================================== -->
+
+    <section class="card">
+
+      <h2 class="section-title">
+        👑 The 4-Step Princess Rule
+      </h2>
+
+      <div class="rule-grid">
+
+        <article class="rule">
+          <div class="rule-number">1</div>
+          <h3>SPLIT</h3>
+          <p>Break the number into factors.</p>
+        </article>
+
+        <article class="rule">
+          <div class="rule-number">2</div>
+          <h3>CHECK</h3>
+          <p>Are all your factors prime?</p>
+        </article>
+
+        <article class="rule">
+          <div class="rule-number">3</div>
+          <h3>COUNT</h3>
+          <p>Find the factors that repeat.</p>
+        </article>
+
+        <article class="rule">
+          <div class="rule-number">4</div>
+          <h3>WRITE</h3>
+          <p>Use an index for repeated factors.</p>
+        </article>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         WORKED EXAMPLE
+         ===================================================== -->
+
+    <section class="card">
+
+      <h2 class="section-title">
+        🌸 Boutique Example: Factorising 18
+      </h2>
+
+      <div class="example-layout">
+
+        <div class="example-tree">
+
+          <div class="tree-number">18</div>
+
+          <div class="tree-line">↓</div>
+
+          <div class="tree-factors">
+            <span class="mini-factor">2</span>
+            <span class="multiply">×</span>
+            <span class="mini-factor">9</span>
+          </div>
+
+          <div class="tree-line">↓</div>
+
+          <div class="tree-factors">
+            <span class="mini-factor">2</span>
+            <span class="multiply">×</span>
+            <span class="mini-factor">3</span>
+            <span class="multiply">×</span>
+            <span class="mini-factor">3</span>
+          </div>
+
+        </div>
+
+
+        <div class="example-explanation">
+
+          <h3>Let's inspect our factors! 🔍</h3>
+
+          <p>
+            We have:
+            <strong>2 × 3 × 3</strong>
+          </p>
+
+          <p>
+            All of these are prime numbers.
+            But we have <strong>two 3s!</strong> 🎀
+          </p>
+
+          <p>
+            Two 3s can be written as
+            <strong>3²</strong>.
+          </p>
+
+          <div class="final-answer">
+            18 = 2 × 3<sup>2</sup> 👑
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         PRACTICE SECTION
+         ===================================================== -->
+
+    <section
+      id="practiceSection"
+      class="card practice-card"
+    >
+
+      <div class="progress-area">
+
+        <div class="progress-top">
+          <span id="questionCounter">
+            Question 1 of 10
+          </span>
+
+          <span id="difficultyText">
+            Starter Princess 🌸
+          </span>
+        </div>
+
+        <div class="progress-track">
+          <div
+            id="progressFill"
+            class="progress-fill"
+          ></div>
+        </div>
+
+        <div
+          id="progressDots"
+          class="progress-dots"
+        ></div>
+
+      </div>
+
+
+      <h2 class="section-title">
+        💌 Your Boutique Challenge!
+      </h2>
+
+
+      <div
+        id="difficultyBadge"
+        class="difficulty-badge"
+      >
+        🌸 Starter Princess
+      </div>
+
+
+      <!-- TARGET NUMBER -->
+
+      <div class="target-box">
+
+        <span class="target-label">
+          Factorise This Number
+        </span>
+
+        <span
+          id="targetNumber"
+          class="target-number"
+        >
+          12
+        </span>
+
+      </div>
+
+
+      <p class="instruction">
+        Click a pink number in the tree, then type two factors that multiply together! 🌸
+      </p>
+
+
+      <!-- FACTOR TREE -->
+
+      <div class="factor-tree-workspace">
+
+        <div class="tree-header">
+
+          <span>🌳 Your Factor Tree</span>
+
+          <button
+            id="resetTreeButton"
+            class="reset-btn"
+            type="button"
+          >
+            ↺ Start This Question Again
+          </button>
+
+        </div>
+
+
+        <div
+          id="factorTree"
+          class="dynamic-factor-tree"
+        ></div>
+
+      </div>
+
+
+      <!-- SPLIT PANEL -->
+
+      <div class="split-panel">
+
+        <h3>✂️ Split the Selected Number</h3>
+
+        <div
+          id="selectedNumberDisplay"
+          class="selected-number-display"
+        >
+          Click a pink number in the tree first!
+        </div>
+
+
+        <div class="split-input-row">
+
+          <div class="number-choice-group">
+
+            <label for="factorOne">
+              First Factor
+            </label>
+
+            <input
+              type="number"
+              id="factorOne"
+              class="factor-input"
+              placeholder="Type here..."
+              min="1"
+              step="1"
+              inputmode="numeric"
+              autocomplete="off"
+            >
+
+          </div>
+
+
+          <span class="big-times">×</span>
+
+
+          <div class="number-choice-group">
+
+            <label for="factorTwo">
+              Second Factor
+            </label>
+
+            <input
+              type="number"
+              id="factorTwo"
+              class="factor-input"
+              placeholder="Type here..."
+              min="1"
+              step="1"
+              inputmode="numeric"
+              autocomplete="off"
+            >
+
+          </div>
+
+        </div>
+
+
+        <button
+          id="splitButton"
+          class="split-button"
+          type="button"
+        >
+          ✨ Split It!
+        </button>
+
+      </div>
+
+
+      <!-- TREE FEEDBACK -->
+
+      <div
+        id="treeFeedback"
+        class="feedback neutral"
+      >
+        Choose a composite number and split it into two factors. 💗
+      </div>
+
+
+      <!-- ===================================================
+           DYNAMIC FINAL ANSWER AREA
+           =================================================== -->
+
+      <div
+        id="solutionPanel"
+        class="solution-panel"
+      >
+
+        <div class="solution-title">
+          👑 Your Factor Tree is Complete!
+        </div>
+
+        <p class="solution-subtitle">
+          Now fill in your own final answer! Don't peek — you're the Prime Factor Princess. 🎀
+        </p>
+
+
+        <!-- PRIME FACTORS -->
+
+        <div class="answer-card">
+
+          <span class="answer-label">
+            🌸 Prime factors:
+          </span>
+
+          <div
+            id="primeFactorsAnswer"
+            class="equation-row"
+          ></div>
+
+        </div>
+
+
+        <!-- INDEX NOTATION -->
+
+        <div class="answer-card">
+
+          <span class="answer-label">
+            👑 Index notation:
+          </span>
+
+          <div
+            id="indexNotationAnswer"
+            class="equation-row"
+          ></div>
+
+        </div>
+
+
+        <button
+          id="checkFinalAnswer"
+          class="check-answer-btn"
+          type="button"
+        >
+          💌 Check My Boutique Answer
+        </button>
+
+
+        <div
+          id="answerFeedback"
+          class="answer-feedback"
+        ></div>
+
+
+        <div
+          id="celebration"
+          class="celebration"
+        >
+          🎉👑 PERFECT! You solved this Boutique Challenge! 🎀✨
+        </div>
+
+
+        <button
+          id="nextQuestionButton"
+          class="next-question-btn"
+          type="button"
+        >
+          💗 Next Boutique Challenge →
+        </button>
+
+      </div>
+
+
+      <!-- ===================================================
+           FINAL SCREEN
+           =================================================== -->
+
+      <div
+        id="finalScreen"
+        class="final-screen"
+      >
+
+        <div class="final-crown">
+          👑🏆🎀
+        </div>
+
+        <h2>
+          You Are the Prime Factor Queen!
+        </h2>
+
+        <p>
+          You completed all 10 Boutique Challenges —
+          from tiny factors all the way up to the mighty 210! ✨
+        </p>
+
+        <p>
+          You've mastered:
+          <br><br>
+          🌸 Factor Trees
+          <br>
+          🔎 Prime Factors
+          <br>
+          🎀 Repeated Factors
+          <br>
+          👑 Index Notation
+        </p>
+
+        <button
+          id="playAgainButton"
+          class="play-again-btn"
+          type="button"
+        >
+          🌷 Play Again
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         MEMORY CARD
+         ===================================================== -->
+
+    <footer class="card memory-card">
+
+      <h2 class="section-title">
+        💖 Princess Memory Card
+      </h2>
+
+      <p class="section-intro">
+        Keep these ideas sparkling in your memory! ✨
+      </p>
+
+      <div class="memory-grid">
+
+        <div class="memory-item">
+          <h3>🌸 Prime Factorisation</h3>
+
+          <p>
+            Keep splitting a number until every final factor is prime.
+          </p>
+        </div>
+
+
+        <div class="memory-item">
+          <h3>🎀 Index Notation</h3>
+
+          <p>
+            If a prime factor repeats, use a small power to show how many times.
+          </p>
+        </div>
+
+
+        <div class="memory-item">
+          <h3>👑 Golden Routine</h3>
+
+          <p>
+            SPLIT → CHECK → COUNT → WRITE
+          </p>
+        </div>
+
+      </div>
+
+    </footer>
+
+  </main>
+
+
+  <script>
+    /* =========================================================
+       THE FACTORISATION BOUTIQUE ENGINE 🎀
+       ========================================================= */
+
+
+    /* =========================================================
+       QUESTION BANK
+       ========================================================= */
+
+    const QUESTIONS = [
+
+      {
+        number: 12,
+        difficulty: "Starter Princess 🌸"
+      },
+
+      {
+        number: 18,
+        difficulty: "Sparkle Starter ✨"
+      },
+
+      {
+        number: 24,
+        difficulty: "Boutique Builder 🎀"
+      },
+
+      {
+        number: 36,
+        difficulty: "Pattern Princess 👑"
+      },
+
+      {
+        number: 60,
+        difficulty: "Factor Fashionista 💗"
+      },
+
+      {
+        number: 84,
+        difficulty: "Prime Detective 🔍"
+      },
+
+      {
+        number: 120,
+        difficulty: "Power Princess ⚡"
+      },
+
+      {
+        number: 150,
+        difficulty: "Factor Expert 🌷"
+      },
+
+      {
+        number: 180,
+        difficulty: "Boutique Boss 💎"
+      },
+
+      {
+        number: 210,
+        difficulty: "Prime Factor Queen 👸🏆"
+      }
+
+    ];
+
+
+    /* =========================================================
+       DOM ELEMENTS
+       ========================================================= */
+
+    const targetNumberElement =
+      document.getElementById("targetNumber");
+
+    const questionCounter =
+      document.getElementById("questionCounter");
+
+    const difficultyText =
+      document.getElementById("difficultyText");
+
+    const difficultyBadge =
+      document.getElementById("difficultyBadge");
+
+    const progressFill =
+      document.getElementById("progressFill");
+
+    const progressDots =
+      document.getElementById("progressDots");
+
+    const factorTree =
+      document.getElementById("factorTree");
+
+    const factorOneInput =
+      document.getElementById("factorOne");
+
+    const factorTwoInput =
+      document.getElementById("factorTwo");
+
+    const splitButton =
+      document.getElementById("splitButton");
+
+    const resetTreeButton =
+      document.getElementById("resetTreeButton");
+
+    const selectedNumberDisplay =
+      document.getElementById("selectedNumberDisplay");
+
+    const treeFeedback =
+      document.getElementById("treeFeedback");
+
+    const solutionPanel =
+      document.getElementById("solutionPanel");
+
+    const primeFactorsAnswer =
+      document.getElementById("primeFactorsAnswer");
+
+    const indexNotationAnswer =
+      document.getElementById("indexNotationAnswer");
+
+    const checkFinalAnswer =
+      document.getElementById("checkFinalAnswer");
+
+    const answerFeedback =
+      document.getElementById("answerFeedback");
+
+    const celebration =
+      document.getElementById("celebration");
+
+    const nextQuestionButton =
+      document.getElementById("nextQuestionButton");
+
+    const finalScreen =
+      document.getElementById("finalScreen");
+
+    const playAgainButton =
+      document.getElementById("playAgainButton");
+
+
+    /* =========================================================
+       APP STATE
+       ========================================================= */
+
+    let currentQuestionIndex = 0;
+
+    let nodeCounter = 0;
+
+    let rootNode = null;
+
+    let selectedNode = null;
+
+    let questionSolved = false;
+
+
+    /* =========================================================
+       TREE NODE
+       ========================================================= */
+
+    function createNode(value) {
+
+      return {
+        id: nodeCounter++,
+        value: value,
+        left: null,
+        right: null
+      };
+
+    }
+
+
+    /* =========================================================
+       PRIME CHECK
+       ========================================================= */
+
+    function isPrime(number) {
+
+      if (number < 2) {
+        return false;
+      }
+
+      for (
+        let i = 2;
+        i <= Math.sqrt(number);
+        i++
+      ) {
+
+        if (number % i === 0) {
+          return false;
+        }
+
+      }
+
+      return true;
+
+    }
+
+
+    /* =========================================================
+       LEAF CHECK
+       ========================================================= */
+
+    function isLeaf(node) {
+
+      return (
+        node.left === null &&
+        node.right === null
+      );
+
+    }
+
+
+    /* =========================================================
+       GET CURRENT QUESTION
+       ========================================================= */
+
+    function getCurrentQuestion() {
+
+      return QUESTIONS[currentQuestionIndex];
+
+    }
+
+
+    /* =========================================================
+       UPDATE PROGRESS
+       ========================================================= */
+
+    function updateProgress() {
+
+      const totalQuestions =
+        QUESTIONS.length;
+
+      const currentNumber =
+        currentQuestionIndex + 1;
+
+      questionCounter.textContent =
+        `Question ${currentNumber} of ${totalQuestions}`;
+
+      difficultyText.textContent =
+        getCurrentQuestion().difficulty;
+
+      difficultyBadge.textContent =
+        getCurrentQuestion().difficulty;
+
+      const progressPercent =
+        (currentNumber / totalQuestions) * 100;
+
+      progressFill.style.width =
+        `${progressPercent}%`;
+
+
+      progressDots.innerHTML = "";
+
+      QUESTIONS.forEach((question, index) => {
+
+        const dot =
+          document.createElement("div");
+
+        dot.className =
+          "progress-dot";
+
+        dot.textContent =
+          index + 1;
+
+        if (index < currentQuestionIndex) {
+          dot.classList.add("completed");
+          dot.textContent = "✓";
+        }
+
+        if (index === currentQuestionIndex) {
+          dot.classList.add("current");
+        }
+
+        progressDots.appendChild(dot);
+
+      });
+
+    }
+
+
+    /* =========================================================
+       LOAD QUESTION
+       ========================================================= */
+
+    function loadQuestion() {
+
+      const question =
+        getCurrentQuestion();
+
+      nodeCounter = 0;
+
+      rootNode =
+        createNode(question.number);
+
+      selectedNode = null;
+
+      questionSolved = false;
+
+
+      targetNumberElement.textContent =
+        question.number;
+
+
+      factorOneInput.value = "";
+      factorTwoInput.value = "";
+
+
+      factorOneInput.placeholder =
+        "Type here...";
+
+      factorTwoInput.placeholder =
+        "Type here...";
+
+
+      selectedNumberDisplay.textContent =
+        "Click a pink number in the tree first!";
+
+
+      solutionPanel.classList.remove("show");
+
+      finalScreen.classList.remove("show");
+
+      answerFeedback.textContent = "";
+
+      answerFeedback.className =
+        "answer-feedback";
+
+      celebration.classList.remove("show");
+
+      nextQuestionButton.classList.remove("show");
+
+
+      showTreeFeedback(
+        `🌸 Begin by splitting ${question.number} into two useful factors!`,
+        "neutral"
+      );
+
+
+      updateProgress();
+
+      renderTree();
+
+    }
+
+
+    /* =========================================================
+       SELECT TREE NODE
+       ========================================================= */
+
+    function selectNode(node) {
+
+      if (questionSolved) {
+        return;
+      }
+
+
+      if (isPrime(node.value)) {
+
+        showTreeFeedback(
+          `✨ ${node.value} is prime, so it is already perfect!`,
+          "neutral"
+        );
+
+        return;
+      }
+
+
+      if (!isLeaf(node)) {
+
+        showTreeFeedback(
+          "🌸 This number has already been split. Choose another pink leaf!",
+          "neutral"
+        );
+
+        return;
+      }
+
+
+      selectedNode = node;
+
+
+      selectedNumberDisplay.innerHTML =
+        `🎀 Split <strong>${node.value}</strong> into two factors`;
+
+
+      factorOneInput.value = "";
+      factorTwoInput.value = "";
+
+
+      factorOneInput.placeholder =
+        `Factor of ${node.value}`;
+
+      factorTwoInput.placeholder =
+        `Factor of ${node.value}`;
+
+
+      renderTree();
+
+      factorOneInput.focus();
+
+    }
+
+
+    /* =========================================================
+       SPLIT SELECTED NODE
+       ========================================================= */
+
+    function splitSelectedNode() {
+
+      if (questionSolved) {
+        return;
+      }
+
+
+      if (!selectedNode) {
+
+        showTreeFeedback(
+          "💗 First click a pink composite number in the factor tree!",
+          "try-again"
+        );
+
+        return;
+      }
+
+
+      const factorOne =
+        Number(factorOneInput.value);
+
+      const factorTwo =
+        Number(factorTwoInput.value);
+
+
+      if (
+        factorOneInput.value === "" ||
+        factorTwoInput.value === ""
+      ) {
+
+        showTreeFeedback(
+          "🌸 Please type a number into both factor boxes!",
+          "try-again"
+        );
+
+        return;
+      }
+
+
+      if (
+        !Number.isInteger(factorOne) ||
+        !Number.isInteger(factorTwo) ||
+        factorOne <= 0 ||
+        factorTwo <= 0
+      ) {
+
+        showTreeFeedback(
+          "💗 Please use positive whole numbers!",
+          "try-again"
+        );
+
+        return;
+      }
+
+
+      if (
+        factorOne * factorTwo !==
+        selectedNode.value
+      ) {
+
+        showTreeFeedback(
+          `Oops! ${factorOne} × ${factorTwo} = ${factorOne * factorTwo}, not ${selectedNode.value}. Try again! 💕`,
+          "try-again"
+        );
+
+        return;
+      }
+
+
+      if (
+        factorOne === 1 ||
+        factorTwo === 1
+      ) {
+
+        showTreeFeedback(
+          "👀 Try a more useful factor pair. Avoid using 1!",
+          "try-again"
+        );
+
+        return;
+      }
+
+
+      const originalValue =
+        selectedNode.value;
+
+
+      selectedNode.left =
+        createNode(factorOne);
+
+      selectedNode.right =
+        createNode(factorTwo);
+
+
+      selectedNode = null;
+
+
+      factorOneInput.value = "";
+      factorTwoInput.value = "";
+
+
+      factorOneInput.placeholder =
+        "Type here...";
+
+      factorTwoInput.placeholder =
+        "Type here...";
+
+
+      selectedNumberDisplay.textContent =
+        "Choose another pink number to split!";
+
+
+      showTreeFeedback(
+        `✨ Beautiful! ${originalValue} = ${factorOne} × ${factorTwo}`,
+        "positive"
+      );
+
+
+      renderTree();
+
+      checkTreeCompletion();
+
+    }
+
+
+    /* =========================================================
+       RENDER A TREE NODE
+       ========================================================= */
+
+    function renderNode(node) {
+
+      const nodeElement =
+        document.createElement("div");
+
+      nodeElement.className =
+        "tree-node";
+
+
+      const valueElement =
+        document.createElement("button");
+
+      valueElement.type =
+        "button";
+
+      valueElement.className =
+        "tree-value";
+
+      valueElement.textContent =
+        node.value;
+
+
+      if (isPrime(node.value)) {
+
+        valueElement.classList.add("prime");
+
+      }
+
+
+      if (
+        selectedNode &&
+        selectedNode.id === node.id
+      ) {
+
+        valueElement.classList.add("selected");
+
+      }
+
+
+      valueElement.addEventListener(
+        "click",
+        () => {
+          selectNode(node);
+        }
+      );
+
+
+      nodeElement.appendChild(
+        valueElement
+      );
+
+
+      if (
+        node.left &&
+        node.right
+      ) {
+
+        nodeElement.classList.add(
+          "has-children"
+        );
+
+
+        const childrenContainer =
+          document.createElement("div");
+
+        childrenContainer.className =
+          "tree-children";
+
+
+        childrenContainer.appendChild(
+          renderNode(node.left)
+        );
+
+        childrenContainer.appendChild(
+          renderNode(node.right)
+        );
+
+
+        nodeElement.appendChild(
+          childrenContainer
+        );
+
+      }
+
+
+      return nodeElement;
+
+    }
+
+
+    /* =========================================================
+       RENDER TREE
+       ========================================================= */
+
+    function renderTree() {
+
+      factorTree.innerHTML = "";
+
+      factorTree.appendChild(
+        renderNode(rootNode)
+      );
+
+    }
+
+
+    /* =========================================================
+       GET LEAF VALUES
+       ========================================================= */
+
+    function getLeafValues(node) {
+
+      if (isLeaf(node)) {
+
+        return [node.value];
+
+      }
+
+
+      let values = [];
+
+
+      if (node.left) {
+
+        values =
+          values.concat(
+            getLeafValues(node.left)
+          );
+
+      }
+
+
+      if (node.right) {
+
+        values =
+          values.concat(
+            getLeafValues(node.right)
+          );
+
+      }
+
+
+      return values;
+
+    }
+
+
+    /* =========================================================
+       CHECK WHETHER TREE IS COMPLETE
+       ========================================================= */
+
+    function isTreeComplete(node) {
+
+      if (isLeaf(node)) {
+
+        return isPrime(node.value);
+
+      }
+
+
+      return (
+        isTreeComplete(node.left) &&
+        isTreeComplete(node.right)
+      );
+
+    }
+
+
+    /* =========================================================
+       GET CORRECT PRIME FACTORS
+       ========================================================= */
+
+    function getCorrectPrimeFactors() {
+
+      const factors =
+        getLeafValues(rootNode);
+
+      return factors.sort(
+        (a, b) => a - b
+      );
+
+    }
+
+
+    /* =========================================================
+       GET INDEX NOTATION GROUPS
+
+       Example:
+       [2,2,2,3]
+
+       becomes:
+
+       [
+         { base: 2, power: 3 },
+         { base: 3, power: 1 }
+       ]
+       ========================================================= */
+
+    function getIndexGroups(factors) {
+
+      const groups = [];
+
+
+      factors.forEach(factor => {
+
+        const existingGroup =
+          groups.find(
+            group =>
+              group.base === factor
+          );
+
+
+        if (existingGroup) {
+
+          existingGroup.power++;
+
+        } else {
+
+          groups.push({
+            base: factor,
+            power: 1
+          });
+
+        }
+
+      });
+
+
+      return groups;
+
+    }
+
+
+    /* =========================================================
+       TREE COMPLETE
+       ========================================================= */
+
+    function checkTreeCompletion() {
+
+      if (!isTreeComplete(rootNode)) {
+        return;
+      }
+
+
+      solutionPanel.classList.add("show");
+
+
+      showTreeFeedback(
+        "🎉 Your factor tree is complete! Now write the final answer yourself. 👑",
+        "positive"
+      );
+
+
+      createAnswerInputs();
+
+
+      setTimeout(() => {
+
+        solutionPanel.scrollIntoView({
+          behavior: "smooth",
+          block: "center"
+        });
+
+        const firstInput =
+          solutionPanel.querySelector("input");
+
+        if (firstInput) {
+          firstInput.focus();
+        }
+
+      }, 300);
+
+    }
+
+
+    /* =========================================================
+       CREATE DYNAMIC ANSWER INPUTS
+       ========================================================= */
+
+    function createAnswerInputs() {
+
+      primeFactorsAnswer.innerHTML = "";
+
+      indexNotationAnswer.innerHTML = "";
+
+      answerFeedback.textContent = "";
+
+      answerFeedback.className =
+        "answer-feedback";
+
+      celebration.classList.remove("show");
+
+      nextQuestionButton.classList.remove("show");
+
+
+      const primeFactors =
+        getCorrectPrimeFactors();
+
+
+      /* -----------------------------------------------
+         PRIME FACTOR BLANKS
+         ----------------------------------------------- */
+
+      primeFactors.forEach(
+        (factor, index) => {
+
+          const input =
+            document.createElement("input");
+
+          input.type = "number";
+
+          input.min = "2";
+
+          input.step = "1";
+
+          input.inputMode = "numeric";
+
+          input.className =
+            "blank-input prime-answer-input";
+
+          input.dataset.expected =
+            factor;
+
+          input.setAttribute(
+            "aria-label",
+            `Prime factor ${index + 1}`
+          );
+
+
+          primeFactorsAnswer.appendChild(
+            input
+          );
+
+
+          if (
+            index <
+            primeFactors.length - 1
+          ) {
+
+            const times =
+              document.createElement("span");
+
+            times.textContent = "×";
+
+            primeFactorsAnswer.appendChild(
+              times
+            );
+
+          }
+
+        }
+      );
+
+
+      /* -----------------------------------------------
+         INDEX NOTATION BLANKS
+         ----------------------------------------------- */
+
+      const indexGroups =
+        getIndexGroups(primeFactors);
+
+
+      indexGroups.forEach(
+        (group, index) => {
+
+          const groupContainer =
+            document.createElement("span");
+
+          groupContainer.className =
+            "index-group";
+
+
+          const baseInput =
+            document.createElement("input");
+
+          baseInput.type = "number";
+
+          baseInput.min = "2";
+
+          baseInput.step = "1";
+
+          baseInput.inputMode = "numeric";
+
+          baseInput.className =
+            "blank-input index-answer-input";
+
+          baseInput.dataset.expected =
+            group.base;
+
+          baseInput.setAttribute(
+            "aria-label",
+            `Index notation base ${index + 1}`
+          );
+
+
+          groupContainer.appendChild(
+            baseInput
+          );
+
+
+          /* Only repeated factors need a power */
+
+          if (group.power > 1) {
+
+            const powerInput =
+              document.createElement("input");
+
+            powerInput.type = "number";
+
+            powerInput.min = "2";
+
+            powerInput.step = "1";
+
+            powerInput.inputMode = "numeric";
+
+            powerInput.className =
+              "blank-input index-power-input index-answer-input";
+
+            powerInput.dataset.expected =
+              group.power;
+
+            powerInput.setAttribute(
+              "aria-label",
+              `Power for ${group.base}`
+            );
+
+
+            groupContainer.appendChild(
+              powerInput
+            );
+
+          }
+
+
+          indexNotationAnswer.appendChild(
+            groupContainer
+          );
+
+
+          if (
+            index <
+            indexGroups.length - 1
+          ) {
+
+            const times =
+              document.createElement("span");
+
+            times.textContent = "×";
+
+            indexNotationAnswer.appendChild(
+              times
+            );
+
+          }
+
+        }
+      );
+
+
+      setupAnswerInputNavigation();
+
+    }
+
+
+    /* =========================================================
+       ANSWER INPUT ENTER NAVIGATION
+       ========================================================= */
+
+    function setupAnswerInputNavigation() {
+
+      const inputs =
+        solutionPanel.querySelectorAll("input");
+
+
+      inputs.forEach(
+        (input, index) => {
+
+          input.addEventListener(
+            "keydown",
+            event => {
+
+              if (
+                event.key === "Enter"
+              ) {
+
+                event.preventDefault();
+
+
+                if (
+                  index <
+                  inputs.length - 1
+                ) {
+
+                  inputs[index + 1].focus();
+
+                } else {
+
+                  checkFinalAnswers();
+
+                }
+
+              }
+
+            }
+          );
+
+        }
+      );
+
+    }
+
+
+    /* =========================================================
+       CHECK FINAL ANSWERS
+       ========================================================= */
+
+    function checkFinalAnswers() {
+
+      if (questionSolved) {
+        return;
+      }
+
+
+      const allAnswerInputs =
+        solutionPanel.querySelectorAll(
+          ".prime-answer-input, .index-answer-input"
+        );
+
+
+      let everythingCorrect = true;
+
+
+      allAnswerInputs.forEach(
+        input => {
+
+          const expected =
+            Number(input.dataset.expected);
+
+          const entered =
+            Number(input.value);
+
+
+          input.classList.remove(
+            "correct",
+            "incorrect"
+          );
+
+
+          if (
+            entered === expected
+          ) {
+
+            input.classList.add(
+              "correct"
+            );
+
+          } else {
+
+            input.classList.add(
+              "incorrect"
+            );
+
+            everythingCorrect = false;
+
+          }
+
+        }
+      );
+
+
+      if (everythingCorrect) {
+
+        questionSolved = true;
+
+
+        answerFeedback.textContent =
+          "Perfect! Your prime factors and index notation are absolutely correct! ✨";
+
+
+        answerFeedback.className =
+          "answer-feedback success";
+
+
+        celebration.classList.add(
+          "show"
+        );
+
+
+        nextQuestionButton.classList.add(
+          "show"
+        );
+
+
+        markCurrentQuestionCompleted();
+
+
+        checkFinalAnswer.disabled = true;
+
+        checkFinalAnswer.style.opacity = "0.6";
+
+        checkFinalAnswer.style.cursor = "default";
+
+      } else {
+
+        answerFeedback.textContent =
+          "Almost there, Princess! Check the pink blanks and try again. 💗";
+
+
+        answerFeedback.className =
+          "answer-feedback error";
+
+      }
+
+    }
+
+
+    /* =========================================================
+       MARK CURRENT QUESTION AS COMPLETE
+       ========================================================= */
+
+    function markCurrentQuestionCompleted() {
+
+      const dots =
+        progressDots.querySelectorAll(
+          ".progress-dot"
+        );
+
+
+      if (
+        dots[currentQuestionIndex]
+      ) {
+
+        dots[currentQuestionIndex].classList.remove(
+          "current"
+        );
+
+        dots[currentQuestionIndex].classList.add(
+          "completed"
+        );
+
+        dots[currentQuestionIndex].textContent =
+          "✓";
+
+      }
+
+    }
+
+
+    /* =========================================================
+       NEXT QUESTION
+       ========================================================= */
+
+    function goToNextQuestion() {
+
+      if (
+        currentQuestionIndex <
+        QUESTIONS.length - 1
+      ) {
+
+        currentQuestionIndex++;
+
+        checkFinalAnswer.disabled = false;
+
+        checkFinalAnswer.style.opacity = "1";
+
+        checkFinalAnswer.style.cursor = "pointer";
+
+
+        loadQuestion();
+
+
+        document
+          .getElementById("practiceSection")
+          .scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+          });
+
+      } else {
+
+        showFinalScreen();
+
+      }
+
+    }
+
+
+    /* =========================================================
+       SHOW FINAL SCREEN
+       ========================================================= */
+
+    function showFinalScreen() {
+
+      solutionPanel.classList.remove("show");
+
+      finalScreen.classList.add("show");
+
+
+      document
+        .getElementById("practiceSection")
+        .scrollIntoView({
+          behavior: "smooth",
+          block: "center"
+        });
+
+    }
+
+
+    /* =========================================================
+       RESET CURRENT QUESTION
+       ========================================================= */
+
+    function resetCurrentQuestion() {
+
+      checkFinalAnswer.disabled = false;
+
+      checkFinalAnswer.style.opacity = "1";
+
+      checkFinalAnswer.style.cursor = "pointer";
+
+
+      loadQuestion();
+
+    }
+
+
+    /* =========================================================
+       SHOW TREE FEEDBACK
+       ========================================================= */
+
+    function showTreeFeedback(
+      message,
+      type
+    ) {
+
+      treeFeedback.textContent =
+        message;
+
+      treeFeedback.className =
+        `feedback ${type}`;
+
+    }
+
+
+    /* =========================================================
+       PLAY AGAIN
+       ========================================================= */
+
+    function playAgain() {
+
+      currentQuestionIndex = 0;
+
+      checkFinalAnswer.disabled = false;
+
+      checkFinalAnswer.style.opacity = "1";
+
+      checkFinalAnswer.style.cursor = "pointer";
+
+
+      finalScreen.classList.remove("show");
+
+
+      loadQuestion();
+
+
+      document
+        .getElementById("practiceSection")
+        .scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+
+    }
+
+
+    /* =========================================================
+       ENTER KEY FOR FACTOR INPUTS
+       ========================================================= */
+
+    factorOneInput.addEventListener(
+      "keydown",
+      event => {
+
+        if (
+          event.key === "Enter"
+        ) {
+
+          event.preventDefault();
+
+          factorTwoInput.focus();
+
+        }
+
+      }
+    );
+
+
+    factorTwoInput.addEventListener(
+      "keydown",
+      event => {
+
+        if (
+          event.key === "Enter"
+        ) {
+
+          event.preventDefault();
+
+          splitSelectedNode();
+
+        }
+
+      }
+    );
+
+
+    /* =========================================================
+       BUTTON EVENTS
+       ========================================================= */
+
+    splitButton.addEventListener(
+      "click",
+      splitSelectedNode
+    );
+
+
+    resetTreeButton.addEventListener(
+      "click",
+      resetCurrentQuestion
+    );
+
+
+    checkFinalAnswer.addEventListener(
+      "click",
+      checkFinalAnswers
+    );
+
+
+    nextQuestionButton.addEventListener(
+      "click",
+      goToNextQuestion
+    );
+
+
+    playAgainButton.addEventListener(
+      "click",
+      playAgain
+    );
+
+
+    /* =========================================================
+       START THE APP
+       ========================================================= */
+
+    loadQuestion();
+
+  </script>
+<nav class="ndx-navbar ndx-bottom" aria-label="Lesson navigation">
+  <a class="ndx-home" href="../../" title="Home">🏠<span>Home</span></a>
+  <div class="ndx-nav-buttons">
+    <a class="ndx-btn ndx-back" href="../../primes/warmup/">← Prime Numbers</a>
+    <a class="ndx-btn ndx-finish" href="../../">Finish Mission 🏁</a>
+  </div>
+</nav>
+</body>
+</html>
