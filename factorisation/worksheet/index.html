@@ -1,0 +1,2352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Prime Factorization & Index Notation</title>
+
+<style>
+/* ==========================================
+   DESIGN SYSTEM
+========================================== */
+:root {
+  --NAVY-DARK: #142B45;
+  --NAVY: #1E3A5F;
+  --ACCENT-BLUE: #3B6EA5;
+  --GOLD-HIGHLIGHT: #F5A623;
+  --DARK-GOLD: #C97F0B;
+  --BG-LIGHT: #F7F9FC;
+  --WHITE: #FFFFFF;
+  --DARK-TEXT: #1E293B;
+  --MUTED-TEXT: #5B6B82;
+  --CHIP-BG: #E5ECF6;
+  --CHIP-BORDER: #C7D5E8;
+  --SUCCESS-GREEN: #2E7D32;
+  --ERROR-RED: #D32F2F;
+  --FONT-TITLE: Cambria, Georgia, serif;
+  --FONT-BODY: Calibri, "Segoe UI", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--FONT-BODY);
+  background: var(--BG-LIGHT);
+  color: var(--DARK-TEXT);
+  min-height: 100vh;
+}
+
+/* ==========================================
+   HEADER
+========================================== */
+header {
+  background: var(--NAVY-DARK);
+  color: white;
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+}
+
+header h1 {
+  font-family: var(--FONT-TITLE);
+  color: var(--GOLD-HIGHLIGHT);
+  font-size: 1.35rem;
+}
+
+nav {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.nav-btn {
+  background: transparent;
+  border: 1px solid var(--CHIP-BORDER);
+  color: white;
+  padding: 0.55rem 0.9rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.nav-btn:hover,
+.nav-btn.active {
+  background: var(--GOLD-HIGHLIGHT);
+  color: var(--NAVY-DARK);
+  border-color: var(--GOLD-HIGHLIGHT);
+}
+
+/* ==========================================
+   MAIN
+========================================== */
+main {
+  max-width: 1250px;
+  margin: auto;
+  padding: 1.5rem;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* ==========================================
+   BUTTONS
+========================================== */
+.btn {
+  background: var(--NAVY);
+  color: white;
+  border: none;
+  padding: 0.65rem 1.1rem;
+  border-radius: 7px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn:hover {
+  background: var(--ACCENT-BLUE);
+}
+
+.btn.gold {
+  background: var(--GOLD-HIGHLIGHT);
+  color: var(--NAVY-DARK);
+}
+
+.btn.green {
+  background: var(--SUCCESS-GREEN);
+}
+
+.btn.red {
+  background: var(--ERROR-RED);
+}
+
+.btn.gray {
+  background: var(--MUTED-TEXT);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ==========================================
+   PRESENTATION
+========================================== */
+.controls-bar {
+  background: white;
+  border: 1px solid var(--CHIP-BORDER);
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.slide-select,
+select,
+input {
+  font-family: var(--FONT-BODY);
+}
+
+.slide-select {
+  padding: 0.55rem;
+  border: 1px solid var(--CHIP-BORDER);
+  border-radius: 6px;
+  max-width: 350px;
+}
+
+.slide-card {
+  min-height: 540px;
+  background: white;
+  border: 1px solid var(--CHIP-BORDER);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+  display: flex;
+  flex-direction: column;
+}
+
+.slide-card.dark {
+  background: var(--NAVY-DARK);
+  color: white;
+}
+
+.slide-header {
+  padding: 1.4rem 2rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.slide-badge {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: var(--NAVY);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: var(--FONT-TITLE);
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.dark .slide-badge {
+  background: var(--GOLD-HIGHLIGHT);
+  color: var(--NAVY-DARK);
+}
+
+.slide-header h2 {
+  font-family: var(--FONT-TITLE);
+  color: var(--NAVY-DARK);
+  font-size: 1.55rem;
+}
+
+.dark .slide-header h2 {
+  color: white;
+}
+
+.slide-header p {
+  color: var(--MUTED-TEXT);
+  font-style: italic;
+  margin-top: 0.2rem;
+}
+
+.dark .slide-header p {
+  color: var(--CHIP-BORDER);
+}
+
+.slide-body {
+  flex: 1;
+  padding: 1rem 2rem 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.slide-footer {
+  border-top: 1px solid var(--CHIP-BORDER);
+  padding: 0.8rem 2rem;
+  color: var(--MUTED-TEXT);
+  font-size: 0.85rem;
+}
+
+.dark .slide-footer {
+  color: var(--CHIP-BORDER);
+}
+
+/* ==========================================
+   CONTENT CARDS
+========================================== */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.workspace-card {
+  background: white;
+  border: 1.5px dashed var(--CHIP-BORDER);
+  border-radius: 10px;
+  padding: 1.2rem;
+  position: relative;
+}
+
+.workspace-label {
+  position: absolute;
+  right: 0.8rem;
+  top: 0.6rem;
+  color: var(--MUTED-TEXT);
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+.chip-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 1rem;
+}
+
+.step-chip {
+  background: var(--CHIP-BG);
+  border: 1px solid var(--CHIP-BORDER);
+  border-radius: 10px;
+  padding: 1rem;
+}
+
+.step-num {
+  width: 30px;
+  height: 30px;
+  background: var(--NAVY);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 0.6rem;
+  font-weight: bold;
+}
+
+.rule-box {
+  border: 3px solid var(--GOLD-HIGHLIGHT);
+  background: white;
+  border-radius: 14px;
+  padding: 2rem;
+  text-align: center;
+}
+
+.rule-box h3 {
+  color: var(--DARK-GOLD);
+  font-family: var(--FONT-TITLE);
+  font-size: 1.6rem;
+  margin-bottom: 0.8rem;
+}
+
+.rule-box p {
+  color: var(--NAVY-DARK);
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+/* ==========================================
+   DIVISION LADDER
+========================================== */
+.ladder-container {
+  display: inline-block;
+  background: white;
+  padding: 1rem;
+  border: 1px solid var(--CHIP-BORDER);
+  border-radius: 10px;
+  min-width: 250px;
+}
+
+.ladder-row {
+  display: flex;
+  align-items: stretch;
+  min-height: 48px;
+}
+
+.ladder-divisor {
+  width: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--DARK-GOLD);
+  font-family: var(--FONT-TITLE);
+  font-weight: bold;
+  font-size: 1.2rem;
+  border-bottom: 2px solid var(--NAVY);
+}
+
+.ladder-number {
+  min-width: 130px;
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: var(--NAVY-DARK);
+  border-left: 3px solid var(--NAVY);
+  border-bottom: 2px solid var(--NAVY);
+}
+
+.ladder-row:last-child .ladder-divisor,
+.ladder-row:last-child .ladder-number {
+  border-bottom: none;
+}
+
+/* ==========================================
+   TOOL CARDS
+========================================== */
+.tool-card {
+  background: white;
+  border: 1px solid var(--CHIP-BORDER);
+  border-radius: 14px;
+  padding: 1.5rem;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+}
+
+.tool-card h2 {
+  color: var(--NAVY-DARK);
+  font-family: var(--FONT-TITLE);
+  margin-bottom: 1rem;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.input-group input,
+.answer-input {
+  padding: 0.65rem;
+  border: 1px solid var(--CHIP-BORDER);
+  border-radius: 7px;
+  font-size: 1rem;
+}
+
+/* ==========================================
+   FACTORIZATION RESULTS
+========================================== */
+.factor-box {
+  background: var(--CHIP-BG);
+  border: 1px solid var(--CHIP-BORDER);
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 0.8rem;
+}
+
+.factor-box strong {
+  color: var(--NAVY-DARK);
+}
+
+.big-math {
+  font-family: var(--FONT-TITLE);
+  font-size: 1.5rem;
+  color: var(--DARK-GOLD);
+  font-weight: bold;
+  margin-top: 0.4rem;
+}
+
+/* ==========================================
+   PRACTICE
+========================================== */
+.practice-layout {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 1.5rem;
+}
+
+.practice-question {
+  background: var(--CHIP-BG);
+  padding: 1rem;
+  border-radius: 10px;
+  border: 1px solid var(--CHIP-BORDER);
+  margin-bottom: 1rem;
+}
+
+.practice-question h3 {
+  color: var(--NAVY-DARK);
+}
+
+.student-ladder {
+  background: white;
+  border: 2px solid var(--CHIP-BORDER);
+  border-radius: 10px;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.student-start-row {
+  display: flex;
+  align-items: stretch;
+  min-height: 52px;
+}
+
+.student-start-left {
+  width: 75px;
+  border-right: 3px solid var(--NAVY);
+}
+
+.student-start-number {
+  padding: 0.7rem 1rem;
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: var(--NAVY-DARK);
+}
+
+.student-step-row {
+  display: flex;
+  min-height: 52px;
+}
+
+.student-divisor-input {
+  width: 75px;
+  text-align: center;
+  border: none;
+  border-right: 3px solid var(--NAVY);
+  border-top: 2px solid var(--NAVY);
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: var(--DARK-GOLD);
+  outline: none;
+}
+
+.student-quotient-input {
+  width: 160px;
+  border: none;
+  border-top: 2px solid var(--NAVY);
+  padding: 0.6rem 1rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: var(--NAVY-DARK);
+  outline: none;
+}
+
+.student-divisor-input:focus,
+.student-quotient-input:focus {
+  background: #FFF9E8;
+}
+
+.fill-section {
+  margin-top: 1.5rem;
+  display: grid;
+  gap: 0.9rem;
+}
+
+.fill-row {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.fill-row label {
+  min-width: 130px;
+  font-weight: bold;
+  color: var(--NAVY-DARK);
+}
+
+.fill-row input {
+  flex: 1;
+  min-width: 200px;
+  padding: 0.65rem;
+  border: 1px solid var(--CHIP-BORDER);
+  border-radius: 7px;
+  font-size: 1rem;
+}
+
+/* ==========================================
+   SCRATCHPAD
+========================================== */
+.scratchpad-card {
+  background: white;
+  border: 1px solid var(--CHIP-BORDER);
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.scratchpad-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.7rem;
+}
+
+#scratchpad {
+  width: 100%;
+  height: 430px;
+  border: 2px dashed var(--ACCENT-BLUE);
+  border-radius: 8px;
+  background-color: white;
+  background-image:
+    linear-gradient(#E8EDF5 1px, transparent 1px),
+    linear-gradient(90deg, #E8EDF5 1px, transparent 1px);
+  background-size: 25px 25px;
+  cursor: crosshair;
+  touch-action: none;
+}
+
+/* ==========================================
+   FEEDBACK
+========================================== */
+.feedback-box {
+  display: none;
+  padding: 1rem;
+  margin-top: 1rem;
+  border-radius: 8px;
+}
+
+.feedback-box.correct {
+  display: block;
+  background: #E8F5E9;
+  border: 1px solid var(--SUCCESS-GREEN);
+  color: var(--SUCCESS-GREEN);
+}
+
+.feedback-box.incorrect {
+  display: block;
+  background: #FFEBEE;
+  border: 1px solid var(--ERROR-RED);
+  color: var(--ERROR-RED);
+}
+
+.solution-box {
+  margin-top: 1rem;
+  background: #FFF9E8;
+  border: 1px solid var(--GOLD-HIGHLIGHT);
+  border-radius: 10px;
+  padding: 1rem;
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+@media (max-width: 800px) {
+
+  main {
+    padding: 0.8rem;
+  }
+
+  .grid-2,
+  .practice-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .controls-bar {
+    flex-wrap: wrap;
+  }
+
+  .slide-header,
+  .slide-body {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .slide-header h2 {
+    font-size: 1.2rem;
+  }
+
+  #scratchpad {
+    height: 300px;
+  }
+}
+</style>
+<style>
+.ndx-navbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;width:100%;padding:14px 20px;background:#241b2e;box-shadow:0 4px 14px rgba(0,0,0,.18);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;box-sizing:border-box}
+.ndx-navbar *{box-sizing:border-box}
+.ndx-home{display:inline-flex;align-items:center;gap:7px;color:#fff;text-decoration:none;font-weight:800;font-size:14px;background:rgba(255,255,255,.12);padding:10px 14px;border-radius:12px;transition:background .15s ease,transform .15s ease}
+.ndx-home:hover{background:rgba(255,255,255,.22);transform:translateY(-1px)}
+.ndx-nav-buttons{display:flex;gap:10px;flex-wrap:wrap;margin-left:auto}
+.ndx-btn{display:inline-flex;align-items:center;padding:12px 18px;border-radius:14px;font-weight:900;font-size:14px;text-decoration:none;white-space:nowrap;transition:transform .15s ease,box-shadow .15s ease}
+.ndx-btn:hover{transform:translateY(-2px)}
+.ndx-back{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.28)}
+.ndx-back:hover{background:rgba(255,255,255,.2)}
+.ndx-finish{background:linear-gradient(135deg,#7edb8c,#4eb962);color:#1c3a22;box-shadow:0 6px 16px rgba(78,185,98,.35)}
+.ndx-navbar.ndx-bottom{margin-top:32px}
+@media(max-width:600px){.ndx-navbar{padding:12px 14px}.ndx-home span{display:none}.ndx-btn{padding:11px 14px;font-size:13px}}
+</style>
+</head>
+
+<body>
+
+<nav class="ndx-navbar" aria-label="Lesson navigation">
+  <a class="ndx-home" href="../../" title="Home">🏠<span>Home</span></a>
+  <div class="ndx-nav-buttons">
+    <a class="ndx-btn ndx-back" href="../warmup/">← Factor Tree</a>
+    <a class="ndx-btn ndx-finish" href="../../">Finish Mission 🏁</a>
+  </div>
+</nav>
+
+<header>
+  <h1>Mathematics — Prime Factorization & Index Notation</h1>
+
+  <nav>
+    <button class="nav-btn active" onclick="switchTab('presentation', this)">
+      📚 Presentation
+    </button>
+
+    <button class="nav-btn" onclick="switchTab('calculator', this)">
+      🔢 Factor Calculator
+    </button>
+
+    <button class="nav-btn" onclick="switchTab('practice', this)">
+      ✏️ Practice
+    </button>
+  </nav>
+</header>
+
+<main>
+
+<!-- ==========================================
+     PRESENTATION TAB
+========================================== -->
+<div id="presentation" class="tab-content active">
+
+  <div class="controls-bar">
+    <button class="btn" id="prevBtn" onclick="prevSlide()">
+      ❮ Previous
+    </button>
+
+    <div>
+      <label for="slideSelect"><strong>Slide:</strong></label>
+      <select id="slideSelect" class="slide-select"
+              onchange="jumpToSlide(this.value)">
+      </select>
+    </div>
+
+    <button class="btn" id="nextBtn" onclick="nextSlide()">
+      Next ❯
+    </button>
+  </div>
+
+  <div id="slideStage"></div>
+</div>
+
+
+<!-- ==========================================
+     CALCULATOR TAB
+========================================== -->
+<div id="calculator" class="tab-content">
+
+  <div class="tool-card">
+
+    <h2>Prime Factorization Calculator</h2>
+
+    <div class="input-group">
+      <label><strong>Enter a number:</strong></label>
+
+      <input
+        type="number"
+        id="calcNumber"
+        value="72"
+        min="2"
+      >
+
+      <button class="btn" onclick="calculatePrimeFactorization()">
+        Generate Division Ladder
+      </button>
+    </div>
+
+    <div class="grid-2" style="margin-top: 1.5rem;">
+
+      <div class="workspace-card">
+        <span class="workspace-label">DIVISION LADDER</span>
+
+        <div id="calculatorLadder"></div>
+      </div>
+
+      <div>
+
+        <div class="factor-box">
+          <strong>Original number:</strong>
+          <div id="calcOriginal" class="big-math"></div>
+        </div>
+
+        <div class="factor-box">
+          <strong>Prime factors:</strong>
+          <div id="calcPrimeFactors" class="big-math"></div>
+        </div>
+
+        <div class="factor-box">
+          <strong>Index notation:</strong>
+          <div id="calcIndexNotation" class="big-math"></div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ==========================================
+     PRACTICE TAB
+========================================== -->
+<div id="practice" class="tab-content">
+
+  <div class="tool-card">
+
+    <h2>Interactive Practice — Build Your Own Division Ladder</h2>
+
+    <p style="color: var(--MUTED-TEXT); margin-bottom: 1.2rem;">
+      Complete the division ladder yourself. Fill in each prime divisor and
+      quotient, then write the prime factors and index notation.
+    </p>
+
+    <div class="input-group" style="margin-bottom: 1rem;">
+
+      <label><strong>Choose a question:</strong></label>
+
+      <select id="practiceSelect"
+              class="slide-select"
+              onchange="loadPracticeQuestion()">
+
+        <option value="12">Prime factorize 12</option>
+        <option value="18">Prime factorize 18</option>
+        <option value="24">Prime factorize 24</option>
+        <option value="30">Prime factorize 30</option>
+        <option value="36">Prime factorize 36</option>
+        <option value="48">Prime factorize 48</option>
+        <option value="60">Prime factorize 60</option>
+        <option value="72">Prime factorize 72</option>
+        <option value="84">Prime factorize 84</option>
+        <option value="90">Prime factorize 90</option>
+        <option value="120">Prime factorize 120</option>
+        <option value="144">Prime factorize 144</option>
+        <option value="180">Prime factorize 180</option>
+        <option value="210">Prime factorize 210</option>
+        <option value="custom">Custom number</option>
+
+      </select>
+
+      <input
+        type="number"
+        id="customPracticeNumber"
+        min="2"
+        value="210"
+        style="display:none; width:120px;"
+      >
+
+      <button
+        class="btn"
+        id="customStartBtn"
+        style="display:none;"
+        onclick="startCustomPractice()">
+        Start
+      </button>
+
+      <button class="btn gold" onclick="resetPractice()">
+        ↻ Reset Question
+      </button>
+
+    </div>
+
+
+    <div class="practice-layout">
+
+      <!-- LEFT SIDE -->
+      <div>
+
+        <div class="practice-question">
+          <h3>
+            Question: Write the prime factorization of
+            <span id="practiceNumberDisplay">12</span>
+          </h3>
+        </div>
+
+
+        <!-- BLANK DIVISION LADDER -->
+        <div class="student-ladder">
+
+          <h3 style="color:var(--NAVY-DARK); margin-bottom:0.8rem;">
+            My Division Ladder
+          </h3>
+
+          <div id="studentLadder">
+
+            <!-- Starting Number -->
+            <div class="student-start-row">
+
+              <div class="student-start-left"></div>
+
+              <div class="student-start-number"
+                   id="studentStartNumber">
+                12
+              </div>
+
+            </div>
+
+          </div>
+
+          <div style="margin-top:1rem; display:flex; gap:0.6rem; flex-wrap:wrap;">
+
+            <button class="btn gray" onclick="addStudentLadderRow()">
+              + Add Division Step
+            </button>
+
+            <button class="btn red" onclick="removeStudentLadderRow()">
+              − Remove Last Step
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <!-- FILL IN THE BLANKS -->
+        <div class="fill-section">
+
+          <div class="fill-row">
+            <label>Prime factors:</label>
+
+            <input
+              type="text"
+              id="studentPrimeFactors"
+              autocomplete="off"
+            >
+          </div>
+
+
+          <div class="fill-row">
+            <label>Index notation:</label>
+
+            <input
+              type="text"
+              id="studentIndexNotation"
+              autocomplete="off"
+            >
+          </div>
+
+        </div>
+
+
+        <div style="margin-top:1.5rem; display:flex; gap:0.7rem; flex-wrap:wrap;">
+
+          <button class="btn green" onclick="checkPractice()">
+            ✓ Check My Answer
+          </button>
+
+          <button class="btn gold" onclick="showPracticeSolution()">
+            Show Solution
+          </button>
+
+        </div>
+
+
+        <div id="practiceFeedback" class="feedback-box"></div>
+
+        <div id="practiceSolution"></div>
+
+      </div>
+
+
+      <!-- RIGHT SIDE SCRATCHPAD -->
+      <div>
+
+        <div class="scratchpad-card">
+
+          <div class="scratchpad-header">
+
+            <div>
+              <h3 style="color:var(--NAVY-DARK);">
+                ✏️ Rough Work Scratchpad
+              </h3>
+
+              <small style="color:var(--MUTED-TEXT);">
+                Draw with your mouse, finger, or stylus.
+              </small>
+            </div>
+
+            <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+
+              <button class="btn gray" onclick="setPenMode()">
+                ✏ Pen
+              </button>
+
+              <button class="btn gold" onclick="setEraserMode()">
+                🧽 Eraser
+              </button>
+
+              <button class="btn red" onclick="clearScratchpad()">
+                🗑 Clear
+              </button>
+
+            </div>
+
+          </div>
+
+          <canvas id="scratchpad"></canvas>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+</main>
+
+
+<script>
+/* ==========================================
+   PRESENTATION DATA
+========================================== */
+
+const slides = [
+
+  {
+    num: 1,
+    dark: true,
+    title: "Prime Factorization",
+    subtitle: "Using the Division Ladder Method",
+
+    html: `
+      <div style="text-align:center;">
+
+        <h1 style="
+          font-family:var(--FONT-TITLE);
+          font-size:2.5rem;
+          margin-bottom:1rem;
+        ">
+          Prime Factorization
+        </h1>
+
+        <p style="
+          max-width:700px;
+          margin:auto;
+          font-size:1.2rem;
+          line-height:1.7;
+          color:var(--CHIP-BORDER);
+        ">
+          Learn how to break a number into prime factors using a simple
+          division ladder, and then write repeated factors using index notation.
+        </p>
+
+      </div>
+    `
+  },
+
+  {
+    num: 2,
+    dark: false,
+    title: "What is a Prime Number?",
+    subtitle: "The building blocks of numbers",
+
+    html: `
+      <div class="rule-box">
+
+        <h3>Prime Number</h3>
+
+        <p>
+          A prime number has exactly two factors:
+          <br><br>
+          <strong>1 and itself</strong>
+        </p>
+
+        <div style="
+          margin-top:1.5rem;
+          font-size:1.5rem;
+          color:var(--DARK-GOLD);
+          font-weight:bold;
+        ">
+          2, 3, 5, 7, 11, 13, 17, 19...
+        </div>
+
+      </div>
+    `
+  },
+
+  {
+    num: 3,
+    dark: false,
+    title: "What is Prime Factorization?",
+    subtitle: "Breaking a number into prime factors",
+
+    html: `
+      <div class="grid-2">
+
+        <div class="workspace-card">
+
+          <span class="workspace-label">EXAMPLE</span>
+
+          <h3 style="color:var(--NAVY-DARK); margin-bottom:1rem;">
+            Take the number 12
+          </h3>
+
+          <p style="font-size:1.2rem; line-height:1.8;">
+            12 can be written as:
+          </p>
+
+          <div class="big-math">
+            2 × 2 × 3
+          </div>
+
+        </div>
+
+        <div>
+
+          <p style="font-size:1.15rem; line-height:1.8;">
+            All of the numbers
+            <strong>2, 2, and 3</strong>
+            are prime numbers.
+          </p>
+
+          <div class="rule-box">
+            <h3>Prime Factorization</h3>
+            <p>
+              Writing a number as a multiplication of prime numbers.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+    `
+  },
+
+  {
+    num: 4,
+    dark: false,
+    title: "The Division Ladder Method",
+    subtitle: "How to find prime factors",
+
+    html: `
+      <div class="chip-row">
+
+        <div class="step-chip">
+          <div class="step-num">1</div>
+          <p>Write the number on the right side of the ladder.</p>
+        </div>
+
+        <div class="step-chip">
+          <div class="step-num">2</div>
+          <p>Divide by the smallest possible prime number.</p>
+        </div>
+
+        <div class="step-chip">
+          <div class="step-num">3</div>
+          <p>Write the quotient underneath.</p>
+        </div>
+
+        <div class="step-chip">
+          <div class="step-num">4</div>
+          <p>Continue until the final quotient is 1.</p>
+        </div>
+
+      </div>
+    `
+  },
+
+  {
+    num: 5,
+    dark: false,
+    title: "Example: Prime Factorize 30",
+    subtitle: "Step 1",
+
+    html: `
+      <div class="grid-2">
+
+        <div class="workspace-card">
+          <span class="workspace-label">DIVISION LADDER</span>
+
+          ${renderStaticLadder([2], [30, 15])}
+        </div>
+
+        <div>
+          <h3 style="color:var(--NAVY-DARK); margin-bottom:1rem;">
+            Divide by 2
+          </h3>
+
+          <p style="font-size:1.2rem;">
+            30 is divisible by the prime number 2.
+          </p>
+
+          <div class="big-math">
+            30 ÷ 2 = 15
+          </div>
+        </div>
+
+      </div>
+    `
+  },
+
+  {
+    num: 6,
+    dark: false,
+    title: "Example: Prime Factorize 30",
+    subtitle: "Step 2",
+
+    html: `
+      <div class="grid-2">
+
+        <div class="workspace-card">
+          <span class="workspace-label">DIVISION LADDER</span>
+
+          ${renderStaticLadder([2, 3], [30, 15, 5])}
+        </div>
+
+        <div>
+          <h3 style="color:var(--NAVY-DARK); margin-bottom:1rem;">
+            Divide 15 by 3
+          </h3>
+
+          <div class="big-math">
+            15 ÷ 3 = 5
+          </div>
+        </div>
+
+      </div>
+    `
+  },
+
+  {
+    num: 7,
+    dark: false,
+    title: "Example: Prime Factorize 30",
+    subtitle: "Step 3",
+
+    html: `
+      <div class="grid-2">
+
+        <div class="workspace-card">
+          <span class="workspace-label">DIVISION LADDER</span>
+
+          ${renderStaticLadder([2, 3, 5], [30, 15, 5, 1])}
+        </div>
+
+        <div>
+          <h3 style="color:var(--NAVY-DARK); margin-bottom:1rem;">
+            Divide 5 by 5
+          </h3>
+
+          <div class="big-math">
+            5 ÷ 5 = 1
+          </div>
+
+          <p style="margin-top:1rem;">
+            We stop because we have reached 1.
+          </p>
+        </div>
+
+      </div>
+    `
+  },
+
+  {
+    num: 8,
+    dark: false,
+    title: "Prime Factors of 30",
+    subtitle: "Read the numbers on the left",
+
+    html: `
+      <div style="text-align:center;">
+
+        ${renderStaticLadder([2, 3, 5], [30, 15, 5, 1])}
+
+        <div class="rule-box" style="margin-top:1.5rem;">
+
+          <h3>Prime factors</h3>
+
+          <div class="big-math">
+            30 = 2 × 3 × 5
+          </div>
+
+        </div>
+
+      </div>
+    `
+  },
+
+  {
+    num: 9,
+    dark: true,
+    title: "Index Notation",
+    subtitle: "A shorter way to write repeated factors",
+
+    html: `
+      <div style="text-align:center;">
+
+        <h2 style="
+          font-family:var(--FONT-TITLE);
+          color:var(--GOLD-HIGHLIGHT);
+          font-size:2rem;
+          margin-bottom:1.5rem;
+        ">
+          Repeated Multiplication
+        </h2>
+
+        <p style="font-size:1.4rem;">
+          Instead of writing:
+        </p>
+
+        <div style="
+          font-size:2rem;
+          color:var(--GOLD-HIGHLIGHT);
+          margin:1rem;
+          font-weight:bold;
+        ">
+          2 × 2 × 2
+        </div>
+
+        <p style="font-size:1.4rem;">
+          We can write:
+        </p>
+
+        <div style="
+          font-size:2.5rem;
+          color:var(--GOLD-HIGHLIGHT);
+          margin-top:1rem;
+          font-weight:bold;
+        ">
+          2³
+        </div>
+
+      </div>
+    `
+  },
+
+  {
+    num: 10,
+    dark: false,
+    title: "What Does the Power Mean?",
+    subtitle: "Understanding 2³",
+
+    html: `
+      <div class="grid-2">
+
+        <div class="rule-box">
+
+          <h3 style="font-size:2rem;">
+            2³
+          </h3>
+
+          <p>
+            2 is the base
+            <br>
+            3 is the index
+          </p>
+
+        </div>
+
+        <div style="font-size:1.2rem; line-height:2;">
+
+          <p>
+            <strong>Base:</strong> the number being multiplied.
+          </p>
+
+          <p>
+            <strong>Index:</strong> how many times the base is multiplied.
+          </p>
+
+          <div class="big-math">
+            2³ = 2 × 2 × 2
+          </div>
+
+        </div>
+
+      </div>
+    `
+  },
+
+  {
+    num: 11,
+    dark: false,
+    title: "Example: Prime Factorize 72",
+    subtitle: "Using the complete division ladder",
+
+    html: `
+      <div class="grid-2">
+
+        <div class="workspace-card">
+
+          <span class="workspace-label">DIVISION LADDER</span>
+
+          ${renderStaticLadder(
+            [2, 2, 2, 3, 3],
+            [72, 36, 18, 9, 3, 1]
+          )}
+
+        </div>
+
+        <div>
+
+          <div class="factor-box">
+            <strong>Prime factors:</strong>
+            <div class="big-math">
+              2 × 2 × 2 × 3 × 3
+            </div>
+          </div>
+
+          <div class="factor-box">
+            <strong>Index notation:</strong>
+            <div class="big-math">
+              2³ × 3²
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    `
+  },
+
+  {
+    num: 12,
+    dark: false,
+    title: "How to Write Index Notation",
+    subtitle: "Count repeated prime factors",
+
+    html: `
+      <table style="
+        width:100%;
+        border-collapse:collapse;
+        font-size:1.1rem;
+      ">
+        <tr style="background:var(--NAVY); color:white;">
+          <th style="padding:0.8rem; border:1px solid var(--CHIP-BORDER);">
+            Prime Factors
+          </th>
+
+          <th style="padding:0.8rem; border:1px solid var(--CHIP-BORDER);">
+            Index Notation
+          </th>
+        </tr>
+
+        <tr>
+          <td style="padding:0.8rem; border:1px solid var(--CHIP-BORDER);">
+            2 × 2
+          </td>
+
+          <td style="padding:0.8rem; border:1px solid var(--CHIP-BORDER);">
+            2²
+          </td>
+        </tr>
+
+        <tr>
+          <td style="padding:0.8rem; border:1px solid var(--CHIP-BORDER);">
+            3 × 3 × 3
+          </td>
+
+          <td style="padding:0.8rem; border:1px solid var(--CHIP-BORDER);">
+            3³
+          </td>
+        </tr>
+
+        <tr>
+          <td style="padding:0.8rem; border:1px solid var(--CHIP-BORDER);">
+            2 × 2 × 2 × 5
+          </td>
+
+          <td style="padding:0.8rem; border:1px solid var(--CHIP-BORDER);">
+            2³ × 5
+          </td>
+        </tr>
+      </table>
+    `
+  },
+
+  {
+    num: 13,
+    dark: true,
+    title: "Important Rule",
+    subtitle: "Prime Factorization and Index Notation",
+
+    html: `
+      <div class="rule-box">
+
+        <h3>Remember!</h3>
+
+        <p>
+          Keep dividing by prime numbers until you reach 1.
+          <br><br>
+          Then read the prime numbers on the left.
+          <br><br>
+          Count repeated factors to write index notation.
+        </p>
+
+      </div>
+    `
+  },
+
+  {
+    num: 14,
+    dark: false,
+    title: "Your Turn!",
+    subtitle: "Practice using the division ladder",
+
+    html: `
+      <div class="workspace-card">
+
+        <span class="workspace-label">PRACTICE</span>
+
+        <ol style="
+          padding-left:1.5rem;
+          line-height:2.2;
+          font-size:1.15rem;
+          font-weight:bold;
+        ">
+          <li>Prime factorize 12</li>
+          <li>Prime factorize 18</li>
+          <li>Prime factorize 24</li>
+          <li>Prime factorize 30</li>
+          <li>Prime factorize 36</li>
+          <li>Prime factorize 48</li>
+          <li>Prime factorize 72</li>
+          <li>Prime factorize 120</li>
+          <li>Prime factorize 210</li>
+        </ol>
+
+      </div>
+    `
+  }
+
+];
+
+
+/* ==========================================
+   PRESENTATION FUNCTIONS
+========================================== */
+
+let currentSlide = 0;
+
+function renderStaticLadder(divisors, numbers) {
+
+  let html = `<div class="ladder-container">`;
+
+  for (let i = 0; i < numbers.length; i++) {
+
+    const divisor = divisors[i] !== undefined ? divisors[i] : "";
+
+    html += `
+      <div class="ladder-row">
+
+        <div class="ladder-divisor">
+          ${divisor}
+        </div>
+
+        <div class="ladder-number">
+          ${numbers[i]}
+        </div>
+
+      </div>
+    `;
+  }
+
+  html += `</div>`;
+
+  return html;
+}
+
+
+function renderSlide(index) {
+
+  currentSlide = index;
+
+  const slide = slides[index];
+
+  document.getElementById("slideStage").innerHTML = `
+    <div class="slide-card ${slide.dark ? "dark" : ""}">
+
+      <div class="slide-header">
+
+        <div class="slide-badge">
+          ${slide.num}
+        </div>
+
+        <div>
+          <h2>${slide.title}</h2>
+          <p>${slide.subtitle || ""}</p>
+        </div>
+
+      </div>
+
+      <div class="slide-body">
+        ${slide.html}
+      </div>
+
+      <div class="slide-footer">
+        Mathematics — Prime Factorization & Index Notation
+      </div>
+
+    </div>
+  `;
+
+  document.getElementById("slideSelect").value = index;
+
+  document.getElementById("prevBtn").disabled = index === 0;
+  document.getElementById("nextBtn").disabled =
+    index === slides.length - 1;
+}
+
+
+function prevSlide() {
+
+  if (currentSlide > 0) {
+    renderSlide(currentSlide - 1);
+  }
+}
+
+
+function nextSlide() {
+
+  if (currentSlide < slides.length - 1) {
+    renderSlide(currentSlide + 1);
+  }
+}
+
+
+function jumpToSlide(index) {
+  renderSlide(parseInt(index));
+}
+
+
+/* ==========================================
+   TAB SWITCHING
+========================================== */
+
+function switchTab(tabId, button) {
+
+  document.querySelectorAll(".tab-content").forEach(tab => {
+    tab.classList.remove("active");
+  });
+
+  document.querySelectorAll(".nav-btn").forEach(btn => {
+    btn.classList.remove("active");
+  });
+
+  document.getElementById(tabId).classList.add("active");
+
+  button.classList.add("active");
+
+  if (tabId === "practice") {
+    setTimeout(resizeScratchpad, 100);
+  }
+}
+
+
+/* ==========================================
+   PRIME FACTORIZATION LOGIC
+========================================== */
+
+function getPrimeFactorization(number) {
+
+  let n = number;
+
+  let factors = [];
+
+  let divisor = 2;
+
+  while (n > 1) {
+
+    while (n % divisor === 0) {
+      factors.push(divisor);
+      n = n / divisor;
+    }
+
+    divisor++;
+  }
+
+  return factors;
+}
+
+
+function getIndexNotation(factors) {
+
+  const counts = {};
+
+  factors.forEach(factor => {
+
+    counts[factor] =
+      (counts[factor] || 0) + 1;
+
+  });
+
+  return Object.keys(counts)
+    .map(base => {
+
+      const power = counts[base];
+
+      if (power === 1) {
+        return base;
+      }
+
+      return base + `<sup>${power}</sup>`;
+
+    })
+    .join(" × ");
+}
+
+
+function getPlainIndexNotation(factors) {
+
+  const counts = {};
+
+  factors.forEach(factor => {
+    counts[factor] =
+      (counts[factor] || 0) + 1;
+  });
+
+  return Object.keys(counts)
+    .map(base => {
+
+      const power = counts[base];
+
+      if (power === 1) return base;
+
+      return base + "^" + power;
+
+    })
+    .join("*");
+}
+
+
+/* ==========================================
+   CALCULATOR
+========================================== */
+
+function calculatePrimeFactorization() {
+
+  let number =
+    parseInt(
+      document.getElementById("calcNumber").value
+    );
+
+  if (!number || number < 2) {
+
+    number = 2;
+
+    document.getElementById("calcNumber").value = 2;
+  }
+
+  const original = number;
+
+  const factors = getPrimeFactorization(number);
+
+  let numbers = [number];
+
+  let current = number;
+
+  factors.forEach(factor => {
+
+    current = current / factor;
+
+    numbers.push(current);
+
+  });
+
+  document.getElementById("calculatorLadder").innerHTML =
+    renderStaticLadder(factors, numbers);
+
+  document.getElementById("calcOriginal").innerHTML =
+    original;
+
+  document.getElementById("calcPrimeFactors").innerHTML =
+    factors.join(" × ");
+
+  document.getElementById("calcIndexNotation").innerHTML =
+    getIndexNotation(factors);
+}
+
+
+/* ==========================================
+   PRACTICE QUESTION LOADING
+========================================== */
+
+let currentPracticeNumber = 12;
+
+
+function loadPracticeQuestion() {
+
+  const selected =
+    document.getElementById("practiceSelect").value;
+
+  const customInput =
+    document.getElementById("customPracticeNumber");
+
+  const customButton =
+    document.getElementById("customStartBtn");
+
+  if (selected === "custom") {
+
+    customInput.style.display = "inline-block";
+    customButton.style.display = "inline-block";
+
+    return;
+  }
+
+  customInput.style.display = "none";
+  customButton.style.display = "none";
+
+  currentPracticeNumber = parseInt(selected);
+
+  resetPractice();
+}
+
+
+function startCustomPractice() {
+
+  const customNumber =
+    parseInt(
+      document.getElementById("customPracticeNumber").value
+    );
+
+  if (!customNumber || customNumber < 2) {
+
+    alert("Please enter a whole number greater than 1.");
+
+    return;
+  }
+
+  currentPracticeNumber = customNumber;
+
+  resetPractice();
+}
+
+
+/* ==========================================
+   STUDENT DIVISION LADDER
+========================================== */
+
+function addStudentLadderRow() {
+
+  const container =
+    document.getElementById("studentLadder");
+
+  const row = document.createElement("div");
+
+  row.className = "student-step-row";
+
+  /* NO PLACEHOLDER TEXT */
+  row.innerHTML = `
+    <input
+      type="number"
+      class="student-divisor-input"
+      min="2"
+      aria-label="Prime divisor"
+    >
+
+    <input
+      type="number"
+      class="student-quotient-input"
+      min="1"
+      aria-label="Quotient"
+    >
+  `;
+
+  container.appendChild(row);
+}
+
+
+function removeStudentLadderRow() {
+
+  const container =
+    document.getElementById("studentLadder");
+
+  const rows =
+    container.querySelectorAll(".student-step-row");
+
+  if (rows.length > 1) {
+    rows[rows.length - 1].remove();
+  }
+}
+
+
+/* ==========================================
+   RESET PRACTICE
+========================================== */
+
+function resetPractice() {
+
+  document.getElementById("practiceNumberDisplay").textContent =
+    currentPracticeNumber;
+
+  document.getElementById("studentStartNumber").textContent =
+    currentPracticeNumber;
+
+  document.getElementById("studentPrimeFactors").value = "";
+
+  document.getElementById("studentIndexNotation").value = "";
+
+  document.getElementById("practiceFeedback").style.display = "none";
+
+  document.getElementById("practiceSolution").innerHTML = "";
+
+  const ladder =
+    document.getElementById("studentLadder");
+
+  /* Remove all old student rows */
+  ladder.querySelectorAll(".student-step-row").forEach(row => {
+    row.remove();
+  });
+
+  /* Start with ONE blank row */
+  addStudentLadderRow();
+
+  clearScratchpad();
+}
+
+
+/* ==========================================
+   CHECK PRACTICE
+========================================== */
+
+function normalizeAnswer(text) {
+
+  return String(text)
+    .toLowerCase()
+    .replace(/\s/g, "")
+    .replace(/×/g, "*")
+    .replace(/x/g, "*")
+    .replace(/\^/g, "^");
+}
+
+
+function checkPractice() {
+
+  const correctFactors =
+    getPrimeFactorization(currentPracticeNumber);
+
+  const correctFactorText =
+    correctFactors.join("*");
+
+  const correctIndexText =
+    getPlainIndexNotation(correctFactors);
+
+  const userFactors =
+    normalizeAnswer(
+      document.getElementById("studentPrimeFactors").value
+    );
+
+  const userIndex =
+    normalizeAnswer(
+      document.getElementById("studentIndexNotation").value
+    );
+
+  const factorCorrect =
+    userFactors === correctFactorText;
+
+  const indexCorrect =
+    userIndex === correctIndexText;
+
+  /* CHECK LADDER */
+
+  let current = currentPracticeNumber;
+
+  let ladderCorrect = true;
+
+  const rows =
+    document.querySelectorAll(".student-step-row");
+
+  let completedRows = 0;
+
+  rows.forEach(row => {
+
+    const divisor =
+      parseInt(
+        row.querySelector(".student-divisor-input").value
+      );
+
+    const quotient =
+      parseInt(
+        row.querySelector(".student-quotient-input").value
+      );
+
+    if (
+      isNaN(divisor) &&
+      isNaN(quotient)
+    ) {
+      return;
+    }
+
+    completedRows++;
+
+    if (
+      !divisor ||
+      !quotient ||
+      current % divisor !== 0 ||
+      quotient !== current / divisor ||
+      !isPrime(divisor)
+    ) {
+      ladderCorrect = false;
+    }
+
+    current = quotient;
+  });
+
+  if (completedRows === 0) {
+    ladderCorrect = false;
+  }
+
+  if (current !== 1) {
+    ladderCorrect = false;
+  }
+
+  const feedback =
+    document.getElementById("practiceFeedback");
+
+  if (
+    factorCorrect &&
+    indexCorrect &&
+    ladderCorrect
+  ) {
+
+    feedback.className =
+      "feedback-box correct";
+
+    feedback.innerHTML = `
+      <strong>🎉 Excellent!</strong><br><br>
+
+      Your division ladder is correct.<br>
+      Your prime factors are correct.<br>
+      Your index notation is correct.
+    `;
+
+  } else {
+
+    feedback.className =
+      "feedback-box incorrect";
+
+    let message =
+      `<strong>❌ Check your work.</strong><br><br>`;
+
+    if (!ladderCorrect) {
+      message += `• Check your division ladder.<br>`;
+    }
+
+    if (!factorCorrect) {
+      message += `• Check your prime factors.<br>`;
+    }
+
+    if (!indexCorrect) {
+      message += `• Check your index notation.<br>`;
+    }
+
+    feedback.innerHTML = message;
+  }
+}
+
+
+function isPrime(number) {
+
+  if (number < 2) return false;
+
+  for (
+    let i = 2;
+    i <= Math.sqrt(number);
+    i++
+  ) {
+
+    if (number % i === 0) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+
+/* ==========================================
+   SHOW SOLUTION
+========================================== */
+
+function showPracticeSolution() {
+
+  const factors =
+    getPrimeFactorization(currentPracticeNumber);
+
+  let numbers = [currentPracticeNumber];
+
+  let current = currentPracticeNumber;
+
+  factors.forEach(factor => {
+
+    current /= factor;
+
+    numbers.push(current);
+  });
+
+  document.getElementById("practiceSolution").innerHTML = `
+
+    <div class="solution-box">
+
+      <h3 style="
+        color:var(--NAVY-DARK);
+        margin-bottom:1rem;
+      ">
+        Correct Solution
+      </h3>
+
+      ${renderStaticLadder(factors, numbers)}
+
+      <div style="margin-top:1rem;">
+
+        <p>
+          <strong>Prime factors:</strong>
+          <span class="big-math">
+            ${factors.join(" × ")}
+          </span>
+        </p>
+
+        <p style="margin-top:0.7rem;">
+          <strong>Index notation:</strong>
+          <span class="big-math">
+            ${getIndexNotation(factors)}
+          </span>
+        </p>
+
+      </div>
+
+    </div>
+  `;
+}
+
+
+/* ==========================================
+   SCRATCHPAD DRAWING
+========================================== */
+
+const canvas =
+  document.getElementById("scratchpad");
+
+const ctx =
+  canvas.getContext("2d");
+
+let drawing = false;
+
+let eraserMode = false;
+
+let lastX = 0;
+
+let lastY = 0;
+
+
+function resizeScratchpad() {
+
+  const oldImage =
+    canvas.width > 0
+      ? ctx.getImageData(
+          0,
+          0,
+          canvas.width,
+          canvas.height
+        )
+      : null;
+
+  const rect =
+    canvas.getBoundingClientRect();
+
+  canvas.width = rect.width;
+
+  canvas.height = rect.height;
+
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+
+  if (oldImage) {
+
+    try {
+
+      ctx.putImageData(
+        oldImage,
+        0,
+        0
+      );
+
+    } catch (error) {}
+
+  }
+}
+
+
+function getCanvasPosition(event) {
+
+  const rect =
+    canvas.getBoundingClientRect();
+
+  let clientX;
+  let clientY;
+
+  if (event.touches && event.touches.length > 0) {
+
+    clientX = event.touches[0].clientX;
+    clientY = event.touches[0].clientY;
+
+  } else {
+
+    clientX = event.clientX;
+    clientY = event.clientY;
+
+  }
+
+  return {
+    x: clientX - rect.left,
+    y: clientY - rect.top
+  };
+}
+
+
+function startDrawing(event) {
+
+  event.preventDefault();
+
+  drawing = true;
+
+  const position =
+    getCanvasPosition(event);
+
+  lastX = position.x;
+  lastY = position.y;
+
+  ctx.beginPath();
+
+  ctx.moveTo(lastX, lastY);
+}
+
+
+function draw(event) {
+
+  if (!drawing) return;
+
+  event.preventDefault();
+
+  const position =
+    getCanvasPosition(event);
+
+  ctx.lineWidth =
+    eraserMode ? 24 : 3;
+
+  ctx.strokeStyle =
+    eraserMode ? "#FFFFFF" : "#142B45";
+
+  ctx.lineTo(
+    position.x,
+    position.y
+  );
+
+  ctx.stroke();
+
+  ctx.beginPath();
+
+  ctx.moveTo(
+    position.x,
+    position.y
+  );
+
+  lastX = position.x;
+  lastY = position.y;
+}
+
+
+function stopDrawing() {
+
+  drawing = false;
+
+  ctx.beginPath();
+}
+
+
+function setPenMode() {
+  eraserMode = false;
+}
+
+
+function setEraserMode() {
+  eraserMode = true;
+}
+
+
+function clearScratchpad() {
+
+  if (!canvas.width || !canvas.height) return;
+
+  ctx.clearRect(
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  );
+}
+
+
+canvas.addEventListener(
+  "mousedown",
+  startDrawing
+);
+
+canvas.addEventListener(
+  "mousemove",
+  draw
+);
+
+canvas.addEventListener(
+  "mouseup",
+  stopDrawing
+);
+
+canvas.addEventListener(
+  "mouseleave",
+  stopDrawing
+);
+
+
+canvas.addEventListener(
+  "touchstart",
+  startDrawing,
+  { passive: false }
+);
+
+canvas.addEventListener(
+  "touchmove",
+  draw,
+  { passive: false }
+);
+
+canvas.addEventListener(
+  "touchend",
+  stopDrawing
+);
+
+
+/* ==========================================
+   INITIALIZATION
+========================================== */
+
+function initializeApp() {
+
+  const slideSelect =
+    document.getElementById("slideSelect");
+
+  slides.forEach((slide, index) => {
+
+    const option =
+      document.createElement("option");
+
+    option.value = index;
+
+    option.textContent =
+      `Slide ${slide.num}: ${slide.title}`;
+
+    slideSelect.appendChild(option);
+  });
+
+  renderSlide(0);
+
+  calculatePrimeFactorization();
+
+  resetPractice();
+
+  setTimeout(resizeScratchpad, 100);
+}
+
+
+window.addEventListener(
+  "resize",
+  () => {
+
+    if (
+      document.getElementById("practice")
+        .classList.contains("active")
+    ) {
+      resizeScratchpad();
+    }
+
+  }
+);
+
+
+window.onload = initializeApp;
+</script>
+
+<nav class="ndx-navbar ndx-bottom" aria-label="Lesson navigation">
+  <a class="ndx-home" href="../../" title="Home">🏠<span>Home</span></a>
+  <div class="ndx-nav-buttons">
+    <a class="ndx-btn ndx-back" href="../warmup/">← Factor Tree</a>
+    <a class="ndx-btn ndx-finish" href="../../">Finish Mission 🏁</a>
+  </div>
+</nav>
+
+</body>
+</html>
