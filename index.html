@@ -21,6 +21,8 @@
     --amber-light:#fbf1dd;
     --pink:#e0568a;
     --pink-light:#fce8f0;
+    --green:#2f9e6b;
+    --green-light:#e2f4ec;
   }
 
   *{box-sizing:border-box}
@@ -120,6 +122,7 @@
   .mission-purple .mission-badge{background:var(--purple)}
   .mission-amber .mission-badge{background:var(--amber)}
   .mission-pink .mission-badge{background:var(--pink)}
+  .mission-green .mission-badge{background:var(--green)}
 
   .mission-tag{
     font-size:11px;
@@ -132,6 +135,7 @@
   .mission-purple .mission-tag{color:var(--purple)}
   .mission-amber .mission-tag{color:var(--amber)}
   .mission-pink .mission-tag{color:var(--pink)}
+  .mission-green .mission-tag{color:var(--green)}
 
   .mission-head h2{
     margin:0;
@@ -182,6 +186,9 @@
 
   .mission-pink .primary{background:var(--pink);color:#fff;box-shadow:0 10px 22px rgba(224,86,138,.28)}
   .mission-pink .secondary{background:var(--pink-light);color:var(--pink)}
+
+  .mission-green .primary{background:var(--green);color:#fff;box-shadow:0 10px 22px rgba(47,158,107,.28)}
+  .mission-green .secondary{background:var(--green-light);color:var(--green)}
 
   .dashboard-footer{
     text-align:center;
@@ -275,9 +282,26 @@
       </div>
     </section>
 
+    <div class="connector" aria-hidden="true"></div>
+
+    <section class="mission mission-green">
+      <div class="mission-head">
+        <div class="mission-badge">5</div>
+        <div>
+          <div class="mission-tag">🟢 Mission 5</div>
+          <h2>HCF &amp; LCM</h2>
+          <p>Use the division (ladder) method to find the highest common factor and lowest common multiple.</p>
+        </div>
+      </div>
+      <div class="mission-actions">
+        <a class="mission-btn primary" href="HCF%20%26%20LCM/HCF_and_LCM_Division_Method.html">Open Division Method App</a>
+        <a class="mission-btn secondary" href="HCF%20%26%20LCM/Presentation%20Deck.html">View Presentation Deck</a>
+      </div>
+    </section>
+
   </div>
 
-  <p class="dashboard-footer">🏁 Finish all four missions to complete Number Detective!</p>
+  <p class="dashboard-footer">🏁 Finish all five missions to complete Number Detective!</p>
 
 </main>
 </body>
