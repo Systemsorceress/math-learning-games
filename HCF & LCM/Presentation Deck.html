@@ -1,0 +1,1498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HCF & LCM Interactive Presentation</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800;900&display=swap');
+
+:root {
+    --navy: #172554;
+    --blue: #2563eb;
+    --sky: #dbeafe;
+    --cream: #fffaf0;
+    --yellow: #fbbf24;
+    --green: #16a34a;
+    --red: #dc2626;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: 'Nunito', sans-serif;
+    background:
+        radial-gradient(circle at 10% 10%, rgba(251,191,36,.18), transparent 25%),
+        radial-gradient(circle at 90% 90%, rgba(37,99,235,.15), transparent 30%),
+        #f8fafc;
+    color: #172554;
+}
+
+h1,h2,h3 {
+    font-family: 'Baloo 2', cursive;
+}
+
+.app {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.topbar {
+    height: 72px;
+    background: rgba(255,255,255,.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 28px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'Baloo 2', cursive;
+    font-size: 24px;
+    font-weight: 800;
+}
+
+.logo-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 13px;
+    background: #2563eb;
+    color: white;
+    display: grid;
+    place-items: center;
+    box-shadow: 0 5px 0 #1e3a8a;
+}
+
+.progress-wrap {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.progress {
+    width: 180px;
+    height: 9px;
+    border-radius: 99px;
+    background: #e2e8f0;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 10%;
+    background: linear-gradient(90deg,#2563eb,#60a5fa);
+    border-radius: inherit;
+    transition: width .35s ease;
+}
+
+.slide-number {
+    font-weight: 800;
+    color: #64748b;
+}
+
+.presentation {
+    flex: 1;
+    width: min(1100px, calc(100% - 32px));
+    margin: 28px auto 110px;
+}
+
+.slide {
+    display: none;
+    min-height: 650px;
+    background: rgba(255,255,255,.95);
+    border: 1px solid #e2e8f0;
+    border-radius: 30px;
+    box-shadow: 0 25px 70px rgba(15,23,42,.10);
+    padding: 48px;
+    animation: slideIn .35s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.slide.active {
+    display: block;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.slide::before {
+    content: "";
+    position: absolute;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    background: #dbeafe;
+    opacity: .45;
+    right: -120px;
+    top: -120px;
+}
+
+.slide::after {
+    content: "";
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: #fef3c7;
+    opacity: .5;
+    left: -100px;
+    bottom: -100px;
+}
+
+.content {
+    position: relative;
+    z-index: 2;
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 13px;
+    border-radius: 999px;
+    background: #eff6ff;
+    color: #1d4ed8;
+    font-size: 13px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: .7px;
+    margin-bottom: 14px;
+}
+
+.badge.lcm {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.title {
+    font-size: clamp(38px,5vw,62px);
+    line-height: .98;
+    margin: 0 0 16px;
+    letter-spacing: -1px;
+}
+
+.subtitle {
+    color: #64748b;
+    font-size: 18px;
+    line-height: 1.6;
+    max-width: 750px;
+}
+
+.definition-card {
+    margin-top: 35px;
+    padding: 30px;
+    border-radius: 22px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+}
+
+.definition-card strong {
+    color: #2563eb;
+}
+
+.example-title {
+    margin-top: 30px;
+    font-size: 25px;
+    font-weight: 800;
+}
+
+.factor-visual,
+.multiple-visual {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.number-pill {
+    min-width: 58px;
+    padding: 12px 15px;
+    border-radius: 13px;
+    background: white;
+    border: 2px solid #bfdbfe;
+    color: #1d4ed8;
+    font-size: 18px;
+    font-weight: 900;
+    text-align: center;
+    box-shadow: 0 4px 0 #dbeafe;
+}
+
+.number-pill.highlight {
+    background: #fef3c7;
+    border-color: #fbbf24;
+    color: #92400e;
+    box-shadow: 0 4px 0 #fde68a;
+}
+
+.math-equation {
+    margin-top: 28px;
+    padding: 20px;
+    background: #172554;
+    color: white;
+    border-radius: 18px;
+    text-align: center;
+    font-size: 28px;
+    font-family: 'Baloo 2', cursive;
+    box-shadow: 0 8px 0 #0f172a;
+}
+
+.interactive-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.example-number {
+    color: #64748b;
+    font-size: 15px;
+    font-weight: 900;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: .8px;
+}
+
+.interactive-title {
+    font-size: clamp(31px,4vw,45px);
+    line-height: 1;
+    margin: 0;
+}
+
+.steps {
+    display: grid;
+    gap: 14px;
+}
+
+.step-row {
+    display: grid;
+    grid-template-columns: minmax(210px, .9fr) 1fr auto;
+    align-items: center;
+    gap: 14px;
+    padding: 17px;
+    border-radius: 18px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    transition: .2s ease;
+}
+
+.step-row:hover {
+    border-color: #bfdbfe;
+    transform: translateY(-1px);
+}
+
+.step-label {
+    font-weight: 900;
+    color: #334155;
+}
+
+.answer-area {
+    position: relative;
+}
+
+.answer-input {
+    width: 100%;
+    padding: 13px 15px;
+    border: 2px solid #cbd5e1;
+    border-radius: 13px;
+    outline: none;
+    font-family: 'Nunito',sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #172554;
+    background: white;
+    transition: .2s;
+}
+
+.answer-input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 4px rgba(37,99,235,.1);
+}
+
+.answer-input.correct {
+    border-color: #16a34a;
+    background: #f0fdf4;
+    color: #166534;
+}
+
+.answer-input.incorrect {
+    border-color: #dc2626;
+    background: #fef2f2;
+    color: #991b1b;
+}
+
+.check-btn {
+    border: none;
+    cursor: pointer;
+    padding: 12px 17px;
+    border-radius: 12px;
+    background: #2563eb;
+    color: white;
+    font-weight: 900;
+    font-family: 'Nunito',sans-serif;
+    box-shadow: 0 4px 0 #1e3a8a;
+    transition: .15s;
+    white-space: nowrap;
+}
+
+.check-btn:hover {
+    transform: translateY(-1px);
+}
+
+.check-btn:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 #1e3a8a;
+}
+
+.status {
+    min-width: 85px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 900;
+    margin-top: 5px;
+    display: none;
+}
+
+.status.correct {
+    display: block;
+    color: #16a34a;
+}
+
+.status.incorrect {
+    display: block;
+    color: #dc2626;
+}
+
+.hint {
+    grid-column: 2 / -1;
+    display: none;
+    color: #b45309;
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    padding: 9px 12px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.hint.show {
+    display: block;
+}
+
+.completion {
+    margin-top: 22px;
+    padding: 16px 18px;
+    border-radius: 15px;
+    background: #f0fdf4;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+    font-weight: 800;
+    display: none;
+}
+
+.completion.show {
+    display: block;
+    animation: pop .35s ease;
+}
+
+@keyframes pop {
+    0% { transform: scale(.97); opacity: .5; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.navigation {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 88px;
+    background: rgba(255,255,255,.94);
+    backdrop-filter: blur(15px);
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    z-index: 100;
+}
+
+.nav-btn {
+    border: none;
+    cursor: pointer;
+    border-radius: 14px;
+    padding: 13px 24px;
+    font-family: 'Nunito',sans-serif;
+    font-weight: 900;
+    font-size: 15px;
+    transition: .2s;
+}
+
+.prev-btn {
+    background: #e2e8f0;
+    color: #334155;
+}
+
+.next-btn {
+    background: #2563eb;
+    color: white;
+    box-shadow: 0 5px 0 #1e3a8a;
+}
+
+.nav-btn:hover {
+    transform: translateY(-2px);
+}
+
+.nav-btn:disabled {
+    opacity: .45;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.dot-container {
+    display: flex;
+    gap: 6px;
+    margin: 0 15px;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #cbd5e1;
+    transition: .2s;
+}
+
+.dot.active {
+    width: 24px;
+    border-radius: 99px;
+    background: #2563eb;
+}
+
+.keyboard-hint {
+    position: fixed;
+    right: 20px;
+    bottom: 105px;
+    font-size: 12px;
+    color: #94a3b8;
+    font-weight: 700;
+}
+
+@media(max-width: 800px) {
+    .topbar {
+        padding: 0 16px;
+    }
+
+    .logo span {
+        display: none;
+    }
+
+    .progress {
+        width: 110px;
+    }
+
+    .presentation {
+        width: calc(100% - 18px);
+        margin: 15px auto 105px;
+    }
+
+    .slide {
+        padding: 30px 20px;
+        min-height: 650px;
+        border-radius: 22px;
+    }
+
+    .step-row {
+        grid-template-columns: 1fr;
+    }
+
+    .check-btn {
+        width: 100%;
+    }
+
+    .hint {
+        grid-column: 1;
+    }
+
+    .navigation {
+        height: 78px;
+    }
+
+    .nav-btn {
+        padding: 11px 17px;
+    }
+
+    .dot-container {
+        margin: 0 5px;
+    }
+
+    .keyboard-hint {
+        display: none;
+    }
+}
+
+@media(max-width: 500px) {
+    .slide {
+        padding: 24px 15px;
+    }
+
+    .title {
+        font-size: 40px;
+    }
+
+    .subtitle {
+        font-size: 16px;
+    }
+
+    .progress-wrap {
+        gap: 7px;
+    }
+
+    .dot-container {
+        display: none;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="topbar">
+    <div class="logo">
+        <div class="logo-icon">∑</div>
+        <span>Math Mission: HCF & LCM</span>
+    </div>
+
+    <div class="progress-wrap">
+        <div class="progress">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <div class="slide-number" id="slideNumber">1 / 10</div>
+    </div>
+</header>
+
+<main class="presentation">
+
+<!-- SLIDE 1 -->
+<section class="slide active">
+<div class="content">
+
+    <div class="badge">🔎 Section 1 · HCF</div>
+
+    <h1 class="title">What is HCF?</h1>
+
+    <p class="subtitle">
+        <strong>HCF</strong> means <strong>Highest Common Factor</strong>.
+        It is the <strong>largest factor</strong> that two or more numbers have in common.
+    </p>
+
+    <div class="definition-card">
+
+        <div class="example-title">Example: Find the HCF of 12 and 18</div>
+
+        <p class="subtitle">
+            First, list the factors of each number.
+        </p>
+
+        <div class="factor-visual">
+            <div class="number-pill">1</div>
+            <div class="number-pill">2</div>
+            <div class="number-pill">3</div>
+            <div class="number-pill">4</div>
+            <div class="number-pill">6</div>
+            <div class="number-pill">12</div>
+        </div>
+
+        <p class="font-bold text-slate-500 mt-4">Factors of 12</p>
+
+        <div class="factor-visual">
+            <div class="number-pill">1</div>
+            <div class="number-pill">2</div>
+            <div class="number-pill">3</div>
+            <div class="number-pill">6</div>
+            <div class="number-pill highlight">9</div>
+            <div class="number-pill">18</div>
+        </div>
+
+        <p class="font-bold text-slate-500 mt-4">
+            Common factors include 1, 2 and 3.
+        </p>
+
+        <div class="math-equation">
+            HCF = the BIGGEST common factor
+        </div>
+
+    </div>
+</div>
+</section>
+
+
+<!-- SLIDE 2 -->
+<section class="slide">
+<div class="content">
+
+    <div class="badge">🔎 HCF · Example 1</div>
+    <div class="example-number">Let's solve it step by step</div>
+    <h2 class="interactive-title">Find the HCF of 12 and 6</h2>
+
+    <div class="steps mt-8">
+
+        <div class="step-row">
+            <div class="step-label">1. Factors of 12</div>
+            <div class="answer-area">
+                <input class="answer-input" data-answer="1,2,3,4,6,12"
+                       placeholder="e.g. 1, 2, 3, 4...">
+                <div class="status"></div>
+            </div>
+            <button class="check-btn">Check</button>
+            <div class="hint">💡 Think of numbers that divide 12 exactly.</div>
+        </div>
+
+        <div class="step-row">
+            <div class="step-label">2. Factors of 6</div>
+            <div class="answer-area">
+                <input class="answer-input" data-answer="1,2,3,6"
+                       placeholder="List all factors">
+                <div class="status"></div>
+            </div>
+            <button class="check-btn">Check</button>
+            <div class="hint">💡 Which numbers divide 6 with no remainder?</div>
+        </div>
+
+        <div class="step-row">
+            <div class="step-label">3. Common Factors</div>
+            <div class="answer-area">
+                <input class="answer-input" data-answer="1,2,3,6"
+                       placeholder="Which factors appear in both?">
+                <div class="status"></div>
+            </div>
+            <button class="check-btn">Check</button>
+            <div class="hint">💡 Compare the two factor lists.</div>
+        </div>
+
+        <div class="step-row">
+            <div class="step-label">4. HCF</div>
+            <div class="answer-area">
+                <input class="answer-input" data-answer="6"
+                       placeholder="Enter the largest common factor">
+                <div class="status"></div>
+            </div>
+            <button class="check-btn">Check</button>
+            <div class="hint">💡 Pick the BIGGEST number in the common-factor list.</div>
+        </div>
+
+    </div>
+
+    <div class="completion">
+        🎉 Excellent! You completed every step correctly.
+    </div>
+
+</div>
+</section>
+
+
+<!-- SLIDE 3 -->
+<section class="slide">
+<div class="content">
+
+    <div class="badge">🔎 HCF · Example 2</div>
+    <div class="example-number">Step-by-step challenge</div>
+    <h2 class="interactive-title">Find the HCF of 18 and 24</h2>
+
+    <div class="steps mt-8">
+
+        <div class="step-row">
+            <div class="step-label">1. Factors of 18</div>
+            <div class="answer-area">
+                <input class="answer-input" data-answer="1,2,3,6,9,18"
+                       placeholder="List all factors">
+                <div class="status"></div>
+            </div>
+            <button class="check-btn">Check</button>
+            <div class="hint">💡 Start with 1 and test numbers that divide 18 exactly.</div>
+        </div>
+
+        <div class="step-row">
+            <div class="step-label">2. Factors of 24</div>
+            <div class="answer-area">
+                <input class="answer-input" data-answer="1,2,3,4,6,8,12,24"
+                       placeholder="List all factors">
+                <div class="status"></div>
+            </div>
+            <button class="check-btn">Check</button>
+            <div class="hint">💡 Factor pairs: 1×24, 2×12, 3×8, 4×6.</div>
+        </div>
+
+        <div class="step-row">
+            <div class="step-label">3. Common Factors</div>
+            <div class="answer-area">
+                <input class="answer-input" data-answer="1,2,3,6"
+                       placeholder="Find the overlap">
+                <div class="status"></div>
+            </div>
+            <button class="check-btn">Check</button>
+            <div class="hint">💡 Choose numbers appearing in BOTH lists.</div>
+        </div>
+
+        <div class="step-row">
+            <div class="step-label">4. HCF</div>
+            <div class="answer-area">
+                <input class="answer-input" data-answer="6"
+                       placeholder="Largest common factor">
+                <div class="status"></div>
+            </div>
+            <button class="check-btn">Check</button>
+            <div class="hint">💡 Which common factor is largest?</div>
+        </div>
+
+    </div>
+
+    <div class="completion">🎉 Fantastic! HCF = 6.</div>
+
+</div>
+</section>
+
+
+<!-- SLIDE 4 -->
+<section class="slide">
+<div class="content">
+
+    <div class="badge">🔎 HCF · Example 3</div>
+    <div class="example-number">Your next challenge</div>
+    <h2 class="interactive-title">Find the HCF of 15 and 20</h2>
+
+    <div class="steps mt-8">
+
+        <div class="step-row">
+            <div class="step-label">1. Factors of 15</div>
+            <div class="answer-area">
+                <input class="answer-input" data-answer="1,3,5,15"
+                       placeholder="List all factors">
+                <div class="status"></div>
+            </div>
+            <button class="check-btn">Check</button>
+            <div class="hint">💡 Factor pairs: 1×15 and 3×5.</div>
+        </div>
+
+        <div class="step-row">
+            <div class="step-label">2. Factors of 20</div>
+            <div class="answer-area">
+                <input class="answer-input" data-answer="1,2,4,5,10,20"
+                       placeholder="List all factors">
+                <div class="status"></div>
+            </div>
+            <button class="check-btn">Check</button>
+            <div class="hint">💡 Factor pairs: 1×20, 2×10, 4×5.</div>
+        </div>
+
+        <div class="step-row">
+            <div class="step-label">3. Common Factors</div>
+            <div class="answer-area">
+                <input class="answer-input" data-answer="1,5"
+                       placeholder="Find the common factors">
+                <div class="status"></div>
+            </div>
+            <button class="check-btn">Check</button>
+            <div class="hint">💡 Look for numbers present in both lists.</div>
+        </div>
+
+        <div class="step-row">
+            <div class="step-label">4. HCF</div>
+            <div class="answer-area">
+                <input class="answer-input" data-answer="5"
+                       placeholder="Enter HCF">
+                <div class="status"></div>
+            </div>
+            <button class="check-btn">Check</button>
+            <div class="hint">💡 The HCF is the largest common factor.</div>
+        </div>
+
+    </div>
+
+    <div class="completion">🎉 Brilliant! HCF = 5.</div>
+
+</div>
+</section>
+
+
+<!-- SLIDE 5 -->
+<section class="slide">
+<div class="content">
+
+    <div class="badge">🔎 HCF · Example 4</div>
+    <div class="example-number">Final HCF challenge</div>
+    <h2 class="interactive-title">Find the HCF of 8 and 12</h2>
+
+    <div class="steps mt-8">
+
+        <div class="step-row">
+            <div class="step-label">1. Factors of 8</div>
+            <div class="answer-area">
+                <input class="answer-input" data-answer="1,2,4,8"
+                       placeholder="List all factors">
+                <div class="status"></div>
+            </div>
+            <button class="check-btn">Check</button>
+            <div class="hint">💡 Factor pairs: 1×8 and 2×4.</div>
+        </div>
+
+        <div class="step-row">
+            <div class="step-label">2. Factors of 12</div>
+            <div class="answer-area">
+                <input class="answer-input" data-answer="1,2,3,4,6,12"
+                       placeholder="List all factors">
+                <div class="status"></div>
+            </div>
+            <button class="check-btn">Check</button>
+            <div class="hint">💡 Factor pairs: 1×12, 2×6, 3×4.</div>
+        </div>
+
+        <div class="step-row">
+            <div class="step-label">3. Common Factors</div>
+            <div class="answer-area">
+                <input class="answer-input" data-answer="1,2,4"
+                       placeholder="Find the common factors">
+                <div class="status"></div>
+            </div>
+            <button class="check-btn">Check</button>
+            <div class="hint">💡 Compare the two lists carefully.</div>
+        </div>
+
+        <div class="step-row">
+            <div class="step-label">4. HCF</div>
+            <div class="answer-area">
+                <input class="answer-input" data-answer="4"
+                       placeholder="Enter HCF">
+                <div class="status"></div>
+            </div>
+            <button class="check-btn">Check</button>
+            <div class="hint">💡 Choose the largest common factor.</div>
+        </div>
+
+    </div>
+
+    <div class="completion">🏆 HCF section complete! HCF = 4.</div>
+
+</div>
+</section>
+
+
+<!-- SLIDE 6 -->
+<section class="slide">
+<div class="content">
+
+    <div class="badge lcm">🚀 Section 2 · LCM</div>
+
+    <h1 class="title">What is LCM?</h1>
+
+    <p class="subtitle">
+        <strong>LCM</strong> means <strong>Lowest Common Multiple</strong>.
+        It is the <strong>smallest positive multiple</strong> that two or more numbers have in common.
+    </p>
+
+    <div class="definition-card">
+
+        <div class="example-title">Example: Find the LCM of 4 and 6</div>
+
+        <p class="subtitle">List the multiples of each number.</p>
+
+        <div class="multiple-visual">
+            <div class="number-pill">4</div>
+            <div class="number-pill">8</div>
+            <div class="number-pill highlight">12</div>
+            <div class="number-pill">16</div>
+            <div class="number-pill">20</div>
+            <div class="number-pill highlight">24</div>
+        </div>
+
+        <p class="font-bold text-slate-500 mt-4">Multiples of 4</p>
+
+        <div class="multiple-visual">
+            <div class="number-pill">6</div>
+            <div class="number-pill highlight">12</div>
+            <div class="number-pill">18</div>
+            <div class="number-pill highlight">24</div>
+            <div class="number-pill">30</div>
+            <div class="number-pill">36</div>
+        </div>
+
+        <p class="font-bold text-slate-500 mt-4">
+            Common multiples: 12, 24...
+        </p>
+
+        <div class="math-equation">
+            LCM = the SMALLEST common multiple
+        </div>
+
+    </div>
+</div>
+</section>
+
+
+<!-- SLIDE 7 -->
+<section class="slide">
+<div class="content">
+
+    <div class="badge lcm">🚀 LCM · Example 1</div>
+    <div class="example-number">Let's find the first common multiple</div>
+    <h2 class="interactive-title">Find the LCM of 4 and 6</h2>
+
+    <div class="steps mt-8">
+
+        <div class="step-row">
+            <div class="step-label">1. First 6 Multiples of 4</div>
+            <div class="answer-area">
+                <input class="answer-input" data-answer="4,8,12,16,20,24"
+                       placeholder="4, 8, ...">
+                <div class="status"></div>
+            </div>
+            <button class="check-btn">Check</button>
+            <div class="hint">💡 Keep adding 4 each time.</div>
+        </div>
+
+        <div class="step-row">
+            <div class="step-label">2. First 6 Multiples of 6</div>
+            <div class="answer-area">
+                <input class="answer-input" data-answer="6,12,18,24,30,36"
+                       placeholder="6, 12, ...">
+                <div class="status"></div>
+            </div>
+            <button class="check-btn">Check</button>
+            <div class="hint">💡 Keep adding 6 each time.</div>
+        </div>
+
+        <div class="step-row">
+            <div class="step-label">3. Common Multiples</div>
+            <div class="answer-area">
+                <input class="answer-input" data-answer="12,24"
+                       placeholder="Find the common multiples">
+                <div class="status"></div>
+            </div>
+            <button class="check-btn">Check</button>
+            <div class="hint">💡 Find numbers appearing in BOTH lists.</div>
+        </div>
+
+        <div class="step-row">
+            <div class="step-label">4. LCM</div>
+            <div class="answer-area">
+                <input class="answer-input" data-answer="12"
+                       placeholder="Enter the smallest common multiple">
+                <div class="status"></div>
+            </div>
+            <button class="check-btn">Check</button>
+            <div class="hint">💡 Which common multiple comes first?</div>
+        </div>
+
+    </div>
+
+    <div class="completion">🎉 Excellent! LCM = 12.</div>
+
+</div>
+</section>
+
+
+<!-- SLIDE 8 -->
+<section class="slide">
+<div class="content">
+
+    <div class="badge lcm">🚀 LCM · Example 2</div>
+    <div class="example-number">Your next challenge</div>
+    <h2 class="interactive-title">Find the LCM of 3 and 5</h2>
+
+    <div class="steps mt-8">
+
+        <div class="step-row">
+            <div class="step-label">1. First 6 Multiples of 3</div>
+            <div class="answer-area">
+                <input class="answer-input" data-answer="3,6,9,12,15,18"
+                       placeholder="List 6 multiples">
+                <div class="status"></div>
+            </div>
+            <button class="check-btn">Check</button>
+            <div class="hint">💡 Count in 3s.</div>
+        </div>
+
+        <div class="step-row">
+            <div class="step-label">2. First 6 Multiples of 5</div>
+            <div class="answer-area">
+                <input class="answer-input" data-answer="5,10,15,20,25,30"
+                       placeholder="List 6 multiples">
+                <div class="status"></div>
+            </div>
+            <button class="check-btn">Check</button>
+            <div class="hint">💡 Count in 5s.</div>
+        </div>
+
+        <div class="step-row">
+            <div class="step-label">3. Common Multiples</div>
+            <div class="answer-area">
+                <input class="answer-input" data-answer="15,30"
+                       placeholder="Find the common multiples">
+                <div class="status"></div>
+            </div>
+            <button class="check-btn">Check</button>
+            <div class="hint">💡 Find the numbers appearing in both lists.</div>
+        </div>
+
+        <div class="step-row">
+            <div class="step-label">4. LCM</div>
+            <div class="answer-area">
+                <input class="answer-input" data-answer="15"
+                       placeholder="Enter LCM">
+                <div class="status"></div>
+            </div>
+            <button class="check-btn">Check</button>
+            <div class="hint">💡 Choose the smallest common multiple.</div>
+        </div>
+
+    </div>
+
+    <div class="completion">🎉 Brilliant! LCM = 15.</div>
+
+</div>
+</section>
+
+
+<!-- SLIDE 9 -->
+<section class="slide">
+<div class="content">
+
+    <div class="badge lcm">🚀 LCM · Example 3</div>
+    <div class="example-number">Challenge time</div>
+    <h2 class="interactive-title">Find the LCM of 8 and 12</h2>
+
+    <div class="steps mt-8">
+
+        <div class="step-row">
+            <div class="step-label">1. First 6 Multiples of 8</div>
+            <div class="answer-area">
+                <input class="answer-input" data-answer="8,16,24,32,40,48"
+                       placeholder="List 6 multiples">
+                <div class="status"></div>
+            </div>
+            <button class="check-btn">Check</button>
+            <div class="hint">💡 Count in 8s.</div>
+        </div>
+
+        <div class="step-row">
+            <div class="step-label">2. First 6 Multiples of 12</div>
+            <div class="answer-area">
+                <input class="answer-input" data-answer="12,24,36,48,60,72"
+                       placeholder="List 6 multiples">
+                <div class="status"></div>
+            </div>
+            <button class="check-btn">Check</button>
+            <div class="hint">💡 Count in 12s.</div>
+        </div>
+
+        <div class="step-row">
+            <div class="step-label">3. Common Multiples</div>
+            <div class="answer-area">
+                <input class="answer-input" data-answer="24,48"
+                       placeholder="Find the common multiples">
+                <div class="status"></div>
+            </div>
+            <button class="check-btn">Check</button>
+            <div class="hint">💡 Compare both lists.</div>
+        </div>
+
+        <div class="step-row">
+            <div class="step-label">4. LCM</div>
+            <div class="answer-area">
+                <input class="answer-input" data-answer="24"
+                       placeholder="Enter LCM">
+                <div class="status"></div>
+            </div>
+            <button class="check-btn">Check</button>
+            <div class="hint">💡 What is the smallest common multiple?</div>
+        </div>
+
+    </div>
+
+    <div class="completion">🎉 Great work! LCM = 24.</div>
+
+</div>
+</section>
+
+
+<!-- SLIDE 10 -->
+<section class="slide">
+<div class="content">
+
+    <div class="badge lcm">🚀 LCM · Example 4</div>
+    <div class="example-number">Final challenge</div>
+    <h2 class="interactive-title">Find the LCM of 6 and 9</h2>
+
+    <div class="steps mt-8">
+
+        <div class="step-row">
+            <div class="step-label">1. First 6 Multiples of 6</div>
+            <div class="answer-area">
+                <input class="answer-input" data-answer="6,12,18,24,30,36"
+                       placeholder="List 6 multiples">
+                <div class="status"></div>
+            </div>
+            <button class="check-btn">Check</button>
+            <div class="hint">💡 Count in 6s.</div>
+        </div>
+
+        <div class="step-row">
+            <div class="step-label">2. First 6 Multiples of 9</div>
+            <div class="answer-area">
+                <input class="answer-input" data-answer="9,18,27,36,45,54"
+                       placeholder="List 6 multiples">
+                <div class="status"></div>
+            </div>
+            <button class="check-btn">Check</button>
+            <div class="hint">💡 Count in 9s.</div>
+        </div>
+
+        <div class="step-row">
+            <div class="step-label">3. Common Multiples</div>
+            <div class="answer-area">
+                <input class="answer-input" data-answer="18,36"
+                       placeholder="Find the common multiples">
+                <div class="status"></div>
+            </div>
+            <button class="check-btn">Check</button>
+            <div class="hint">💡 Look for numbers appearing in both lists.</div>
+        </div>
+
+        <div class="step-row">
+            <div class="step-label">4. LCM</div>
+            <div class="answer-area">
+                <input class="answer-input" data-answer="18"
+                       placeholder="Enter LCM">
+                <div class="status"></div>
+            </div>
+            <button class="check-btn">Check</button>
+            <div class="hint">💡 Pick the SMALLEST common multiple.</div>
+        </div>
+
+    </div>
+
+    <div class="completion">
+        🏆 AMAZING! You've completed the HCF & LCM mission! LCM = 18.
+    </div>
+
+</div>
+</section>
+
+</main>
+
+
+<div class="keyboard-hint">
+    Use ← → arrow keys to navigate
+</div>
+
+<nav class="navigation">
+
+    <button class="nav-btn prev-btn" id="prevBtn">
+        ← Previous
+    </button>
+
+    <div class="dot-container" id="dots"></div>
+
+    <button class="nav-btn next-btn" id="nextBtn">
+        Next →
+    </button>
+
+</nav>
+
+</div>
+
+
+<script>
+/* =========================================================
+   HCF & LCM INTERACTIVE PRESENTATION
+   ========================================================= */
+
+const slides = document.querySelectorAll('.slide');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const slideNumber = document.getElementById('slideNumber');
+const progressBar = document.getElementById('progressBar');
+const dotsContainer = document.getElementById('dots');
+
+let currentSlide = 0;
+
+
+/* ---------------------------------------------------------
+   CREATE NAVIGATION DOTS
+--------------------------------------------------------- */
+
+slides.forEach((_, index) => {
+    const dot = document.createElement('div');
+    dot.className = 'dot';
+    dot.addEventListener('click', () => {
+        currentSlide = index;
+        updatePresentation();
+    });
+    dotsContainer.appendChild(dot);
+});
+
+
+/* ---------------------------------------------------------
+   NORMALISE ANSWERS
+   - Removes spaces
+   - Handles comma differences
+   - Compares numbers in sequence
+--------------------------------------------------------- */
+
+function normalizeAnswer(value) {
+
+    return value
+        .trim()
+        .replace(/\s+/g, '')
+        .replace(/,+/g, ',')
+        .replace(/^,|,$/g, '')
+        .toLowerCase();
+
+}
+
+
+/* ---------------------------------------------------------
+   CHECK ANSWER
+--------------------------------------------------------- */
+
+function checkAnswer(input, button) {
+
+    const expected = normalizeAnswer(input.dataset.answer);
+    const entered = normalizeAnswer(input.value);
+
+    const row = input.closest('.step-row');
+    const status = row.querySelector('.status');
+    const hint = row.querySelector('.hint');
+
+    if (entered === expected) {
+
+        input.classList.remove('incorrect');
+        input.classList.add('correct');
+
+        status.className = 'status correct';
+        status.textContent = '✓ Correct!';
+
+        hint.classList.remove('show');
+
+    } else {
+
+        input.classList.remove('correct');
+        input.classList.add('incorrect');
+
+        status.className = 'status incorrect';
+        status.textContent = '✗ Try again';
+
+        hint.classList.add('show');
+    }
+
+    updateCompletion(row.closest('.slide'));
+}
+
+
+/* ---------------------------------------------------------
+   SLIDE COMPLETION
+--------------------------------------------------------- */
+
+function updateCompletion(slide) {
+
+    const inputs = slide.querySelectorAll('.answer-input');
+
+    if (!inputs.length) return;
+
+    const allCorrect = [...inputs].every(input =>
+        input.classList.contains('correct')
+    );
+
+    const completion = slide.querySelector('.completion');
+
+    if (allCorrect) {
+        completion.classList.add('show');
+    } else {
+        completion.classList.remove('show');
+    }
+}
+
+
+/* ---------------------------------------------------------
+   ATTACH CHECK BUTTONS
+--------------------------------------------------------- */
+
+document.querySelectorAll('.check-btn').forEach(button => {
+
+    button.addEventListener('click', () => {
+
+        const row = button.closest('.step-row');
+        const input = row.querySelector('.answer-input');
+
+        checkAnswer(input, button);
+
+    });
+
+});
+
+
+/* ---------------------------------------------------------
+   ENTER KEY CHECK
+--------------------------------------------------------- */
+
+document.querySelectorAll('.answer-input').forEach(input => {
+
+    input.addEventListener('keydown', event => {
+
+        if (event.key === 'Enter') {
+
+            event.preventDefault();
+
+            const button =
+                input.closest('.step-row').querySelector('.check-btn');
+
+            checkAnswer(input, button);
+        }
+
+    });
+
+});
+
+
+/* ---------------------------------------------------------
+   PRESENTATION NAVIGATION
+--------------------------------------------------------- */
+
+function updatePresentation() {
+
+    slides.forEach((slide, index) => {
+
+        slide.classList.toggle(
+            'active',
+            index === currentSlide
+        );
+
+    });
+
+    slideNumber.textContent =
+        `${currentSlide + 1} / ${slides.length}`;
+
+    progressBar.style.width =
+        `${((currentSlide + 1) / slides.length) * 100}%`;
+
+    document.querySelectorAll('.dot').forEach((dot, index) => {
+
+        dot.classList.toggle(
+            'active',
+            index === currentSlide
+        );
+
+    });
+
+    prevBtn.disabled = currentSlide === 0;
+    nextBtn.disabled = currentSlide === slides.length - 1;
+
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+}
+
+
+prevBtn.addEventListener('click', () => {
+
+    if (currentSlide > 0) {
+
+        currentSlide--;
+        updatePresentation();
+
+    }
+
+});
+
+
+nextBtn.addEventListener('click', () => {
+
+    if (currentSlide < slides.length - 1) {
+
+        currentSlide++;
+        updatePresentation();
+
+    }
+
+});
+
+
+/* ---------------------------------------------------------
+   KEYBOARD NAVIGATION
+--------------------------------------------------------- */
+
+document.addEventListener('keydown', event => {
+
+    /*
+       Don't navigate slides when the student is typing.
+    */
+
+    if (
+        event.target.tagName === 'INPUT' ||
+        event.target.tagName === 'TEXTAREA'
+    ) {
+        return;
+    }
+
+    if (event.key === 'ArrowRight') {
+
+        if (currentSlide < slides.length - 1) {
+
+            currentSlide++;
+            updatePresentation();
+
+        }
+
+    }
+
+    if (event.key === 'ArrowLeft') {
+
+        if (currentSlide > 0) {
+
+            currentSlide--;
+            updatePresentation();
+
+        }
+
+    }
+
+});
+
+
+/* ---------------------------------------------------------
+   INITIALISE
+--------------------------------------------------------- */
+
+updatePresentation();
+
+</script>
+
+</body>
+</html>
