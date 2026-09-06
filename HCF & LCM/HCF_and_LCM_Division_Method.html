@@ -414,21 +414,7 @@
       font-size: 1rem;
     }
 
-    /* Interactive Quiz Form */
-    .quiz-step-input {
-      display: flex;
-      gap: 0.5rem;
-      align-items: center;
-      margin-bottom: 0.5rem;
-    }
-
-    .quiz-step-input input {
-      padding: 0.4rem;
-      border: 1px solid var(--CHIP-BORDER);
-      border-radius: 4px;
-      width: 80px;
-    }
-
+    /* Interactive Quiz Feedback */
     .feedback-box {
       padding: 1rem;
       border-radius: 8px;
@@ -447,6 +433,144 @@
       border: 1px solid var(--ERROR-RED);
       color: var(--ERROR-RED);
     }
+
+    /* Interactive Ladder Builder (Quiz) */
+    .hint-text {
+      font-size: 0.9rem;
+      color: var(--MUTED-TEXT);
+      margin-bottom: 1rem;
+    }
+
+    .ladder-build .ladder-container {
+      display: block;
+      min-width: 240px;
+    }
+
+    .ladder-build .ladder-row {
+      min-height: 2.7rem;
+    }
+
+    .ladder-build .divisor-cell {
+      width: 64px;
+    }
+
+    .ladder-build .divisor-cell input {
+      width: 48px;
+      padding: 0.3rem;
+      text-align: center;
+      border: 1.5px solid var(--ACCENT-BLUE);
+      border-radius: 4px;
+      font-size: 1rem;
+      font-weight: bold;
+      font-family: var(--FONT-BODY);
+      color: var(--DARK-GOLD);
+    }
+
+    .ladder-build .numbers-cell {
+      letter-spacing: normal;
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+      padding: 0.4rem 1.2rem;
+    }
+
+    .ladder-build .numbers-cell .num-static {
+      min-width: 34px;
+      text-align: center;
+    }
+
+    .ladder-build .numbers-cell input {
+      width: 56px;
+      padding: 0.3rem;
+      text-align: center;
+      border: 1.5px solid var(--ACCENT-BLUE);
+      border-radius: 4px;
+      font-size: 1rem;
+      font-weight: bold;
+      font-family: var(--FONT-BODY);
+      color: var(--NAVY-DARK);
+    }
+
+    .step-error {
+      color: var(--ERROR-RED);
+      font-weight: bold;
+      margin: 0.6rem 0;
+      min-height: 1.2rem;
+      font-size: 0.9rem;
+    }
+
+    .step-error.as-hint {
+      color: var(--ACCENT-BLUE);
+    }
+
+    .ladder-actions {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-top: 0.25rem;
+    }
+
+    .btn-muted { background: var(--MUTED-TEXT); }
+    .btn-success { background: var(--SUCCESS-GREEN); }
+
+    .ladder-status {
+      margin-top: 0.9rem;
+      font-weight: bold;
+      color: var(--NAVY-DARK);
+      font-size: 0.95rem;
+    }
+
+    .ladder-status.complete { color: var(--SUCCESS-GREEN); }
+
+    .final-inputs {
+      margin-top: 1.25rem;
+      padding-top: 1rem;
+      border-top: 1px dashed var(--CHIP-BORDER);
+    }
+
+    .final-row {
+      display: flex;
+      gap: 1.5rem;
+      margin: 0.6rem 0 1rem;
+    }
+
+    .final-row label {
+      font-weight: bold;
+      color: var(--NAVY-DARK);
+      margin-right: 0.4rem;
+    }
+
+    .final-row input {
+      padding: 0.4rem;
+      width: 90px;
+      border: 1px solid var(--CHIP-BORDER);
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+
+    /* Two separate ladder panels (HCF / LCM) */
+    .ladder-pair {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .ladder-panel {
+      border: 1px solid var(--CHIP-BORDER);
+      border-radius: 10px;
+      padding: 1.25rem;
+      background: var(--BG-LIGHT);
+    }
+
+    .ladder-panel h3 {
+      color: var(--NAVY-DARK);
+      font-family: var(--FONT-TITLE);
+      margin-bottom: 0.3rem;
+    }
+
+    .ladder-panel.hcf-panel { border-top: 4px solid var(--DARK-GOLD); }
+    .ladder-panel.lcm-panel { border-top: 4px solid var(--NAVY); }
   </style>
 </head>
 <body>
@@ -506,58 +630,97 @@
     <div id="quiz" class="tab-content">
       <div class="tool-card">
         <h2 style="font-family: var(--FONT-TITLE); color: var(--NAVY-DARK); margin-bottom: 1rem;">
-          Interactive Practice & Step Verification
+          Interactive Practice — Build the Division Ladder
         </h2>
-        
+
         <div class="input-group">
           <label for="quizProblemSelect">Select Problem:</label>
           <select id="quizProblemSelect" class="slide-select" onchange="loadQuizProblem()">
             <option value="custom">-- Custom Numbers --</option>
-            <option value="20,30">Find HCF & LCM of 20 and 30</option>
-            <option value="27,45">Find HCF & LCM of 27 and 45</option>
-            <option value="12,18">Find HCF & LCM of 12 and 18</option>
-            <option value="15,20">Find HCF & LCM of 15 and 20</option>
-            <option value="24,60">Find HCF & LCM of 24 and 60</option>
+            <option value="20,30">Find HCF &amp; LCM of 20 and 30</option>
+            <option value="27,45">Find HCF &amp; LCM of 27 and 45</option>
+            <option value="12,18">Find HCF &amp; LCM of 12 and 18</option>
+            <option value="15,20">Find HCF &amp; LCM of 15 and 20</option>
+            <option value="24,60">Find HCF &amp; LCM of 24 and 60</option>
           </select>
           <div id="customInputs" style="display: flex; gap: 0.5rem; align-items: center;">
-            <input type="number" id="quizNum1" value="18" placeholder="Num 1">
-            <input type="number" id="quizNum2" value="30" placeholder="Num 2">
+            <input type="number" id="quizNum1" value="18" min="2" placeholder="Num 1">
+            <input type="number" id="quizNum2" value="30" min="2" placeholder="Num 2">
             <button class="btn" onclick="initQuiz()">Start Problem</button>
           </div>
         </div>
 
-        <div class="grid-2" style="margin-top: 1rem;">
-          <div>
-            <h3 style="margin-bottom: 0.8rem; color: var(--NAVY-DARK);">1. Enter Your Division Ladder Steps</h3>
-            <p style="font-size: 0.9rem; color: var(--MUTED-TEXT); margin-bottom: 1rem;">
-              Enter prime divisors step by step and the remaining quotients after division.
+        <p class="hint-text" style="margin-top: 1rem;">
+          Build a <strong>separate ladder for each answer</strong>. In every row, type the
+          <strong>prime</strong> you are dividing by on the left, then the two results on the line
+          below (a number that will not divide is carried straight down). Press <em>Check Step</em> —
+          each step is checked.
+        </p>
+
+        <div class="ladder-pair">
+          <!-- HCF LADDER -->
+          <div class="ladder-panel hcf-panel">
+            <h3>A &middot; HCF Ladder</h3>
+            <p class="hint-text">
+              Divide only by primes that go into <strong>both</strong> numbers.
+              Stop when the two numbers share no common factor. HCF = the divisors on the left multiplied together.
             </p>
 
-            <div id="quizLadderInputs"></div>
+            <div id="hcfLadder" class="ladder-build"></div>
+            <div id="hcfErr" class="step-error"></div>
 
-            <button class="btn" style="background: var(--MUTED-TEXT); margin-top: 0.5rem;" onclick="addQuizStepRow()">+ Add Ladder Step</button>
-            
-            <div style="margin-top: 1.5rem;">
-              <h3 style="margin-bottom: 0.8rem; color: var(--NAVY-DARK);">2. Enter Final Calculated Answers</h3>
-              <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
-                <div>
-                  <label style="font-weight: bold;">HCF:</label>
-                  <input type="number" id="userHCF" style="padding: 0.4rem; width: 80px;">
-                </div>
-                <div>
-                  <label style="font-weight: bold;">LCM:</label>
-                  <input type="number" id="userLCM" style="padding: 0.4rem; width: 80px;">
-                </div>
-              </div>
-              <button class="btn" style="background: var(--SUCCESS-GREEN);" onclick="verifyQuizAnswer()">Verify My Solution</button>
+            <div class="ladder-actions">
+              <button class="btn" onclick="ladderCheckStep('hcf')">&#10003; Check Step</button>
+              <button class="btn btn-muted" onclick="ladderUndo('hcf')">&#8630; Undo</button>
+              <button class="btn btn-muted" onclick="ladderHint('hcf')">&#128161; Hint</button>
             </div>
+
+            <div id="hcfStatus" class="ladder-status"></div>
+
+            <div id="hcfFinal" class="final-inputs" style="display: none;">
+              <div class="final-row">
+                <div><label>HCF =</label><input type="number" id="userHCF"></div>
+              </div>
+              <button class="btn btn-success" onclick="verifyLadder('hcf')">Check HCF</button>
+            </div>
+
+            <div id="hcfFeedback" class="feedback-box"></div>
+            <div id="hcfSolution" style="margin-top: 0.75rem;"></div>
           </div>
 
-          <div>
-            <h3 style="margin-bottom: 0.8rem; color: var(--NAVY-DARK);">Verification & Feedback</h3>
-            <div id="quizFeedback" class="feedback-box"></div>
-            <div id="quizSolutionPreview" style="margin-top: 1rem;"></div>
+          <!-- LCM LADDER -->
+          <div class="ladder-panel lcm-panel">
+            <h3>B &middot; LCM Ladder</h3>
+            <p class="hint-text">
+              Divide by any prime that goes into <strong>at least one</strong> number (common primes first).
+              Keep going until <strong>both numbers are 1</strong>. LCM = every divisor on the left multiplied together.
+            </p>
+
+            <div id="lcmLadder" class="ladder-build"></div>
+            <div id="lcmErr" class="step-error"></div>
+
+            <div class="ladder-actions">
+              <button class="btn" onclick="ladderCheckStep('lcm')">&#10003; Check Step</button>
+              <button class="btn btn-muted" onclick="ladderUndo('lcm')">&#8630; Undo</button>
+              <button class="btn btn-muted" onclick="ladderHint('lcm')">&#128161; Hint</button>
+            </div>
+
+            <div id="lcmStatus" class="ladder-status"></div>
+
+            <div id="lcmFinal" class="final-inputs" style="display: none;">
+              <div class="final-row">
+                <div><label>LCM =</label><input type="number" id="userLCM"></div>
+              </div>
+              <button class="btn btn-success" onclick="verifyLadder('lcm')">Check LCM</button>
+            </div>
+
+            <div id="lcmFeedback" class="feedback-box"></div>
+            <div id="lcmSolution" style="margin-top: 0.75rem;"></div>
           </div>
+        </div>
+
+        <div class="ladder-actions" style="margin-top: 1.25rem;">
+          <button class="btn btn-muted" onclick="initQuiz()">&#8634; Restart Both Ladders</button>
         </div>
       </div>
     </div>
@@ -945,8 +1108,25 @@
     }
 
     /* ==========================================
-       QUIZ & STEP VERIFICATION LOGIC
+       QUIZ — TWO SEPARATE LADDERS (HCF & LCM)
        ========================================== */
+    const LAD = {
+      hcf: { container: 'hcfLadder', err: 'hcfErr', status: 'hcfStatus', final: 'hcfFinal',
+             feedback: 'hcfFeedback', solution: 'hcfSolution', answer: 'userHCF' },
+      lcm: { container: 'lcmLadder', err: 'lcmErr', status: 'lcmStatus', final: 'lcmFinal',
+             feedback: 'lcmFeedback', solution: 'lcmSolution', answer: 'userLCM' }
+    };
+
+    let ladders = { hcf: null, lcm: null };
+
+    function isPrime(n) {
+      if (!Number.isInteger(n) || n < 2) return false;
+      for (let i = 2; i * i <= n; i++) if (n % i === 0) return false;
+      return true;
+    }
+
+    function gcd(a, b) { return b === 0 ? a : gcd(b, a % b); }
+
     function loadQuizProblem() {
       const val = document.getElementById('quizProblemSelect').value;
       const customInputs = document.getElementById('customInputs');
@@ -957,98 +1137,251 @@
         const [n1, n2] = val.split(',');
         document.getElementById('quizNum1').value = n1;
         document.getElementById('quizNum2').value = n2;
-        initQuiz();
       }
+      initQuiz();
     }
 
     function initQuiz() {
-      const container = document.getElementById('quizLadderInputs');
-      const num1 = parseInt(document.getElementById('quizNum1').value) || 18;
-      const num2 = parseInt(document.getElementById('quizNum2').value) || 30;
+      let num1 = parseInt(document.getElementById('quizNum1').value);
+      let num2 = parseInt(document.getElementById('quizNum2').value);
+      if (!num1 || num1 < 2) num1 = 18;
+      if (!num2 || num2 < 2) num2 = 30;
 
-      container.innerHTML = `
-        <div class="quiz-step-input">
-          <label style="width: 60px;">Start:</label>
-          <input type="text" value="${num1}, ${num2}" disabled style="width: 120px; font-weight: bold;">
-        </div>
-      `;
-      addQuizStepRow();
-      document.getElementById('quizFeedback').style.display = 'none';
-      document.getElementById('quizSolutionPreview').innerHTML = '';
-      document.getElementById('userHCF').value = '';
-      document.getElementById('userLCM').value = '';
+      ['hcf', 'lcm'].forEach(mode => {
+        ladders[mode] = { n1: num1, n2: num2, rows: [[num1, num2]], divisors: [], done: false };
+        const els = LAD[mode];
+        document.getElementById(els.final).style.display = 'none';
+        document.getElementById(els.feedback).style.display = 'none';
+        document.getElementById(els.solution).innerHTML = '';
+        document.getElementById(els.answer).value = '';
+        setLadderError(mode, '', false);
+        checkLadderDone(mode);   // HCF may already be finished if the numbers are coprime
+        renderLadder(mode);
+        updateLadderStatus(mode);
+      });
     }
 
-    function addQuizStepRow() {
-      const container = document.getElementById('quizLadderInputs');
-      const stepNum = container.children.length;
-      const row = document.createElement('div');
-      row.className = 'quiz-step-input';
-      row.innerHTML = `
-        <label style="width: 60px;">Step ${stepNum}:</label>
-        <input type="number" class="quiz-div" placeholder="Divisor">
-        <input type="text" class="quiz-rem" placeholder="e.g. 9, 15" style="width: 120px;">
-      `;
-      container.appendChild(row);
+    function setLadderError(mode, msg, isHint) {
+      const el = document.getElementById(LAD[mode].err);
+      el.className = 'step-error' + (isHint ? ' as-hint' : '');
+      el.innerHTML = msg;
     }
 
-    function verifyQuizAnswer() {
-      const n1 = parseInt(document.getElementById('quizNum1').value);
-      const n2 = parseInt(document.getElementById('quizNum2').value);
+    function checkLadderDone(mode) {
+      const s = ladders[mode];
+      const [a, b] = s.rows[s.rows.length - 1];
+      s.done = (mode === 'lcm') ? (a === 1 && b === 1) : (gcd(a, b) === 1);
+      if (s.done) document.getElementById(LAD[mode].final).style.display = 'block';
+      return s.done;
+    }
 
-      // Compute correct values
-      let a = n1, b = n2;
-      let commonDivs = [], allDivs = [];
-      let d = 2;
-      while (d <= Math.max(a, b)) {
-        if (a % d === 0 || b % d === 0) {
-          if (a % d === 0 && b % d === 0) commonDivs.push(d);
-          allDivs.push(d);
-          if (a % d === 0) a /= d;
-          if (b % d === 0) b /= d;
-        } else { d++; }
+    function renderLadder(mode) {
+      const s = ladders[mode];
+      let rows = '';
+      for (let i = 0; i < s.rows.length; i++) {
+        const isLast = i === s.rows.length - 1;
+        let divCell = '';
+        if (i < s.divisors.length) {
+          divCell = `<span>${s.divisors[i]}</span>`;
+        } else if (isLast && !s.done) {
+          divCell = `<input type="number" id="${mode}Div" min="2" placeholder="&divide;"
+                       onkeydown="if(event.key==='Enter')ladderCheckStep('${mode}')">`;
+        }
+        const hasLine = i < s.divisors.length;
+        rows += `
+          <div class="ladder-row ${hasLine ? 'has-line' : ''}">
+            <div class="divisor-cell">${divCell}</div>
+            <div class="numbers-cell">
+              <span class="num-static">${s.rows[i][0]}</span>
+              <span class="num-static">${s.rows[i][1]}</span>
+            </div>
+          </div>`;
       }
+      if (!s.done) {
+        rows += `
+          <div class="ladder-row">
+            <div class="divisor-cell"></div>
+            <div class="numbers-cell">
+              <input type="number" id="${mode}Q1" placeholder="?" onkeydown="if(event.key==='Enter')ladderCheckStep('${mode}')">
+              <input type="number" id="${mode}Q2" placeholder="?" onkeydown="if(event.key==='Enter')ladderCheckStep('${mode}')">
+            </div>
+          </div>`;
+      }
+      document.getElementById(LAD[mode].container).innerHTML = `<div class="ladder-container">${rows}</div>`;
+    }
 
-      const correctHCF = commonDivs.reduce((acc, v) => acc * v, 1);
-      const correctLCM = allDivs.reduce((acc, v) => acc * v, 1);
-
-      const userHCF = parseInt(document.getElementById('userHCF').value);
-      const userLCM = parseInt(document.getElementById('userLCM').value);
-
-      const feedback = document.getElementById('quizFeedback');
-      feedback.style.display = 'block';
-
-      if (userHCF === correctHCF && userLCM === correctLCM) {
-        feedback.className = 'feedback-box correct';
-        feedback.innerHTML = `<strong>✅ Excellent!</strong> Both HCF (${correctHCF}) and LCM (${correctLCM}) are correct!`;
+    function updateLadderStatus(mode) {
+      const s = ladders[mode];
+      const el = document.getElementById(LAD[mode].status);
+      const [a, b] = s.rows[s.rows.length - 1];
+      if (s.done) {
+        el.className = 'ladder-status complete';
+        if (mode === 'lcm') {
+          el.textContent = '✓ Both numbers are 1 — LCM ladder complete. Multiply every divisor on the left.';
+        } else if (s.divisors.length === 0) {
+          el.textContent = `✓ ${a} and ${b} share no common prime factor, so the HCF is 1.`;
+        } else {
+          el.textContent = `✓ ${a} and ${b} share no common factor — HCF ladder complete. Multiply the divisors on the left.`;
+        }
       } else {
-        feedback.className = 'feedback-box incorrect';
-        feedback.innerHTML = `
-          <strong>❌ Not quite.</strong><br>
-          Your input: HCF = ${userHCF || '?'}, LCM = ${userLCM || '?'}<br>
-          Correct values: HCF = <strong>${correctHCF}</strong>, LCM = <strong>${correctLCM}</strong>
-        `;
+        el.className = 'ladder-status';
+        el.textContent = (mode === 'lcm')
+          ? `Current numbers: ${a} and ${b}. Keep dividing until both are 1.`
+          : `Current numbers: ${a} and ${b}. Keep dividing by common primes.`;
       }
-
-      // Show Full Correct Solution
-      document.getElementById('quizSolutionPreview').innerHTML = `
-        <h4 style="margin-bottom:0.5rem; color:var(--NAVY-DARK);">Complete Correct Division Ladder:</h4>
-        ${renderLadderHTML(allDivs, computeLadderRows(n1, n2))}
-      `;
     }
 
-    function computeLadderRows(n1, n2) {
-      let a = n1, b = n2;
-      let rows = [[a, b]];
-      let d = 2;
+    function ladderCheckStep(mode) {
+      const s = ladders[mode];
+      if (s.done) return;
+      const [a, b] = s.rows[s.rows.length - 1];
+      const div = parseInt(document.getElementById(mode + 'Div').value);
+      const q1 = parseInt(document.getElementById(mode + 'Q1').value);
+      const q2 = parseInt(document.getElementById(mode + 'Q2').value);
+
+      if (!div || div < 2) { setLadderError(mode, 'Enter a divisor of 2 or more on the left.'); return; }
+      if (!isPrime(div)) { setLadderError(mode, `<strong>${div}</strong> is not prime — divide by a prime (2, 3, 5, 7, 11, …).`); return; }
+
+      const dividesA = a % div === 0, dividesB = b % div === 0;
+      if (mode === 'hcf') {
+        if (!(dividesA && dividesB)) {
+          setLadderError(mode, `For the HCF ladder the divisor must go into <strong>both</strong> numbers — <strong>${div}</strong> does not divide both ${a} and ${b}.`);
+          return;
+        }
+      } else if (!dividesA && !dividesB) {
+        setLadderError(mode, `<strong>${div}</strong> does not divide ${a} or ${b}. Choose a prime that divides at least one of them.`);
+        return;
+      }
+
+      if (isNaN(q1) || isNaN(q2)) { setLadderError(mode, 'Fill in both result numbers on the line below.'); return; }
+
+      const eA = dividesA ? a / div : a;
+      const eB = dividesB ? b / div : b;
+      if (q1 !== eA || q2 !== eB) {
+        setLadderError(mode, `Check your division: ${a} &divide; ${div} = <strong>${eA}</strong> and ${b} &divide; ${div} = <strong>${eB}</strong>.` +
+          (mode === 'lcm' ? ` (A number not divisible by ${div} is carried straight down.)` : ''));
+        return;
+      }
+
+      // Valid — commit the step
+      s.divisors.push(div);
+      s.rows.push([eA, eB]);
+      setLadderError(mode, '', false);
+      checkLadderDone(mode);
+      renderLadder(mode);
+      updateLadderStatus(mode);
+      if (!s.done) {
+        const next = document.getElementById(mode + 'Div');
+        if (next) next.focus();
+      }
+    }
+
+    function ladderUndo(mode) {
+      const s = ladders[mode];
+      if (s.divisors.length === 0) return;
+      s.divisors.pop();
+      s.rows.pop();
+      s.done = false;
+      document.getElementById(LAD[mode].final).style.display = 'none';
+      document.getElementById(LAD[mode].feedback).style.display = 'none';
+      document.getElementById(LAD[mode].solution).innerHTML = '';
+      setLadderError(mode, '', false);
+      renderLadder(mode);
+      updateLadderStatus(mode);
+    }
+
+    function ladderHint(mode) {
+      const s = ladders[mode];
+      if (s.done) { setLadderError(mode, 'This ladder is already complete.', true); return; }
+      const [a, b] = s.rows[s.rows.length - 1];
+
+      if (mode === 'hcf') {
+        for (let d = 2; d <= Math.min(a, b); d++) {
+          if (isPrime(d) && a % d === 0 && b % d === 0) {
+            setLadderError(mode, `Hint: <strong>${d}</strong> divides both ${a} and ${b}.`, true);
+            return;
+          }
+        }
+        setLadderError(mode, `No common prime divides ${a} and ${b} — the HCF ladder is finished. Enter your answer.`, true);
+        return;
+      }
+
+      for (let d = 2; d <= Math.max(a, b); d++) {
+        if (isPrime(d) && a % d === 0 && b % d === 0) {
+          setLadderError(mode, `Hint: <strong>${d}</strong> divides both ${a} and ${b} — use common primes first.`, true);
+          return;
+        }
+      }
+      for (let d = 2; d <= Math.max(a, b); d++) {
+        if (isPrime(d) && (a % d === 0 || b % d === 0)) {
+          setLadderError(mode, `Hint: try dividing by <strong>${d}</strong> — it divides only one of the numbers.`, true);
+          return;
+        }
+      }
+      setLadderError(mode, 'Both numbers are 1 — the LCM ladder is finished.', true);
+    }
+
+    /* Worked-solution ladder data */
+    function hcfLadderData(n1, n2) {
+      let a = n1, b = n2, divs = [], rows = [[a, b]], d = 2;
+      while (d <= Math.min(a, b)) {
+        if (a % d === 0 && b % d === 0) { divs.push(d); a /= d; b /= d; rows.push([a, b]); }
+        else d++;
+      }
+      return { divs, rows };
+    }
+
+    function lcmLadderData(n1, n2) {
+      let a = n1, b = n2, divs = [], rows = [[a, b]], d = 2;
       while (d <= Math.max(a, b)) {
         if (a % d === 0 || b % d === 0) {
+          divs.push(d);
           if (a % d === 0) a /= d;
           if (b % d === 0) b /= d;
           rows.push([a, b]);
         } else { d++; }
       }
-      return rows;
+      return { divs, rows };
+    }
+
+    function verifyLadder(mode) {
+      const s = ladders[mode];
+      const feedback = document.getElementById(LAD[mode].feedback);
+      feedback.style.display = 'block';
+
+      if (!s.done) {
+        feedback.className = 'feedback-box incorrect';
+        feedback.innerHTML = (mode === 'lcm')
+          ? '<strong>Not finished.</strong> Keep dividing until both numbers are 1.'
+          : '<strong>Not finished.</strong> Keep dividing by common primes until the two numbers share no factor.';
+        return;
+      }
+
+      const correct = s.divisors.reduce((acc, v) => acc * v, 1);
+      const user = parseInt(document.getElementById(LAD[mode].answer).value);
+      const label = mode.toUpperCase();
+      const expr = s.divisors.join(' &times; ') || '1';
+
+      if (user === correct) {
+        feedback.className = 'feedback-box correct';
+        feedback.innerHTML = `<strong>&#9989; Correct!</strong> ${label} = ${expr} = <strong>${correct}</strong>.`;
+      } else {
+        feedback.className = 'feedback-box incorrect';
+        feedback.innerHTML = `<strong>&#10060; Not quite.</strong> You entered ${isNaN(user) ? '?' : user}.<br>` +
+          `${label} = ${expr} = <strong>${correct}</strong>.`;
+      }
+
+      const data = (mode === 'hcf') ? hcfLadderData(s.n1, s.n2) : lcmLadderData(s.n1, s.n2);
+      const workedVal = data.divs.reduce((a, v) => a * v, 1);
+      document.getElementById(LAD[mode].solution).innerHTML = `
+        <h4 style="margin-bottom:0.4rem; color:var(--NAVY-DARK);">Your ladder</h4>
+        ${renderLadderHTML(s.divisors, s.rows)}
+        <h4 style="margin:0.8rem 0 0.4rem; color:var(--NAVY-DARK);">Worked ${label} ladder</h4>
+        ${renderLadderHTML(data.divs, data.rows)}
+        <p style="color:var(--SUCCESS-GREEN); font-weight:bold; margin-top:0.4rem;">
+          ${label} = ${data.divs.join(' &times; ') || '1'} = ${workedVal}
+        </p>
+      `;
     }
 
     // Initialize App on load
