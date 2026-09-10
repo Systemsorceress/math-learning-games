@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Are We Sharing or Meeting?</title>
+<style>
+:root{
+  --ink:#172033;--muted:#5b667b;--bg:#f4f7fb;--card:#fff;
+  --teal:#087f78;--teal-bg:#e5f5f2;--orange:#b85a08;
+  --orange-bg:#fff0df;--blue:#2458a6;--line:#d7deea;
+  --danger:#b42318;--shadow:0 4px 18px #17203312;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,sans-serif;font-size:18px;line-height:1.55}
+button,input,select{font:inherit}
+button{cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:4px solid #f5b700;outline-offset:3px}
+.deck{min-height:100vh;padding-bottom:88px}
+.slide{display:none;max-width:1200px;margin:auto;padding:34px 42px 30px;min-height:calc(100vh - 88px)}
+.slide.active{display:block;animation:appear .2s ease}
+@keyframes appear{from{opacity:.5;transform:translateY(5px)}to{opacity:1;transform:none}}
+.kicker{font-weight:bold;text-transform:uppercase;letter-spacing:1.5px;font-size:13px;color:var(--teal)}
+h1{font-size:clamp(32px,4vw,56px);line-height:1.12;margin:8px 0 16px;letter-spacing:-1.2px}
+h2{font-size:clamp(26px,3vw,40px);line-height:1.2;margin:8px 0 12px}
+h3{font-size:23px;margin:8px 0}
+p{margin:8px 0 16px}
+.subtitle{color:var(--muted);font-size:20px;max-width:780px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px;box-shadow:var(--shadow)}
+.story{min-height:245px}
+.story h3{color:var(--teal)}
+.story.meeting h3{color:var(--orange)}
+.story.meeting{border-top:6px solid var(--orange)}
+.story.share{border-top:6px solid var(--teal)}
+.counters{display:flex;flex-wrap:wrap;gap:9px;max-width:270px;margin:18px 0}
+.counter{width:30px;height:30px;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 4px #0002}
+.red{background:#e84c50}.blue{background:#4088df}
+.bell{display:inline-flex;align-items:center;justify-content:center;background:var(--orange-bg);border:2px solid #e4a66d;border-radius:12px;padding:10px 15px;font-weight:bold;margin:4px}
+.callout{border-left:6px solid var(--teal);background:var(--teal-bg);padding:16px 20px;border-radius:8px;margin:20px 0}
+.callout.orange{border-color:var(--orange);background:var(--orange-bg)}
+.question{background:#fff;border:1px solid var(--line);border-radius:15px;padding:20px;margin:18px 0}
+.question h3{margin-top:0}
+.choice-row{display:flex;flex-wrap:wrap;gap:10px}
+.choice{background:#fff;border:2px solid var(--line);border-radius:10px;padding:12px 17px;color:var(--ink);font-weight:bold}
+.choice:hover{border-color:var(--blue);background:#f2f6ff}
+.choice.selected{border-color:var(--blue);background:#e9f0ff}
+.choice.correct{border-color:var(--teal);background:var(--teal-bg);color:#075e58}
+.choice.wrong{border-color:var(--danger);background:#fff0f0;color:var(--danger)}
+.feedback{margin-top:12px;padding:12px 15px;border-radius:9px;font-weight:bold;display:none}
+.feedback.show{display:block;background:var(--teal-bg);color:#075e58}
+.feedback.bad{display:block;background:#fff0f0;color:var(--danger)}
+.muted{color:var(--muted)}
+.answer{font-size:27px;font-weight:bold;color:var(--teal)}
+.orange-text{color:var(--orange)}
+.factor{background:#fff;border:2px solid var(--orange);color:var(--orange);border-radius:9px;padding:9px 18px;font-weight:bold}
+.factor:hover{background:var(--orange-bg)}
+.factor.used{background:var(--orange);color:#fff}
+.factor:disabled{opacity:.35;cursor:not-allowed}
+table{width:100%;border-collapse:collapse;margin:16px 0;background:#fff;border-radius:10px;overflow:hidden}
+th,td{padding:13px;border-bottom:1px solid var(--line);text-align:left}
+th{background:#e9eef7}
+.tick{color:var(--teal);font-size:24px;font-weight:bold}
+.cross{color:var(--danger);font-size:24px;font-weight:bold}
+.ladder-wrap{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px;max-width:560px;margin:20px 0}
+.ladder{display:flex;flex-direction:column;align-items:center;font-size:25px;font-weight:bold}
+.ladder-row{display:grid;grid-template-columns:90px 1fr;align-items:center;width:100%;min-height:58px}
+.ladder-div{border-right:3px solid var(--ink);padding:8px;text-align:center;color:var(--orange)}
+.ladder-num{display:flex;justify-content:space-around;padding:8px}
+.ladder-row.quiet{opacity:.36}
+.ladder-row.active{background:#e5f5f2;border-radius:8px}
+.ladder-row:last-child .ladder-div{border-color:transparent}
+.ladder input{width:76px;border:2px solid var(--line);border-radius:8px;text-align:center;padding:6px;font-weight:bold}
+.step-controls{display:flex;flex-wrap:wrap;gap:10px;margin-top:15px}
+.step-controls button{min-width:55px}
+.status{background:#edf1f8;border-radius:9px;padding:12px 15px;margin:14px 0;color:var(--muted)}
+.status.complete{background:var(--teal-bg);color:#075e58}
+.timeline{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:15px 0}
+.time{padding:12px 17px;background:#eef2f8;border:2px solid #d6deeb;border-radius:10px;font-weight:bold}
+.time.match{background:var(--orange-bg);border-color:var(--orange);color:var(--orange);transform:scale(1.08)}
+.line{height:5px;background:var(--teal);border-radius:5px;margin:10px 0}
+.match-grid{display:grid;grid-template-columns:1fr 150px;gap:12px;align-items:center;margin:15px 0}
+.match-grid select{width:100%;padding:11px;border:2px solid var(--line);border-radius:9px;background:#fff}
+.term{display:inline-block;padding:8px 12px;border-radius:9px;margin:4px;font-weight:bold;background:var(--teal-bg);color:#075e58}
+.term.orange{background:var(--orange-bg);color:var(--orange)}
+.problem-card{background:#fff;border:2px solid var(--line);border-radius:14px;padding:20px;margin:14px 0}
+.problem-card.done{border-color:var(--teal);background:var(--teal-bg)}
+.problem-card h3{font-size:20px}
+.progress{height:7px;background:#e0e6ef;border-radius:10px;overflow:hidden;margin:18px 0}
+.progress span{display:block;height:100%;background:var(--teal);transition:width .2s}
+.tree{display:flex;flex-direction:column;align-items:center;gap:14px;margin:20px auto;max-width:850px}
+.node{padding:15px 25px;border:2px solid var(--line);background:#fff;border-radius:13px;text-align:center;font-weight:bold;box-shadow:var(--shadow)}
+.node.teal{border-color:var(--teal);background:var(--teal-bg)}
+.node.orange{border-color:var(--orange);background:var(--orange-bg)}
+.branches{display:grid;grid-template-columns:1fr 1fr;gap:35px;width:100%}
+.branch{display:flex;flex-direction:column;align-items:center;gap:12px}
+.connector{height:25px;border-left:3px solid var(--line)}
+.big-input{font-size:24px;width:150px;border:2px solid var(--line);border-radius:10px;padding:8px}
+.footer-note{color:var(--muted);font-size:15px;margin-top:18px}
+.nav{position:fixed;bottom:0;left:0;right:0;height:78px;background:#fff;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:center;gap:14px;padding:10px 20px;z-index:10}
+.nav button{background:#fff;border:2px solid var(--line);border-radius:10px;padding:10px 18px;font-weight:bold;color:var(--ink)}
+.nav button.primary{background:var(--teal);border-color:var(--teal);color:#fff}
+.nav button:disabled{opacity:.35;cursor:not-allowed}
+.counter-label{font-weight:bold;min-width:105px;text-align:center}
+#overview{padding:10px;border:2px solid var(--line);border-radius:9px;background:#fff}
+@media(max-width:750px){
+  .slide{padding:25px 18px}
+  .grid2,.grid3,.branches{grid-template-columns:1fr}
+  .nav{gap:6px;height:72px;padding:8px}
+  .nav button{padding:9px 10px;font-size:14px}
+  .counter-label{min-width:85px;font-size:14px}
+  .ladder-wrap{padding:12px}
+}
+</style>
+</head>
+<body>
+<div class="deck">
+
+<section class="slide active" id="s1">
+<div class="kicker">01 / The two mathematical stories</div>
+<h1>Are we sharing or meeting?</h1>
+<p class="subtitle">Before we calculate, we must understand what the story is asking us to do.</p>
+<div class="grid2">
+<div class="card story share">
+<h3>Story A: Sharing</h3>
+<p>We have 12 red counters and 18 blue counters. We want equal groups with no leftovers.</p>
+<div class="counters" id="redCounters"></div>
+<div class="counters" id="blueCounters"></div>
+<p class="muted">Question: How many identical groups can we make?</p>
+</div>
+<div class="card story meeting">
+<h3>Story B: Meeting</h3>
+<p>Bell A rings every 4 minutes. Bell B rings every 6 minutes. They ring together now.</p>
+<div class="timeline">
+<span class="bell">Bell A: 4m</span>
+<span class="bell">Bell B: 6m</span>
+</div>
+<p class="muted">Question: When will they ring together again?</p>
+</div>
+</div>
+<div class="question">
+<h3>Which story are you solving?</h3>
+<div class="choice-row">
+<button class="choice" onclick="storyChoice('share',this)">We are sharing</button>
+<button class="choice" onclick="storyChoice('meet',this)">We are meeting</button>
+</div>
+<div class="feedback" id="storyFeedback"></div>
+</div>
+<div class="question">
+<h3>What are the clues?</h3>
+<p>Choose a statement, then decide whether it points to HCF or LCM.</p>
+<div class="choice-row">
+<button class="choice" onclick="clue('groups',this)">Splitting things into groups</button>
+<button class="choice" onclick="clue('time',this)">Things happen together</button>
+<button class="choice" onclick="clue('number',this)">A number works for both</button>
+</div>
+<div class="feedback" id="clueFeedback"></div>
+</div>
+</section>
+
+<section class="slide" id="s2">
+<div class="kicker">02 / HCF</div>
+<h1>What is the biggest group size that works?</h1>
+<p class="subtitle">We have 12 strawberries and 18 blueberries. Every box must be identical.</p>
+<div class="grid2">
+<div class="card">
+<h3>Critical thinking</h3>
+<p>Which mathematical question matches this story?</p>
+<div class="choice-row">
+<button class="choice" onclick="mcq(this,false,'hcfQ')">A. What is the smallest number both can reach?</button>
+<button class="choice" onclick="mcq(this,true,'hcfQ')">B. What is the biggest number that divides both exactly?</button>
+<button class="choice" onclick="mcq(this,false,'hcfQ')">C. What is the total number of fruits?</button>
+</div>
+<div class="feedback" id="hcfQ"></div>
+</div>
+<div class="card">
+<h3>Test possible group sizes</h3>
+<p>Does this number divide both 12 and 18 exactly?</p>
+<table>
+<tr><th>Group size</th><th>12</th><th>18</th></tr>
+<tr><td>2</td><td class="tick">✓</td><td class="tick">✓</td></tr>
+<tr><td>3</td><td class="tick">✓</td><td class="tick">✓</td></tr>
+<tr><td>6</td><td class="tick">✓</td><td class="tick">✓</td></tr>
+<tr><td>9</td><td class="cross">✗</td><td class="tick">✓</td></tr>
+</table>
+<div class="callout"><strong>HCF = 6</strong><br>The greatest group size that works for both numbers is 6.</div>
+</div>
+</div>
+</section>
+
+<section class="slide" id="s3">
+<div class="kicker">03 / HCF division ladder</div>
+<h1>Let's solve the fruit-box problem</h1>
+<p class="subtitle">Numbers: 12 and 18. Divide both numbers by the same prime factor.</p>
+<div class="callout"><strong>HCF rule:</strong> Only divide by a prime factor that divides BOTH numbers.</div>
+<div class="grid2">
+<div>
+<div class="ladder-wrap">
+<div id="hcfLadder" class="ladder"></div>
+<div class="status" id="hcfStatus"></div>
+<div class="step-controls" id="hcfFactors"></div>
+<div class="feedback" id="hcfError"></div>
+<div class="step-controls">
+<button class="choice" onclick="ladderUndo('hcf')">Undo</button>
+<button class="choice" onclick="ladderHint('hcf')">Hint</button>
+<button class="choice" onclick="ladderReset('hcf')">Reset</button>
+</div>
+</div>
+</div>
+<div class="card">
+<h3>Why do we stop?</h3>
+<p>When the current numbers have no common prime factor, the common division has finished.</p>
+<div id="hcfResult" class="callout"></div>
+<p class="muted">The divisors on the left are the common prime factors.</p>
+</div>
+</div>
+</section>
+
+<section class="slide" id="s4">
+<div class="kicker">04 / HCF practice</div>
+<h1>Which group size works?</h1>
+<p class="subtitle">We have 24 pencils and 36 erasers. We want identical stationery packs.</p>
+<div class="question">
+<h3>Choose the correct action.</h3>
+<div class="choice-row">
+<button class="choice" onclick="mcq(this,true,'s4a')">Sharing into equal groups (HCF)</button>
+<button class="choice" onclick="mcq(this,false,'s4a')">Finding when something repeats (LCM)</button>
+</div>
+<div class="feedback" id="s4a"></div>
+</div>
+<div class="grid2">
+<div class="card">
+<h3>Check 1</h3>
+<p>If I use 12 pencils in each pack, does 24 divide exactly?</p>
+<div class="choice-row">
+<button class="choice" onclick="mcq(this,true,'s4b')">Yes</button>
+<button class="choice" onclick="mcq(this,false,'s4b')">No</button>
+</div>
+<div class="feedback" id="s4b"></div>
+</div>
+<div class="card">
+<h3>Check 2</h3>
+<p>If I use 12 erasers in each pack, does 36 divide exactly?</p>
+<div class="choice-row">
+<button class="choice" onclick="mcq(this,true,'s4c')">Yes</button>
+<button class="choice" onclick="mcq(this,false,'s4c')">No</button>
+</div>
+<div class="feedback" id="s4c"></div>
+</div>
+</div>
+<div class="callout"><strong>Conclusion:</strong> The greatest possible number of items of each type in a pack is 12.</div>
+</section>
+
+<section class="slide" id="s5">
+<div class="kicker">05 / LCM</div>
+<h1>Two buses, one stop</h1>
+<p class="subtitle">Bus A arrives every 4 minutes. Bus B arrives every 6 minutes. Both arrive at 9:00 AM.</p>
+<div class="question">
+<h3>What are we finding?</h3>
+<div class="choice-row">
+<button class="choice" onclick="mcq(this,false,'s5a')">The greatest equal group</button>
+<button class="choice" onclick="mcq(this,true,'s5a')">The first shared time</button>
+</div>
+<div class="feedback" id="s5a"></div>
+</div>
+<div class="card">
+<h3>Bus A: Every 4 minutes</h3>
+<div class="timeline" id="busA"></div>
+<h3>Bus B: Every 6 minutes</h3>
+<div class="timeline" id="busB"></div>
+<div class="callout orange"><strong>LCM = 12</strong><br>Both buses arrive together again after 12 minutes, at 9:12 AM.</div>
+</div>
+</section>
+
+<section class="slide" id="s6">
+<div class="kicker">06 / LCM division ladder</div>
+<h1>Find the first shared multiple</h1>
+<p class="subtitle">Numbers: 4 and 6. This time, a prime may divide AT LEAST ONE of the numbers.</p>
+<div class="callout orange"><strong>LCM rule:</strong> Divide by a prime if it divides at least one of the numbers. If it does not divide a number, carry that number down unchanged.</div>
+<div class="grid2">
+<div class="ladder-wrap">
+<div id="lcmLadder" class="ladder"></div>
+<div class="status" id="lcmStatus"></div>
+<div class="step-controls" id="lcmFactors"></div>
+<div class="feedback" id="lcmError"></div>
+<div class="step-controls">
+<button class="choice" onclick="ladderUndo('lcm')">Undo</button>
+<button class="choice" onclick="ladderHint('lcm')">Hint</button>
+<button class="choice" onclick="ladderReset('lcm')">Reset</button>
+</div>
+</div>
+<div class="card">
+<h3>Remember</h3>
+<p>For LCM, every divisor is important because we are collecting all prime factors needed to reach 1 and 1.</p>
+<div id="lcmResult" class="callout orange"></div>
+</div>
+</div>
+</section>
+
+<section class="slide" id="s7">
+<div class="kicker">07 / The decision bridge</div>
+<h1>The words are clues</h1>
+<p class="subtitle">Read the story. Find the action. Match it to the correct method.</p>
+<div class="card">
+<h3>Situation A</h3>
+<p>20 apples and 30 oranges are placed into equal fruit baskets. Every basket is identical.</p>
+<div class="match-grid">
+<span class="muted">Choose the method:</span>
+<select id="matchA" onchange="checkMatch('A')">
+<option value="">Choose...</option><option value="HCF">HCF</option><option value="LCM">LCM</option>
+</select>
+</div>
+<div class="feedback" id="matchFeedbackA"></div>
+</div>
+<div class="card">
+<h3>Situation B</h3>
+<p>Light A flashes every 5 seconds. Light B flashes every 8 seconds. When will they flash together?</p>
+<div class="match-grid">
+<span class="muted">Choose the method:</span>
+<select id="matchB" onchange="checkMatch('B')">
+<option value="">Choose...</option><option value="HCF">HCF</option><option value="LCM">LCM</option>
+</select>
+</div>
+<div class="feedback" id="matchFeedbackB"></div>
+</div>
+<div class="grid2">
+<div class="card">
+<h3>HCF clues</h3>
+<span class="term">Equal</span><span class="term">Share</span><span class="term">Divide</span>
+</div>
+<div class="card">
+<h3 class="orange-text">LCM clues</h3>
+<span class="term orange">Together</span><span class="term orange">Repeat</span><span class="term orange">Next time</span>
+</div>
+</div>
+</section>
+
+<section class="slide" id="s8">
+<div class="kicker">08 / Mixed word problems</div>
+<h1>Choose your path</h1>
+<p class="subtitle">Read each story carefully. Which method is needed?</p>
+<div class="progress"><span id="mixedProgress" style="width:0%"></span></div>
+<div id="mixedCards"></div>
+<div class="callout" id="mixedSummary">Complete all four challenges.</div>
+</section>
+
+<section class="slide" id="s9">
+<div class="kicker">09 / Guided HCF problem</div>
+<h1>Solve with the ladder</h1>
+<p class="subtitle">36 chocolate cupcakes and 48 vanilla cupcakes. What is the greatest number of cupcakes of each type per box?</p>
+<div class="question">
+<h3>Step 1: Choose the action</h3>
+<div class="choice-row">
+<button class="choice" onclick="guidedAction('hcf',this)">HCF</button>
+<button class="choice" onclick="guidedAction('lcm',this)">LCM</button>
+</div>
+<div class="feedback" id="g9action"></div>
+</div>
+<div class="card">
+<h3>Step 2: Complete the ladder</h3>
+<div class="ladder-wrap">
+<div id="g9Ladder" class="ladder"></div>
+<div class="status" id="g9Status"></div>
+<div class="step-controls" id="g9Factors"></div>
+<div class="feedback" id="g9Error"></div>
+</div>
+</div>
+<div class="card">
+<h3>Step 3: Calculate</h3>
+<p>Multiply the common divisors.</p>
+<div id="g9Calculation" class="answer">2 × 2 × 3 = 12</div>
+<div class="feedback show" id="g9Final">Answer: 12 cupcakes of each type per box.</div>
+</div>
+</section>
+
+<section class="slide" id="s10">
+<div class="kicker">10 / Guided LCM problem</div>
+<h1>Solve with the ladder</h1>
+<p class="subtitle">Bell A rings every 8 minutes. Bell B rings every 12 minutes. They ring together at 10:00 AM.</p>
+<div class="question">
+<h3>Step 1: Choose the action</h3>
+<div class="choice-row">
+<button class="choice" onclick="guidedAction('hcf',this,'g10action')">HCF</button>
+<button class="choice" onclick="guidedAction('lcm',this,'g10action')">LCM</button>
+</div>
+<div class="feedback" id="g10action"></div>
+</div>
+<div class="card">
+<h3>Step 2: Complete the ladder</h3>
+<div class="ladder-wrap">
+<div id="g10Ladder" class="ladder"></div>
+<div class="status" id="g10Status"></div>
+<div class="step-controls" id="g10Factors"></div>
+<div class="feedback" id="g10Error"></div>
+</div>
+</div>
+<div class="card">
+<h3>Step 3: Calculate the time</h3>
+<div class="answer">2 × 2 × 2 × 3 = 24</div>
+<div class="callout orange"><strong>10:00 AM + 24 minutes = 10:24 AM</strong></div>
+</div>
+</section>
+
+<section class="slide" id="s11">
+<div class="kicker">11 / Decision tree</div>
+<h1>Which method should I use?</h1>
+<p class="subtitle">Follow the story, then choose the rule that matches it.</p>
+<div class="tree">
+<div class="node">Read the story</div>
+<div class="connector"></div>
+<div class="branches">
+<div class="branch">
+<div class="node teal">Equal sharing?</div>
+<div class="connector"></div>
+<div class="node">Choose method:
+<select id="treeHcf" onchange="treeCheck()" style="padding:5px;border-radius:7px;border:2px solid var(--line)">
+<option value="">Choose</option><option value="HCF">HCF</option><option value="LCM">LCM</option>
+</select></div>
+<div class="node">Calculation:
+<select id="treeHcfRule" onchange="treeCheck()" style="padding:5px;border-radius:7px;border:2px solid var(--line)">
+<option value="">Choose</option><option value="common">Multiply common factors</option><option value="all">Multiply all divisors</option>
+</select></div>
+</div>
+<div class="branch">
+<div class="node orange">Repeating events?</div>
+<div class="connector"></div>
+<div class="node">Choose method:
+<select id="treeLcm" onchange="treeCheck()" style="padding:5px;border-radius:7px;border:2px solid var(--line)">
+<option value="">Choose</option><option value="HCF">HCF</option><option value="LCM">LCM</option>
+</select></div>
+<div class="node">Calculation:
+<select id="treeLcmRule" onchange="treeCheck()" style="padding:5px;border-radius:7px;border:2px solid var(--line)">
+<option value="">Choose</option><option value="common">Multiply common factors</option><option value="all">Multiply all divisors</option>
+</select></div>
+</div>
+</div>
+</div>
+<div class="feedback" id="treeFeedback"></div>
+</section>
+
+<section class="slide" id="s12">
+<div class="kicker">12 / Final challenge</div>
+<h1>You are the maths detective</h1>
+<p class="subtitle">42 red balloons and 56 blue balloons are arranged into identical bunches. Find the greatest number of balloons of each colour per bunch.</p>
+<div class="question">
+<h3>Step 1: Choose the path</h3>
+<div class="choice-row">
+<button class="choice" onclick="guidedAction('hcf',this,'detectiveAction')">HCF</button>
+<button class="choice" onclick="guidedAction('lcm',this,'detectiveAction')">LCM</button>
+</div>
+<div class="feedback" id="detectiveAction"></div>
+</div>
+<div class="card">
+<h3>Step 2: Complete the ladder</h3>
+<div class="ladder-wrap">
+<div id="detectiveLadder" class="ladder"></div>
+<div class="status" id="detectiveStatus"></div>
+<div class="step-controls" id="detectiveFactors"></div>
+<div class="feedback" id="detectiveError"></div>
+</div>
+</div>
+<div class="card">
+<h3>Step 3: Calculate</h3>
+<div class="answer">2 × 7 = 14</div>
+<div class="callout">Answer: 14 balloons of each colour per bunch.</div>
+</div>
+</section>
+
+<section class="slide" id="s13">
+<div class="kicker">13 / Exit ticket</div>
+<h1>Tell me why</h1>
+<p class="subtitle">The final test is not just getting the answer. It is explaining why.</p>
+<div class="question">
+<h3>Q1. 18 apples and 24 oranges are put into equal baskets.</h3>
+<div class="choice-row">
+<button class="choice" onclick="mcq(this,true,'exit1')">HCF</button>
+<button class="choice" onclick="mcq(this,false,'exit1')">LCM</button>
+</div>
+<div class="feedback" id="exit1"></div>
+</div>
+<div class="question">
+<h3>Q2. Light A flashes every 3 seconds and Light B every 5 seconds. When do they flash together?</h3>
+<div class="choice-row">
+<button class="choice" onclick="mcq(this,false,'exit2')">HCF</button>
+<button class="choice" onclick="mcq(this,true,'exit2')">LCM</button>
+</div>
+<div class="feedback" id="exit2"></div>
+</div>
+<div class="question">
+<h3>Q3. Complete the rules.</h3>
+<div class="grid2">
+<div class="card">
+<p><strong>HCF = </strong></p>
+<select id="exitHcf" onchange="exitCheck()" style="padding:12px;border:2px solid var(--line);border-radius:9px;width:100%">
+<option value="">Choose...</option><option value="groups">Greatest equal groups</option><option value="time">First shared time/multiple</option>
+</select>
+</div>
+<div class="card">
+<p><strong>LCM = </strong></p>
+<select id="exitLcm" onchange="exitCheck()" style="padding:12px;border:2px solid var(--line);border-radius:9px;width:100%">
+<option value="">Choose...</option><option value="groups">Greatest equal groups</option><option value="time">First shared time/multiple</option>
+</select>
+</div>
+</div>
+<div class="feedback" id="exit3"></div>
+</div>
+<div class="card">
+<h3>Remember the big idea</h3>
+<div class="grid2">
+<div><span class="term">HCF</span><p>Greatest equal sharing or grouping.</p></div>
+<div><span class="term orange">LCM</span><p>First shared time or multiple.</p></div>
+</div>
+</div>
+</section>
+</div>
+
+<nav class="nav">
+<button id="prev" onclick="go(-1)">← Previous</button>
+<select id="overview" onchange="jump(this.value)" aria-label="Slide overview"></select>
+<span class="counter-label" id="counter">Slide 1 of 13</span>
+<button class="primary" id="next" onclick="go(1)">Next →</button>
+</nav>
+
+<script>
+"use strict";
+
+const $=id=>document.getElementById(id);
+let current=1;
+
+const titles=[
+"Are we sharing or meeting?","What is the biggest group size that works?",
+"Let's solve the fruit-box problem","Which group size works?","Two buses, one stop",
+"Find the first shared multiple","The words are clues","Choose your path",
+"Solve with the ladder","Solve with the ladder","Which method should I use?",
+"You are the maths detective","Tell me why"
+];
+
+function init(){
+ for(let i=1;i<=13;i++){
+  const o=document.createElement("option");
+  o.value=i;o.textContent=`${i}. ${titles[i-1]}`;$("overview").appendChild(o);
+ }
+ $("redCounters").innerHTML=Array(12).fill('<span class="counter red"></span>').join("");
+ $("blueCounters").innerHTML=Array(18).fill('<span class="counter blue"></span>').join("");
+ $("busA").innerHTML=[0,4,8,12,16,20,24].map(n=>`<span class="time ${n===12?"match":""}">${n}</span>`).join("");
+ $("busB").innerHTML=[0,6,12,18,24].map(n=>`<span class="time ${n===12?"match":""}">${n}</span>`).join("");
+ initLadder("hcf",12,18,"hcfLadder","hcfStatus","hcfFactors","hcfError");
+ initLadder("lcm",4,6,"lcmLadder","lcmStatus","lcmFactors","lcmError");
+ initLadder("g9",36,48,"g9Ladder","g9Status","g9Factors","g9Error");
+ initLadder("g10",8,12,"g10Ladder","g10Status","g10Factors","g10Error");
+ initLadder("detective",42,56,"detectiveLadder","detectiveStatus","detectiveFactors","detectiveError");
+ initMixed();
+ updateNav();
+}
+function go(n){jump(current+n)}
+function jump(n){
+ current=Math.max(1,Math.min(13,Number(n)));
+ document.querySelectorAll(".slide").forEach((s,i)=>s.classList.toggle("active",i+1===current));
+ $("overview").value=current;updateNav();
+}
+function updateNav(){
+ $("counter").textContent=`Slide ${current} of 13`;
+ $("prev").disabled=current===1;$("next").disabled=current===13;
+}
+document.addEventListener("keydown",e=>{
+ if(e.target.matches("input,select,textarea,button"))return;
+ if(e.key==="ArrowRight")go(1);
+ if(e.key==="ArrowLeft")go(-1);
+});
+
+function feedback(id,text,good=true){
+ const el=$(id);el.className="feedback show"+(good?"":" bad");el.innerHTML=text;
+}
+function mcq(btn,correct,id){
+ btn.parentElement.querySelectorAll(".choice").forEach(b=>b.classList.remove("selected","correct","wrong"));
+ btn.classList.add(correct?"correct":"wrong");
+ feedback(id,correct?"✓ Correct! "+explain(id):"Not quite. Read the clue again and try the other choice.",correct);
+}
+function explain(id){
+ const map={
+ hcfQ:"We need the greatest number that divides both numbers exactly.",
+ s4a:"Equal groups mean HCF.",
+ s4b:"24 ÷ 12 = 2, with no remainder.",
+ s4c:"36 ÷ 12 = 3, with no remainder.",
+ s5a:"We need the first shared time, so we use LCM.",
+ g9action:"We need the greatest equal groups, so we use HCF.",
+ g10action:"We need the first shared time, so we use LCM.",
+ exit1:"Equal baskets mean HCF.",
+ exit2:"Together again means LCM."
+ };
+ return map[id]||"The clue matches the chosen method.";
+}
+function storyChoice(type,btn){
+ $("storyFeedback").className="feedback show";
+ $("storyFeedback").innerHTML=type==="share"?"✓ Sharing → HCF. We want the greatest number of equal groups.":"✓ Meeting → LCM. We want the first shared time.";
+}
+function clue(type,btn){
+ const answer=type==="time"?"LCM":type==="groups"?"HCF":"Look for the action: sharing points to HCF; a shared repeating time points to LCM.";
+ feedback("clueFeedback",answer==="LCM"?"✓ Together and repeating are LCM clues.":answer==="HCF"?"✓ Splitting into equal groups is an HCF clue.":"✓ Both methods use numbers that work for both, but the story tells us which one to choose.",true);
+}
+
+const ladders={};
+function isPrime(n){
+ if(n<2||!Number.isInteger(n))return false;
+ for(let i=2;i*i<=n;i++)if(n%i===0)return false;
+ return true;
+}
+function initLadder(id,a,b,container,status,factors,error){
+ ladders[id]={id,a,b,rows:[[a,b]],divisors:[],done:false,container,status,factors,error};
+ renderLadder(id);
+}
+function ladderState(id){
+ const s=ladders[id];
+ return s.rows[s.rows.length-1];
+}
+function ladderComplete(id){
+ const s=ladders[id],[a,b]=ladderState(id);
+ s.done=id==="lcm"||id==="g10"||id==="detective"||id==="g9"?a===1&&b===1:gcd(a,b)===1;
+ return s.done;
+}
+function gcd(a,b){return b?gcd(b,a%b):a}
+function renderLadder(id){
+ const s=ladders[id];
+ let html="";
+ s.rows.forEach((row,i)=>{
+  const done=i<s.divisors.length;
+  const active=i===s.rows.length-1;
+  html+=`<div class="ladder-row ${active?"active":"quiet"}">
+  <div class="ladder-div">${done?s.divisors[i]:""}</div>
+  <div class="ladder-num"><span>${row[0]}</span><span>${row[1]}</span></div></div>`;
+ });
+ $(s.container).innerHTML=html;
+ const [a,b]=ladderState(id);
+ const isLCM=id==="lcm"||id==="g10";
+ const complete=isLCM?a===1&&b===1:gcd(a,b)===1;
+ s.done=complete;
+ $(s.status).className="status"+(complete?" complete":"");
+ $(s.status).textContent=complete
+ ?"✓ Ladder complete. Multiply the divisors on the left."
+ :isLCM?`Current numbers: ${a} and ${b}. Keep dividing until both are 1.`
+ :`Current numbers: ${a} and ${b}. Keep dividing by common primes.`;
+ if(complete){
+  $(s.factors).innerHTML="";
+  const product=s.divisors.reduce((x,y)=>x*y,1);
+  const common=s.divisors.filter((d,i)=>{
+   let aa=s.rows[i][0],bb=s.rows[i][1];
+   return aa%d===0&&bb%d===0;
+  });
+  $(s.error).className="feedback show";
+  $(s.error).innerHTML=`✓ Complete. ${s.divisors.join(" × ")||"1"} = <strong>${product}</strong>`;
+  return;
+ }
+ $(s.error).className="feedback";
+ $(s.error).innerHTML="";
+ const primes=[2,3,5,7];
+ $(s.factors).innerHTML=primes.map(d=>`<button class="factor" onclick="ladderStep('${id}',${d})">${d}</button>`).join("");
+}
+function ladderStep(id,d){
+ const s=ladders[id];
+ if(s.done)return;
+ const [a,b]=ladderState(id);
+ const isLCM=id==="lcm"||id==="g10";
+ const da=a%d===0,db=b%d===0;
+ if(!isPrime(d)){
+  feedback(s.error,"Choose a prime factor.",false);return;
+ }
+ if(isLCM?!da&&!db:!da||!db){
+  feedback(s.error,isLCM
+  ?`${d} does not divide either number. Choose a prime that divides at least one number.`
+  :`${d} must divide BOTH ${a} and ${b}. Try another prime.`,false);return;
+ }
+ s.divisors.push(d);
+ s.rows.push([da?a/d:a,db?b/d:b]);
+ renderLadder(id);
+ if(s.done){
+  const product=s.divisors.reduce((x,y)=>x*y,1);
+  if(id==="hcf")$("hcfResult").innerHTML=`<strong>HCF = ${product}</strong><br>2 × 3 = 6`;
+  if(id==="lcm")$("lcmResult").innerHTML=`<strong>LCM = ${product}</strong><br>2 × 2 × 3 = 12`;
+  if(id==="g9")$("g9Calculation").textContent=s.divisors.join(" × ")+" = "+product;
+  if(id==="g10")$("g10Ladder").parentElement.insertAdjacentHTML("afterend","");
+  if(id==="detective")$("detectiveError").innerHTML="✓ HCF = 14";
+ }
+}
+function ladderUndo(id){
+ const s=ladders[id];
+ if(!s.divisors.length)return;
+ s.divisors.pop();s.rows.pop();s.done=false;renderLadder(id);
+}
+function ladderReset(id){
+ const s=ladders[id];
+ s.rows=[[s.a,s.b]];s.divisors=[];s.done=false;renderLadder(id);
+}
+function ladderHint(id){
+ const s=ladders[id],[a,b]=ladderState(id);
+ const isLCM=id==="lcm"||id==="g10";
+ const d=[2,3,5,7].find(x=>isLCM?(a%x===0||b%x===0):(a%x===0&&b%x===0));
+ feedback(s.error,d?`Hint: Try <strong>${d}</strong>.`:"No common prime factor remains. The ladder is complete.",true);
+}
+
+const mixed=[
+["16 red beads and 24 blue beads make the greatest number of identical bracelets.","HCF"],
+["Train A arrives every 9 minutes and Train B every 12 minutes. When do they arrive together?","LCM"],
+["30 chocolates and 45 candies go into identical gift bags.","HCF"],
+["System A waters every 6 minutes and System B every 10 minutes. When do they run together?","LCM"]
+];
+let mixedDone=0;
+function initMixed(){
+ $("mixedCards").innerHTML=mixed.map((p,i)=>`
+ <div class="problem-card" id="mix${i}">
+ <h3>${i+1}. ${p[0]}</h3>
+ <div class="choice-row">
+ <button class="choice" onclick="mixedChoice(${i},'HCF',this)">HCF</button>
+ <button class="choice" onclick="mixedChoice(${i},'LCM',this)">LCM</button>
+ </div><div class="feedback" id="mixF${i}"></div></div>`).join("");
+}
+function mixedChoice(i,answer,btn){
+ const correct=answer===mixed[i][1];
+ btn.parentElement.querySelectorAll(".choice").forEach(b=>b.classList.remove("correct","wrong"));
+ btn.classList.add(correct?"correct":"wrong");
+ feedback("mixF"+i,correct?"✓ Correct! "+(answer==="HCF"?"Equal groups → HCF.":"Repeating together → LCM."):"Not quite. Look for the story clue.",correct);
+ if(correct&&!$("mix"+i).classList.contains("done")){
+  $("mix"+i).classList.add("done");mixedDone++;
+  $("mixedProgress").style.width=mixedDone/4*100+"%";
+  if(mixedDone===4)$("mixedSummary").innerHTML="<strong>Excellent!</strong> You identified all four methods correctly.";
+ }
+}
+function checkMatch(letter){
+ const answer=$("match"+letter).value;
+ if(!answer)return;
+ const correct=letter==="A"?"HCF":"LCM";
+ feedback("matchFeedback"+letter,answer===correct?"✓ Correct! "+(correct==="HCF"?"Equal baskets → HCF.":"Repeating flashes → LCM."):"Try again. Look for the action in the story.",answer===correct);
+}
+function guidedAction(answer,btn,id){
+ id=id||"g9action";
+ const correct=id==="g10action"?"lcm":id==="detectiveAction"?"hcf":"hcf";
+ const good=answer===correct;
+ btn.parentElement.querySelectorAll(".choice").forEach(b=>b.classList.remove("correct","wrong"));
+ btn.classList.add(good?"correct":"wrong");
+ feedback(id,good?"✓ Correct! Now complete the ladder.":"Read the story again. Are we sharing or meeting?",good);
+}
+function treeCheck(){
+ const a=$("treeHcf").value,b=$("treeHcfRule").value,c=$("treeLcm").value,d=$("treeLcmRule").value;
+ if(a&&b&&c&&d){
+  const good=a==="HCF"&&b==="common"&&c==="LCM"&&d==="all";
+  feedback("treeFeedback",good?"✓ Excellent! You followed both branches correctly.":"Some choices need changing. Equal sharing → HCF and common factors. Repeating events → LCM and all divisors.",good);
+ }
+}
+function exitCheck(){
+ const good=$("exitHcf").value==="groups"&&$("exitLcm").value==="time";
+ if($("exitHcf").value&&$("exitLcm").value)
+ feedback("exit3",good?"✓ Perfect! You understand both rules.":"Try again. HCF is about greatest equal groups; LCM is about first shared time or multiple.",good);
+}
+init();
+</script>
+</body>
+</html>
