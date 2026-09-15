@@ -1,0 +1,1511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Equivalent Fractions — Interactive Lecture</title>
+<style>
+:root {
+  --navy:#0F172A;
+  --blue:#306998;
+  --yellow:#FFD43B;
+  --green:#10B981;
+  --orange:#F59E0B;
+  --white:#F8FAFC;
+  --muted:#94A3B8;
+  --panel:#17243A;
+  --line:#334155;
+  --red:#F87171;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  background:var(--navy);
+  color:var(--white);
+  font-family:Arial,"Segoe UI",sans-serif;
+  min-height:100vh;
+  overflow:hidden;
+}
+button,input,select,textarea { font:inherit; }
+button {
+  cursor:pointer;
+  border:0;
+  border-radius:10px;
+  padding:10px 16px;
+  font-weight:700;
+  transition:transform .15s,background .15s;
+}
+button:hover { transform:translateY(-1px); }
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible {
+  outline:3px solid var(--yellow);
+  outline-offset:3px;
+}
+button:disabled { opacity:.4;cursor:not-allowed;transform:none; }
+.primary { background:var(--yellow);color:var(--navy); }
+.secondary { background:#263852;color:var(--white); }
+.green { background:var(--green);color:var(--navy); }
+.orange { background:var(--orange);color:var(--navy); }
+.danger { background:#7F2935;color:var(--white); }
+#app { height:100vh;display:flex;flex-direction:column; }
+header {
+  height:68px;
+  flex-shrink:0;
+  display:flex;
+  align-items:center;
+  gap:18px;
+  padding:12px 28px;
+  border-bottom:1px solid var(--line);
+}
+.brand { display:flex;align-items:center;gap:10px;font-weight:800; }
+.logo {
+  width:38px;height:38px;border-radius:10px;
+  background:var(--yellow);color:var(--navy);
+  display:grid;place-items:center;font-size:21px;
+}
+.header-title { font-size:15px;color:#CBD5E1; }
+.header-spacer { flex:1; }
+#counter { color:var(--muted);font-size:14px;white-space:nowrap; }
+.progress { width:150px;height:6px;background:#263852;border-radius:9px;overflow:hidden; }
+#progressFill { height:100%;width:5%;background:var(--yellow);transition:width .3s; }
+main { flex:1;min-height:0;position:relative; }
+#slides { height:100%; }
+.slide {
+  display:none;
+  height:100%;
+  overflow-y:auto;
+  padding:26px clamp(20px,5vw,70px) 28px;
+  animation:enter .25s ease;
+}
+.slide.active { display:block; }
+@keyframes enter { from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none} }
+.slide-inner { max-width:1160px;margin:auto;min-height:100%;display:flex;flex-direction:column; }
+.eyebrow {
+  color:var(--yellow);font-weight:800;text-transform:uppercase;
+  letter-spacing:1.6px;font-size:12px;margin-bottom:8px;
+}
+h1 { font-size:clamp(25px,3.2vw,43px);margin:0 0 10px;line-height:1.1; }
+h2 { font-size:clamp(20px,2.4vw,31px);margin:0 0 12px; }
+h3 { margin:0 0 8px; }
+p { color:#CBD5E1;line-height:1.55;margin:8px 0; }
+.subtitle { font-size:18px;color:#CBD5E1;max-width:700px; }
+.content { flex:1;display:flex;flex-direction:column;justify-content:center;gap:20px; }
+.grid { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px; }
+.grid3 { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px; }
+.card {
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:16px;padding:20px;
+}
+.card h3 { color:#E2E8F0; }
+.center { text-align:center; }
+.muted { color:var(--muted); }
+.small { font-size:13px; }
+.big { font-size:clamp(25px,4vw,48px);font-weight:800; }
+.question { font-size:clamp(20px,2.5vw,29px);font-weight:800;line-height:1.35; }
+.answer-area { display:flex;flex-wrap:wrap;align-items:center;gap:10px; }
+.answer-area input,.number-input {
+  width:100px;
+  background:#0B1220;color:white;border:1px solid #52647C;
+  border-radius:9px;padding:12px;text-align:center;
+}
+.feedback {
+  min-height:42px;padding:11px 14px;border-radius:10px;
+  background:#202F44;color:#CBD5E1;
+}
+.feedback.correct { background:#063D30;color:#A7F3D0;border:1px solid #047857; }
+.feedback.wrong { background:#451F2A;color:#FECACA;border:1px solid #9F3448; }
+.reveal { display:none;margin-top:14px; }
+.reveal.show { display:block;animation:enter .25s; }
+.teacher {
+  margin-top:20px;border:1px solid #334155;border-radius:12px;
+  overflow:hidden;background:#111D30;
+}
+.teacher summary {
+  cursor:pointer;padding:11px 15px;color:#FCD34D;font-weight:800;
+  font-size:13px;
+}
+.teacher-body { padding:0 15px 15px;display:grid;gap:5px; }
+.teacher-body p { margin:3px 0;font-size:13px; }
+.teacher-body strong { color:#F8FAFC; }
+footer {
+  height:76px;flex-shrink:0;display:flex;align-items:center;
+  justify-content:space-between;padding:12px 28px;
+  border-top:1px solid var(--line);gap:12px;
+}
+.footer-actions { display:flex;gap:8px; }
+#dots { display:flex;gap:4px;flex:1;justify-content:center; }
+.dot { width:7px;height:7px;border-radius:50%;background:#334155;padding:0; }
+.dot.active { background:var(--yellow); }
+.dot.done { background:#64748B; }
+.frac {
+  display:inline-flex;flex-direction:column;align-items:center;
+  vertical-align:middle;line-height:1.05;font-weight:800;
+  min-width:35px;margin:0 4px;
+}
+.frac .top { border-bottom:2px solid currentColor;padding:0 6px 4px; }
+.frac .bottom { padding:4px 6px 0; }
+.frac.large { font-size:clamp(25px,3.8vw,48px); }
+.frac.medium { font-size:30px; }
+.frac.small { font-size:18px; }
+.frac-symbol { display:inline-flex;align-items:center;gap:5px; }
+.equals { font-weight:800;font-size:24px;color:var(--yellow); }
+.bar {
+  display:flex;width:100%;height:70px;border:2px solid #64748B;
+  border-radius:7px;overflow:hidden;background:#0B1220;
+}
+.part {
+  flex:1;min-width:0;border-right:1px solid #0F172A;
+  background:#25364D;display:flex;align-items:center;justify-content:center;
+  color:#0F172A;font-weight:800;position:relative;
+}
+.part:last-child { border-right:0; }
+.part.shaded { background:var(--yellow); }
+.part.selected { background:var(--green); }
+.part.bad { background:var(--red); }
+.part.clickable { cursor:pointer; }
+.part.clickable:hover { filter:brightness(1.2); }
+.bar-label { display:flex;justify-content:space-between;color:var(--muted);font-size:12px;margin-top:5px; }
+.model { display:flex;flex-direction:column;gap:8px; }
+.model-title { display:flex;justify-content:space-between;align-items:center;font-weight:700; }
+.pizza {
+  width:150px;height:150px;border-radius:50%;margin:auto;
+  background:conic-gradient(var(--yellow) 0 50%,#263852 50% 100%);
+  border:6px solid #64748B;
+  position:relative;
+}
+.pizza.four { background:conic-gradient(var(--yellow) 0 25%,#263852 25% 50%,var(--yellow) 50% 75%,#263852 75%); }
+.hero {
+  min-height:250px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:20px;
+}
+.hero h1 { font-size:clamp(32px,5vw,62px);max-width:800px;text-align:center; }
+.badge {
+  display:inline-block;background:#263852;color:#FCD34D;
+  border:1px solid #52647C;border-radius:99px;padding:6px 12px;
+  font-size:12px;font-weight:800;
+}
+.rule {
+  background:#172F45;border:1px solid #305F87;border-radius:14px;
+  padding:20px;text-align:center;
+}
+.rule .big { color:#FCD34D; }
+.choice-grid { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px; }
+.choice {
+  background:#1E3048;border:2px solid #334B67;color:white;
+  border-radius:12px;padding:16px;font-size:17px;min-height:65px;
+}
+.choice:hover { border-color:var(--yellow); }
+.choice.selected { border-color:var(--yellow);background:#443B1A; }
+.choice.correct { border-color:var(--green);background:#073C2F; }
+.choice.wrong { border-color:var(--red);background:#451F2A; }
+input[type=range] { width:100%;accent-color:var(--yellow); }
+input[type=text],input[type=number],textarea,select {
+  background:#0B1220;color:white;border:1px solid #52647C;
+  border-radius:9px;padding:11px;min-width:0;
+}
+input[type=text]:invalid { border-color:var(--red); }
+label { color:#CBD5E1;font-size:13px;display:block;margin-bottom:6px;font-weight:700; }
+.controls { display:flex;align-items:center;gap:12px;flex-wrap:wrap; }
+.slider-label { display:flex;justify-content:space-between;font-size:13px;color:#CBD5E1; }
+.compare { display:grid;grid-template-columns:1fr 1fr;gap:15px;align-items:center; }
+.compare > div { min-width:0; }
+.model-row { display:flex;align-items:center;gap:16px;flex-wrap:wrap; }
+.model-row .frac { flex-shrink:0; }
+.wall { display:flex;flex-direction:column;gap:3px; }
+.wall-row { display:flex;height:38px;gap:2px; }
+.wall-row .part { border-radius:3px;font-size:11px;cursor:pointer; }
+.wall-row .part.highlight { outline:3px solid var(--yellow);outline-offset:1px;z-index:1; }
+.wall-label { width:78px;display:flex;align-items:center;color:#CBD5E1;font-size:12px;font-weight:800; }
+.wall-track { flex:1;display:flex;gap:2px; }
+.match-board { display:grid;grid-template-columns:1fr 1fr;gap:12px; }
+.match-card {
+  background:#1E3048;border:2px solid #334B67;border-radius:10px;
+  padding:14px;text-align:center;cursor:pointer;min-height:62px;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+}
+.match-card.selected { border-color:var(--yellow);background:#443B1A; }
+.match-card.matched { border-color:var(--green);background:#073C2F;opacity:.8;cursor:default; }
+.match-card.wrong { border-color:var(--red); }
+.match-column h3 { font-size:13px;color:var(--muted);margin-bottom:8px; }
+.quiz-progress { display:flex;gap:5px; }
+.quiz-dot { flex:1;height:6px;background:#334155;border-radius:5px; }
+.quiz-dot.active { background:var(--yellow); }
+.quiz-dot.done { background:var(--green); }
+textarea { resize:vertical;min-height:65px;width:100%; }
+canvas {
+  display:block;width:100%;height:160px;background:#fff;
+  border:3px solid #52647C;border-radius:10px;touch-action:none;
+}
+canvas.guide { background:linear-gradient(to right,#fff 49.5%,#64748B 49.5%,#64748B 50.5%,#fff 50.5%); }
+.success-list { list-style:none;padding:0;margin:0;display:grid;gap:10px; }
+.success-list li { display:flex;align-items:center;gap:10px;color:#CBD5E1; }
+.success-list li::before { content:"✓";width:25px;height:25px;border-radius:50%;background:#064E3B;color:#6EE7B7;display:grid;place-items:center;font-weight:800; }
+.lesson-map {
+  position:absolute;top:12px;right:25px;z-index:5;
+}
+#overview {
+  display:none;position:absolute;inset:0;background:#0B1220;
+  z-index:20;padding:30px;overflow:auto;
+}
+#overview.open { display:block; }
+.overview-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;max-width:1200px;margin:20px auto; }
+.overview-item { text-align:left;background:#17243A;border:1px solid #334155;color:white;border-radius:10px;padding:14px; }
+.overview-item.active { border-color:var(--yellow); }
+.overview-item span { display:block;color:var(--yellow);font-size:12px;font-weight:800;margin-bottom:7px; }
+#presentationMode {
+  display:none;position:fixed;inset:0;background:var(--navy);z-index:30;
+}
+body.presentation header,body.presentation footer { display:none; }
+body.presentation .slide { padding:55px 8vw; }
+body.presentation #slides { height:100vh; }
+body.presentation .slide-inner { max-width:1300px; }
+body.presentation #presentationMode { display:flex;align-items:center;justify-content:center; }
+@media(max-width:700px) {
+  header { padding:10px 15px;height:60px;gap:8px; }
+  .header-title { display:none; }
+  .progress { width:75px; }
+  footer { height:70px;padding:10px 15px; }
+  #dots { display:none; }
+  .slide { padding:20px 15px; }
+  .grid,.grid3,.compare,.match-board { grid-template-columns:1fr; }
+  .choice-grid { grid-template-columns:1fr; }
+  .bar { height:55px; }
+  .card { padding:15px; }
+  .teacher { margin-top:15px; }
+  .wall-label { width:55px;font-size:11px; }
+  .wall-row { height:30px; }
+  .hero { min-height:200px; }
+  .pizza { width:115px;height:115px; }
+  .big { font-size:30px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  *,*::before,*::after { animation-duration:.01ms!important;transition-duration:.01ms!important; }
+}
+</style>
+</head>
+<body>
+<div id="app">
+<header>
+  <div class="brand">
+    <div class="logo" aria-hidden="true">½</div>
+    <div>
+      <div style="font-weight:800">Fraction Detectives</div>
+      <div class="header-title">Understanding and Using Equivalent Fractions</div>
+    </div>
+  </div>
+  <div class="header-spacer"></div>
+  <div id="counter" aria-live="polite">Slide 1 of 20</div>
+  <div class="progress" aria-label="Lesson progress"><div id="progressFill"></div></div>
+  <button class="secondary" onclick="toggleOverview()" aria-label="Open slide overview">☷</button>
+  <button class="secondary" onclick="restart()" aria-label="Restart lesson">↻</button>
+</header>
+
+<main>
+<div id="slides">
+
+<!-- SLIDE 1 -->
+<section class="slide active" data-title="Fraction Detectives">
+<div class="slide-inner">
+<div class="eyebrow">01 / Discover</div>
+<h1>Fraction Detectives</h1>
+<p class="subtitle">Two students share the same amount of pizza. Are their fractions telling the same story?</p>
+<div class="content">
+<div class="grid">
+<div class="card center">
+  <h3>Student A</h3>
+  <div class="pizza" aria-label="Pizza with one half shaded"></div>
+  <div class="big"><span class="frac large"><span class="top">1</span><span class="bottom">2</span></span></div>
+  <p>“I ate one half.”</p>
+</div>
+<div class="card center">
+  <h3>Student B</h3>
+  <div class="pizza four" aria-label="Pizza with two quarters shaded"></div>
+  <div class="big"><span class="frac large"><span class="top">2</span><span class="bottom">4</span></span></div>
+  <p>“I ate two quarters.”</p>
+</div>
+</div>
+<div class="card">
+  <div class="question">Did they eat the same amount?</div>
+  <div class="choice-grid" style="margin-top:15px">
+    <button class="choice" onclick="votePizza(true,this)">YES — same amount</button>
+    <button class="choice" onclick="votePizza(false,this)">NO — different amount</button>
+  </div>
+  <div id="pizzaFeedback" class="feedback" style="margin-top:12px" aria-live="polite">Make your prediction first.</div>
+  <div id="pizzaReveal" class="reveal">
+    <div class="rule"><div class="big">1/2 = 2/4</div><p>Yes! Both fractions represent the same amount. The names are different, but the amount is the same.</p></div>
+  </div>
+</div>
+</div>
+<div class="teacher"><details><summary>Teacher support</summary><div class="teacher-body"><p><strong>Ask:</strong> How can two different fractions show the same amount?</p><p><strong>Expected answer:</strong> The pieces can be different sizes, but the total shaded amount can stay the same.</p><p><strong>Prompt:</strong> Imagine cutting each half into two equal pieces.</p></div></details></div>
+</div>
+</section>
+
+<!-- SLIDE 2 -->
+<section class="slide" data-title="What Does Equivalent Mean?">
+<div class="slide-inner">
+<div class="eyebrow">02 / Vocabulary</div>
+<h1>What Does Equivalent Mean?</h1>
+<p class="subtitle">Equivalent fractions have the same value, even though they may have different numbers.</p>
+<div class="content">
+<div class="grid3">
+<div class="card center">
+  <h3>One half</h3>
+  <div class="bar" id="bar2"></div>
+  <div class="big"><span class="frac"><span class="top">1</span><span class="bottom">2</span></span></div>
+</div>
+<div class="card center">
+  <h3>Two quarters</h3>
+  <div class="bar" id="bar4"></div>
+  <div class="big"><span class="frac"><span class="top">2</span><span class="bottom">4</span></span></div>
+</div>
+<div class="card center">
+  <h3>Four eighths</h3>
+  <div class="bar" id="bar8"></div>
+  <div class="big"><span class="frac"><span class="top">4</span><span class="bottom">8</span></span></div>
+</div>
+</div>
+<div class="rule"><div class="big">1/2 = 2/4 = 4/8</div><p>More pieces, but the same shaded amount.</p></div>
+<div class="card">
+  <div class="question">What changed? What stayed the same?</div>
+  <button class="primary" onclick="reveal('slide2Reveal',this)">Reveal the explanation</button>
+  <div id="slide2Reveal" class="reveal feedback correct">The number of pieces changed, but the total shaded amount stayed the same. Equivalent fractions have equal value.</div>
+</div>
+</div>
+<div class="teacher"><details><summary>Teacher support</summary><div class="teacher-body"><p><strong>Ask:</strong> Which bar has the most pieces? Does it have more shaded pizza?</p><p><strong>Expected answer:</strong> The eighths bar has more pieces, but the same amount is shaded.</p></div></details></div>
+</div>
+</section>
+
+<!-- SLIDE 3 -->
+<section class="slide" data-title="Explore the Fraction Bar">
+<div class="slide-inner">
+<div class="eyebrow">03 / Explore</div>
+<h1>Explore the Fraction Bar</h1>
+<p class="subtitle">Change the number of equal parts and the number of shaded parts. Watch the fraction change.</p>
+<div class="content">
+<div class="card">
+  <div class="slider-label"><label for="partsSlider">Number of equal parts</label><strong id="partsValue">4</strong></div>
+  <input id="partsSlider" type="range" min="1" max="12" value="4" oninput="updateExplorer()">
+  <div class="slider-label" style="margin-top:16px"><label for="shadeSlider">Number of shaded parts</label><strong id="shadeValue">2</strong></div>
+  <input id="shadeSlider" type="range" min="0" max="4" value="2" oninput="updateExplorer()">
+</div>
+<div class="grid">
+<div class="card center">
+  <h3>Your fraction</h3>
+  <div id="explorerFraction" class="big"></div>
+  <p id="explorerWords">two fourths</p>
+  <div id="explorerBar" class="bar" style="margin-top:15px"></div>
+</div>
+<div class="card">
+  <h3>Find an equivalent fraction</h3>
+  <p>Can we change the number of pieces without changing the amount shaded?</p>
+  <button class="primary" onclick="findEquivalent()">Find an equivalent fraction</button>
+  <div id="equivalentResult" class="reveal" style="margin-top:18px"></div>
+</div>
+</div>
+</div>
+<div class="teacher"><details><summary>Teacher support</summary><div class="teacher-body"><p><strong>Ask:</strong> Try 3/6, 4/8, or 5/10. What do you notice?</p><p><strong>Expected answer:</strong> Multiplying the top and bottom by the same number gives the same value.</p></div></details></div>
+</div>
+</section>
+
+<!-- SLIDE 4 -->
+<section class="slide" data-title="Same Amount, Different Names">
+<div class="slide-inner">
+<div class="eyebrow">04 / Manipulate</div>
+<h1>Same Amount, Different Names</h1>
+<p class="subtitle">Shade the second rectangle so it shows the same amount as the first rectangle.</p>
+<div class="content">
+<div class="grid">
+<div class="card center">
+  <h3>Rectangle A</h3>
+  <div id="rectangleA" class="bar" style="height:85px"></div>
+  <div class="big"><span class="frac"><span class="top">1</span><span class="bottom">2</span></span></div>
+</div>
+<div class="card center">
+  <h3>Rectangle B — click pieces</h3>
+  <div id="rectangleB" class="bar" style="height:85px"></div>
+  <div class="big"><span class="frac"><span class="top" id="rectTop">0</span><span class="bottom">4</span></span></div>
+</div>
+</div>
+<div class="card">
+  <div class="question">Shade exactly two quarters.</div>
+  <button class="secondary" onclick="resetRect()">Reset rectangle</button>
+  <div id="rectFeedback" class="feedback" style="margin-top:12px">Click any quarter to shade or unshade it.</div>
+</div>
+<div id="rectReveal" class="reveal rule"><div class="big">1/2 = 2/4</div><p>Both rectangles show one half. Equivalent means equal in value.</p></div>
+</div>
+<div class="teacher"><details><summary>Teacher support</summary><div class="teacher-body"><p><strong>Ask:</strong> How many quarters make one half?</p><p><strong>Expected answer:</strong> Two quarters.</p></div></details></div>
+</div>
+</section>
+
+<!-- SLIDE 5 -->
+<section class="slide" data-title="The Secret Rule">
+<div class="slide-inner">
+<div class="eyebrow">05 / Learn</div>
+<h1>The Secret Rule</h1>
+<p class="subtitle">To make an equivalent fraction, multiply or divide the numerator and denominator by the same non-zero number.</p>
+<div class="content">
+<div class="rule">
+  <div class="big">Same operation, top and bottom.</div>
+  <p>Both numbers must change in the same way.</p>
+</div>
+<div class="grid">
+<div class="card center">
+  <h3>Multiply</h3>
+  <div class="big"><span class="frac"><span class="top">2</span><span class="bottom">3</span></span> × <span class="frac"><span class="top">2</span><span class="bottom">2</span></span></div>
+  <div class="equals">↓</div>
+  <div class="big"><span class="frac"><span class="top">4</span><span class="bottom">6</span></span></div>
+  <p>Two thirds is four sixths.</p>
+</div>
+<div class="card center">
+  <h3>Divide</h3>
+  <div class="big"><span class="frac"><span class="top">4</span><span class="bottom">6</span></span> ÷ <span class="frac"><span class="top">2</span><span class="bottom">2</span></span></div>
+  <div class="equals">↓</div>
+  <div class="big"><span class="frac"><span class="top">2</span><span class="bottom">3</span></span></div>
+  <p>Only divide when both numbers are divisible by the same number.</p>
+</div>
+</div>
+<div class="card">
+  <div class="question">Which action makes an equivalent fraction?</div>
+  <div class="choice-grid">
+    <button class="choice" onclick="ruleChoice(this,false)">Add 2 to the top and bottom</button>
+    <button class="choice" onclick="ruleChoice(this,true)">Multiply top and bottom by 2</button>
+    <button class="choice" onclick="ruleChoice(this,false)">Multiply only the numerator</button>
+  </div>
+  <div id="ruleFeedback" class="feedback" style="margin-top:12px">Choose an answer.</div>
+</div>
+</div>
+<div class="teacher"><details><summary>Teacher support</summary><div class="teacher-body"><p><strong>Ask:</strong> Why must the same operation happen to both numbers?</p><p><strong>Expected answer:</strong> Otherwise the value of the fraction changes.</p></div></details></div>
+</div>
+</section>
+
+<!-- SLIDE 6 -->
+<section class="slide" data-title="Build an Equivalent Fraction">
+<div class="slide-inner">
+<div class="eyebrow">06 / Practise</div>
+<h1>Build an Equivalent Fraction</h1>
+<p class="subtitle">Start with three quarters. Multiply both numbers by 2.</p>
+<div class="content">
+<div class="rule"><div class="big">3/4 × 2/2 = ?</div></div>
+<div class="grid">
+<div class="card">
+  <h3>Build your answer</h3>
+  <div class="answer-area" style="margin-top:15px">
+    <input id="buildTop" type="number" min="0" placeholder="Top" aria-label="New numerator">
+    <span class="equals">/</span>
+    <input id="buildBottom" type="number" min="1" placeholder="Bottom" aria-label="New denominator">
+    <button class="primary" onclick="checkBuild()">Check</button>
+  </div>
+  <div id="buildFeedback" class="feedback" style="margin-top:15px">Enter the new numerator and denominator.</div>
+</div>
+<div class="card center">
+  <h3>Visual comparison</h3>
+  <div id="buildBars" style="display:grid;gap:12px;margin-top:15px"></div>
+</div>
+</div>
+</div>
+<div class="teacher"><details><summary>Teacher support</summary><div class="teacher-body"><p><strong>Ask:</strong> What is 3 × 2? What is 4 × 2?</p><p><strong>Expected answer:</strong> 6 and 8. The answer is 6/8.</p></div></details></div>
+</div>
+</section>
+
+<!-- SLIDE 7 -->
+<section class="slide" data-title="Missing Number Mystery">
+<div class="slide-inner">
+<div class="eyebrow">07 / Missing numbers</div>
+<h1>Missing Number Mystery</h1>
+<p class="subtitle">The denominator changed from 5 to 10. What must happen to the numerator?</p>
+<div class="content">
+<div class="rule"><div class="big">2/5 = ?/10</div></div>
+<div class="card">
+  <div class="question">Enter the missing numerator.</div>
+  <div class="answer-area" style="margin-top:15px">
+    <input id="missing7" type="number" min="0" placeholder="?" aria-label="Missing numerator">
+    <button class="primary" onclick="checkMissing7()">Check answer</button>
+    <button class="secondary" onclick="hint('hint7')">Hint</button>
+  </div>
+  <div id="hint7" class="reveal feedback">5 became 10. What number multiplied by 5 gives 10?</div>
+  <div id="missing7Feedback" class="feedback" style="margin-top:12px">Your answer will appear here.</div>
+</div>
+<div id="missing7Reveal" class="reveal rule"><div class="big">2/5 = 4/10</div><p>5 × 2 = 10, so 2 × 2 = 4.</p></div>
+</div>
+<div class="teacher"><details><summary>Teacher support</summary><div class="teacher-body"><p><strong>Ask:</strong> What happened to the denominator? Can we do the same to the numerator?</p><p><strong>Expected answer:</strong> Both numbers are multiplied by 2.</p></div></details></div>
+</div>
+</section>
+
+<!-- SLIDE 8 -->
+<section class="slide" data-title="Make It Smaller">
+<div class="slide-inner">
+<div class="eyebrow">08 / Simplify</div>
+<h1>Make It Smaller</h1>
+<p class="subtitle">Sometimes we can divide both numbers to find an equivalent fraction with smaller numbers.</p>
+<div class="content">
+<div class="rule"><div class="big">6/12 = ?/6</div></div>
+<div class="card">
+  <div class="question">Choose the missing numerator.</div>
+  <div class="choice-grid" style="margin-top:15px">
+    <button class="choice" onclick="check8(2,this)">2</button>
+    <button class="choice" onclick="check8(3,this)">3</button>
+    <button class="choice" onclick="check8(4,this)">4</button>
+  </div>
+  <div id="feedback8" class="feedback" style="margin-top:12px">Choose an answer.</div>
+</div>
+<div id="reveal8" class="reveal grid">
+<div class="card center"><h3>Before</h3><div id="bar612"></div><div class="big">6/12</div></div>
+<div class="card center"><h3>After</h3><div id="bar36"></div><div class="big">3/6</div></div>
+</div>
+</div>
+<div class="teacher"><details><summary>Teacher support</summary><div class="teacher-body"><p><strong>Ask:</strong> What number divides both 6 and 12?</p><p><strong>Expected answer:</strong> 2. Six divided by 2 is 3.</p></div></details></div>
+</div>
+</section>
+
+<!-- SLIDE 9 -->
+<section class="slide" data-title="Spot the Mistake">
+<div class="slide-inner">
+<div class="eyebrow">09 / Think critically</div>
+<h1>Spot the Mistake</h1>
+<p class="subtitle">A student tries to make an equivalent fraction. Can you find the error?</p>
+<div class="content">
+<div class="rule"><div class="big">2/3 = 4/5</div><p>“I multiplied the numerator by 2 and added 2 to the denominator.”</p></div>
+<div class="card">
+  <div class="question">What mistake did the student make?</div>
+  <div class="choice-grid" style="margin-top:15px">
+    <button class="choice" onclick="mistake9(this,0)">They changed the numerator and denominator differently.</button>
+    <button class="choice" onclick="mistake9(this,1)">They multiplied both numbers by 2.</button>
+    <button class="choice" onclick="mistake9(this,2)">They divided both numbers by 2.</button>
+  </div>
+  <div id="feedback9" class="feedback" style="margin-top:12px">Choose the mistake.</div>
+</div>
+<div id="reveal9" class="reveal rule"><div class="big">2/3 × 2/2 = 4/6</div><p>Both numbers must be multiplied by the same number. Adding 2 to the denominator is not the same operation.</p></div>
+</div>
+<div class="teacher"><details><summary>Teacher support</summary><div class="teacher-body"><p><strong>Ask:</strong> Is 3 × 2 equal to 5? What operation made 3 become 5?</p><p><strong>Expected answer:</strong> The student added 2 to the denominator instead of multiplying it.</p></div></details></div>
+</div>
+</section>
+
+<!-- SLIDE 10 -->
+<section class="slide" data-title="Equivalent or Not?">
+<div class="slide-inner">
+<div class="eyebrow">10 / Check</div>
+<h1>Equivalent or Not?</h1>
+<p class="subtitle">Use multiplication or division to decide whether each pair has the same value.</p>
+<div class="content">
+<div class="card">
+  <div class="grid3">
+    <div><h3>Pair 1</h3><div class="question">1/2 and 3/6</div><div id="pair10a"></div></div>
+    <div><h3>Pair 2</h3><div class="question">2/3 and 6/9</div><div id="pair10b"></div></div>
+    <div><h3>Pair 3</h3><div class="question">3/4 and 6/10</div><div id="pair10c"></div></div>
+  </div>
+</div>
+<div class="card">
+  <div class="question" id="q10">Pair 1: Are these fractions equivalent?</div>
+  <div class="choice-grid" style="margin-top:15px">
+    <button class="choice" onclick="check10(true,this)">YES</button>
+    <button class="choice" onclick="check10(false,this)">NO</button>
+  </div>
+  <div id="feedback10" class="feedback" style="margin-top:12px">Choose YES or NO.</div>
+  <button id="next10" class="primary" style="margin-top:12px;display:none" onclick="next10()">Next pair →</button>
+</div>
+</div>
+<div class="teacher"><details><summary>Teacher support</summary><div class="teacher-body"><p><strong>Ask:</strong> Can you find a multiplier that turns one fraction into the other?</p><p><strong>Expected answers:</strong> Yes, yes, no.</p></div></details></div>
+</div>
+</section>
+
+<!-- SLIDE 11 -->
+<section class="slide" data-title="Use a Fraction Wall">
+<div class="slide-inner">
+<div class="eyebrow">11 / Fraction wall</div>
+<h1>Use a Fraction Wall</h1>
+<p class="subtitle">Click a fraction to highlight equivalent fractions in other rows.</p>
+<div class="content">
+<div class="card">
+  <div id="fractionWall" class="wall" aria-label="Interactive fraction wall"></div>
+  <p class="small muted">Click any piece. Equivalent pieces will be highlighted.</p>
+</div>
+<div class="card">
+  <div class="question" id="wallQuestion">Which fractions are equal to 1/2?</div>
+  <div id="wallAnswer" class="feedback" style="margin-top:12px">Click a piece in the wall to explore.</div>
+  <div class="answer-area" style="margin-top:12px">
+    <button class="secondary" onclick="setWallTarget(1,2)">Find 1/2</button>
+    <button class="secondary" onclick="setWallTarget(3,4)">Find 3/4</button>
+    <button class="secondary" onclick="setWallTarget(1,3)">Find 1/3</button>
+  </div>
+</div>
+</div>
+<div class="teacher"><details><summary>Teacher support</summary><div class="teacher-body"><p><strong>Ask:</strong> Can you find three fractions equivalent to one third?</p><p><strong>Expected answer:</strong> 2/6, 3/9, 4/12.</p></div></details></div>
+</div>
+</section>
+
+<!-- SLIDE 12 -->
+<section class="slide" data-title="Real-Life Problem">
+<div class="slide-inner">
+<div class="eyebrow">12 / Apply</div>
+<h1>Real-Life Problem</h1>
+<p class="subtitle">Sara and Ali each eat chocolate. Who ate more?</p>
+<div class="content">
+<div class="grid">
+<div class="card center">
+  <h3>Sara</h3>
+  <div id="chocSara" class="bar" style="height:70px"></div>
+  <div class="big">4/8</div>
+  <p>Four pieces from eight.</p>
+</div>
+<div class="card center">
+  <h3>Ali</h3>
+  <div id="chocAli" class="bar" style="height:70px"></div>
+  <div class="big">2/4</div>
+  <p>Two pieces from four.</p>
+</div>
+</div>
+<div class="card">
+  <div class="question">Who ate more?</div>
+  <div class="choice-grid" style="margin-top:15px">
+    <button class="choice" onclick="check12('Sara',this)">Sara</button>
+    <button class="choice" onclick="check12('Ali',this)">Ali</button>
+    <button class="choice" onclick="check12('Same amount',this)">Same amount</button>
+  </div>
+  <div id="feedback12" class="feedback" style="margin-top:12px">Choose an answer.</div>
+</div>
+<div id="reveal12" class="reveal rule"><div class="big">4/8 = 2/4</div><p>They ate the same amount. Both fractions represent one half.</p></div>
+</div>
+<div class="teacher"><details><summary>Teacher support</summary><div class="teacher-body"><p><strong>Ask:</strong> Can we change 4/8 into a fraction with denominator 4?</p><p><strong>Expected answer:</strong> Divide both numbers by 2 to get 2/4.</p></div></details></div>
+</div>
+</section>
+
+<!-- SLIDE 13 -->
+<section class="slide" data-title="Equivalent Fractions in Recipes">
+<div class="slide-inner">
+<div class="eyebrow">13 / Everyday maths</div>
+<h1>Equivalent Fractions in Recipes</h1>
+<p class="subtitle">A recipe needs one half cup of milk. You only have a quarter-cup measuring cup.</p>
+<div class="content">
+<div class="grid">
+<div class="card center">
+  <h3>Recipe needs</h3>
+  <div class="big">1/2 cup</div>
+  <div style="font-size:55px;margin:12px">🥛</div>
+</div>
+<div class="card center">
+  <h3>Available cup</h3>
+  <div class="big">1/4 cup</div>
+  <div id="measuringCup" style="display:flex;justify-content:center;gap:10px;margin:12px"></div>
+</div>
+</div>
+<div class="card">
+  <div class="question">How many quarter-cups do you need?</div>
+  <div class="answer-area" style="margin-top:15px">
+    <button class="primary" onclick="addCup()">Add 1/4 cup</button>
+    <button class="secondary" onclick="resetCups()">Reset</button>
+    <span id="cupCount" class="badge">0 / 2 cups</span>
+  </div>
+  <div id="cupFeedback" class="feedback" style="margin-top:12px">Add quarter-cups until you reach one half.</div>
+</div>
+<div id="reveal13" class="reveal rule"><div class="big">1/2 = 2/4</div><p>You need two quarter-cups.</p></div>
+</div>
+<div class="teacher"><details><summary>Teacher support</summary><div class="teacher-body"><p><strong>Ask:</strong> How many quarters make a half?</p><p><strong>Expected answer:</strong> Two quarters.</p></div></details></div>
+</div>
+</section>
+
+<!-- SLIDE 14 -->
+<section class="slide" data-title="Find All the Matches">
+<div class="slide-inner">
+<div class="eyebrow">14 / Match</div>
+<h1>Find All the Matches</h1>
+<p class="subtitle">Select a fraction from the left and its equivalent fraction from the right. Touch-friendly matching is supported.</p>
+<div class="content">
+<div class="card">
+  <div class="match-board">
+    <div class="match-column"><h3>Original fractions</h3><div id="matchLeft"></div></div>
+    <div class="match-column"><h3>Equivalent fractions</h3><div id="matchRight"></div></div>
+  </div>
+</div>
+<div class="card">
+  <div class="answer-area">
+    <button class="primary" onclick="checkMatches()">Check Answers</button>
+    <button class="secondary" onclick="resetMatches()">Reset</button>
+    <span id="matchCount" class="badge">0 / 3 matched</span>
+  </div>
+  <div id="matchFeedback" class="feedback" style="margin-top:12px">Select one card from each column.</div>
+</div>
+</div>
+<div class="teacher"><details><summary>Teacher support</summary><div class="teacher-body"><p><strong>Ask:</strong> How do you know 2/3 and 4/6 are equivalent?</p><p><strong>Expected answer:</strong> Both numbers in 2/3 were multiplied by 2.</p></div></details></div>
+</div>
+</section>
+
+<!-- SLIDE 15 -->
+<section class="slide" data-title="Challenge: Multiple Answers">
+<div class="slide-inner">
+<div class="eyebrow">15 / Challenge</div>
+<h1>Challenge: Multiple Answers</h1>
+<p class="subtitle">Find three different fractions equivalent to four fifths. There is more than one correct answer.</p>
+<div class="content">
+<div class="rule"><div class="big">4/5 = ?/?</div></div>
+<div class="card">
+  <div class="answer-area">
+    <input id="multiTop" type="number" min="0" placeholder="Top" aria-label="Numerator">
+    <span class="equals">/</span>
+    <input id="multiBottom" type="number" min="1" placeholder="Bottom" aria-label="Denominator">
+    <button class="primary" onclick="addMultiple()">Add fraction</button>
+  </div>
+  <div id="multiFeedback" class="feedback" style="margin-top:12px">Enter a fraction equivalent to 4/5.</div>
+  <div id="multiAnswers" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:15px"></div>
+</div>
+<div class="card">
+  <h3>Try these</h3>
+  <p>8/10, 12/15, 16/20 — or any other mathematically correct answer.</p>
+  <button class="secondary" onclick="hint('hint15')">Show a hint</button>
+  <div id="hint15" class="reveal feedback">Multiply 4 and 5 by 2, then by 3, then by 4.</div>
+</div>
+</div>
+<div class="teacher"><details><summary>Teacher support</summary><div class="teacher-body"><p><strong>Ask:</strong> Can you create a fraction with a denominator of 25?</p><p><strong>Expected answer:</strong> 20/25.</p></div></details></div>
+</div>
+</section>
+
+<!-- SLIDE 16 -->
+<section class="slide" data-title="Brain Teaser">
+<div class="slide-inner">
+<div class="eyebrow">16 / Brain teaser</div>
+<h1>Brain Teaser</h1>
+<p class="subtitle">A fraction has a denominator of 12. It is equivalent to two thirds. What is the numerator?</p>
+<div class="content">
+<div class="rule"><div class="big">2/3 = ?/12</div></div>
+<div class="card">
+  <div class="question">What is the missing numerator?</div>
+  <div class="answer-area" style="margin-top:15px">
+    <input id="brain16" type="number" min="0" placeholder="?" aria-label="Missing numerator">
+    <button class="primary" onclick="check16()">Check answer</button>
+    <button class="secondary" onclick="hint('hint16')">Hint</button>
+  </div>
+  <div id="hint16" class="reveal feedback">3 × 4 = 12. Multiply the numerator by the same number.</div>
+  <div id="feedback16" class="feedback" style="margin-top:12px">Your answer will appear here.</div>
+</div>
+<div id="reveal16" class="reveal rule"><div class="big">2/3 = 8/12</div><p>3 × 4 = 12, so 2 × 4 = 8.</p></div>
+</div>
+<div class="teacher"><details><summary>Teacher support</summary><div class="teacher-body"><p><strong>Ask:</strong> How many times bigger is 12 than 3?</p><p><strong>Expected answer:</strong> Four times.</p></div></details></div>
+</div>
+</section>
+
+<!-- SLIDE 17 -->
+<section class="slide" data-title="Which Fraction Is Greater?">
+<div class="slide-inner">
+<div class="eyebrow">17 / Compare</div>
+<h1>Which Fraction Is Greater?</h1>
+<p class="subtitle">Compare three quarters and six eighths. Are they greater, smaller, or equal?</p>
+<div class="content">
+<div class="grid">
+<div class="card center">
+  <h3>Three quarters</h3>
+  <div class="big">3/4</div>
+  <div id="compare34" class="bar" style="margin-top:15px"></div>
+</div>
+<div class="card center">
+  <h3>Six eighths</h3>
+  <div class="big">6/8</div>
+  <div id="compare68" class="bar" style="margin-top:15px"></div>
+</div>
+</div>
+<div class="card">
+  <div class="question">Which fraction is greater?</div>
+  <div class="choice-grid" style="margin-top:15px">
+    <button class="choice" onclick="check17('greater',this)">3/4 is greater</button>
+    <button class="choice" onclick="check17('smaller',this)">3/4 is smaller</button>
+    <button class="choice" onclick="check17('equal',this)">They are equal</button>
+  </div>
+  <div id="feedback17" class="feedback" style="margin-top:12px">Choose an answer.</div>
+</div>
+<div id="reveal17" class="reveal rule"><div class="big">3/4 = 6/8</div><p>They are equal because both fractions represent the same amount.</p></div>
+</div>
+<div class="teacher"><details><summary>Teacher support</summary><div class="teacher-body"><p><strong>Ask:</strong> How can we turn 3/4 into a fraction with denominator 8?</p><p><strong>Expected answer:</strong> Multiply both numbers by 2.</p></div></details></div>
+</div>
+</section>
+
+<!-- SLIDE 18 -->
+<section class="slide" data-title="Mini Quiz">
+<div class="slide-inner">
+<div class="eyebrow">18 / Mini quiz</div>
+<h1>Mini Quiz</h1>
+<p class="subtitle">Four questions to show what you have learned.</p>
+<div class="content">
+<div class="quiz-progress" id="quizProgress"></div>
+<div class="card">
+  <div id="quizNumber" class="eyebrow">Question 1 of 4</div>
+  <div id="quizQuestion" class="question"></div>
+  <div id="quizAnswer" style="margin-top:18px"></div>
+  <div id="quizFeedback" class="feedback" style="margin-top:15px">Take your time.</div>
+  <div class="answer-area" style="margin-top:15px">
+    <button id="quizSubmit" class="primary" onclick="submitQuiz()">Check answer</button>
+    <button id="quizNext" class="secondary" onclick="nextQuiz()" style="display:none">Next question →</button>
+  </div>
+</div>
+<div id="quizFinal" class="reveal card center"></div>
+</div>
+<div class="teacher"><details><summary>Teacher support</summary><div class="teacher-body"><p><strong>Ask:</strong> Explain your answer, not just the number.</p><p><strong>Expected answers:</strong> 6/10, yes, 8/12, and a correct explanation of multiplying both numerator and denominator by the same number.</p></div></details></div>
+</div>
+</section>
+
+<!-- SLIDE 19 -->
+<section class="slide" data-title="Exit Ticket">
+<div class="slide-inner">
+<div class="eyebrow">19 / Independent assessment</div>
+<h1>Exit Ticket</h1>
+<p class="subtitle">Complete these independently. Your teacher can review your answers.</p>
+<div class="content">
+<div class="card">
+  <h3>1. Write two fractions equivalent to 1/2.</h3>
+  <input id="exit1" type="text" placeholder="e.g. 2/4 and 3/6" style="width:100%;margin-top:8px">
+</div>
+<div class="card">
+  <h3>2. Complete: 4/7 = ?/14</h3>
+  <input id="exit2" type="number" min="0" placeholder="Missing numerator" style="margin-top:8px">
+</div>
+<div class="card">
+  <h3>3. Explain the rule for making equivalent fractions.</h3>
+  <textarea id="exit3" placeholder="Write your explanation..." style="margin-top:8px"></textarea>
+</div>
+<div class="card">
+  <h3>4. Draw a picture showing why 1/2 = 2/4.</h3>
+  <p class="small muted">Draw two halves, then four quarters. Shade the same amount.</p>
+  <canvas id="drawing" width="900" height="300" aria-label="Drawing canvas for showing equivalent fractions"></canvas>
+  <div class="answer-area" style="margin-top:10px">
+    <button class="secondary" onclick="clearDrawing()">Clear drawing</button>
+    <span class="small muted">Use your mouse or finger.</span>
+  </div>
+</div>
+<div class="card">
+  <button class="primary" onclick="submitExit()">Submit Exit Ticket</button>
+  <div id="exitFeedback" class="feedback" style="margin-top:12px">Your responses will be summarised here.</div>
+  <div id="exitSummary" class="reveal"></div>
+</div>
+</div>
+<div class="teacher"><details><summary>Teacher support</summary><div class="teacher-body"><p><strong>Look for:</strong> Correct equivalent fractions, multiplying or dividing both numbers by the same number, and a drawing showing equal shaded amounts.</p></div></details></div>
+</div>
+</section>
+
+<!-- SLIDE 20 -->
+<section class="slide" data-title="Success">
+<div class="slide-inner">
+<div class="eyebrow">20 / Celebrate</div>
+<div class="content">
+<div class="hero">
+  <div class="badge">LESSON COMPLETE</div>
+  <h1>Today I can…</h1>
+  <p class="subtitle center">You have investigated, built, compared, and used equivalent fractions.</p>
+</div>
+<div class="grid">
+<div class="card">
+  <ul class="success-list">
+    <li>Recognise equivalent fractions.</li>
+    <li>Make equivalent fractions.</li>
+    <li>Use multiplication and division.</li>
+    <li>Solve missing-number fraction problems.</li>
+    <li>Explain why two fractions have the same value.</li>
+  </ul>
+</div>
+<div class="card">
+  <h3>Final challenge</h3>
+  <p>Create a fraction equivalent to five sixths using a denominator greater than 20.</p>
+  <div class="answer-area" style="margin-top:15px">
+    <input id="finalTop" type="number" min="0" placeholder="Top" aria-label="Final numerator">
+    <span class="equals">/</span>
+    <input id="finalBottom" type="number" min="1" placeholder="Bottom" aria-label="Final denominator">
+    <button class="primary" onclick="checkFinal()">Check</button>
+  </div>
+  <div id="finalFeedback" class="feedback" style="margin-top:12px">Find any correct fraction.</div>
+</div>
+</div>
+<div class="rule">
+  <div class="big">5/6 = 25/30</div>
+  <p>Next lesson: Simplifying fractions and comparing fractions with different denominators.</p>
+</div>
+<div class="teacher"><details><summary>Teacher support</summary><div class="teacher-body"><p><strong>Celebrate:</strong> Ask students to explain their favourite discovery from the lesson.</p><p><strong>Extension:</strong> Can they find another equivalent fraction with a denominator greater than 50?</p></div></details></div>
+</div>
+</section>
+
+</div>
+
+<div id="overview">
+  <div style="max-width:1200px;margin:auto;display:flex;justify-content:space-between;align-items:center">
+    <div><div class="eyebrow">Lesson map</div><h2>Choose a slide</h2></div>
+    <button class="secondary" onclick="toggleOverview()">Close ✕</button>
+  </div>
+  <div class="overview-grid" id="overviewGrid"></div>
+</div>
+</main>
+
+<footer>
+  <button id="prevBtn" class="secondary" onclick="previousSlide()">← Previous</button>
+  <div id="dots" aria-label="Slide progress"></div>
+  <div class="footer-actions">
+    <button class="secondary" onclick="togglePresentation()">Presentation</button>
+    <button id="nextBtn" class="primary" onclick="nextSlide()">Next →</button>
+  </div>
+</footer>
+</div>
+
+<div id="presentationMode">
+  <div style="text-align:center">
+    <div class="eyebrow">Presentation mode</div>
+    <h2>Use ArrowLeft and ArrowRight to navigate</h2>
+    <p>Press Escape to return to the normal view.</p>
+    <button class="primary" onclick="togglePresentation()">Exit presentation</button>
+  </div>
+</div>
+
+<script>
+"use strict";
+
+/* ---------- Core lesson navigation ---------- */
+const slides = [...document.querySelectorAll(".slide")];
+let current = 0;
+
+function showSlide(index) {
+  current = Math.max(0, Math.min(slides.length - 1, index));
+  slides.forEach((s,i) => s.classList.toggle("active", i === current));
+  document.getElementById("counter").textContent = `Slide ${current+1} of ${slides.length}`;
+  document.getElementById("progressFill").style.width = `${((current+1)/slides.length)*100}%`;
+  document.getElementById("prevBtn").disabled = current === 0;
+  document.getElementById("nextBtn").textContent = current === slides.length-1 ? "Finish ✓" : "Next →";
+  document.querySelectorAll(".dot").forEach((d,i) => {
+    d.classList.toggle("active",i===current);
+    d.classList.toggle("done",i<current);
+  });
+  document.querySelectorAll(".overview-item").forEach((d,i) => d.classList.toggle("active",i===current));
+  slides[current].scrollTop = 0;
+  if(current === 2) updateExplorer();
+  if(current === 3) renderRectangle();
+  if(current === 5) renderBuildBars();
+  if(current === 7) { renderBar("bar612",12,6);renderBar("bar36",6,3); }
+  if(current === 9) renderPair10();
+  if(current === 10) renderWall();
+  if(current === 11) { renderBar("chocSara",8,4);renderBar("chocAli",4,2); }
+  if(current === 13) renderMatches();
+  if(current === 16) { renderBar("compare34",4,3);renderBar("compare68",8,6); }
+  if(current === 17) renderQuiz();
+  if(current === 18) initDrawing();
+}
+function nextSlide() { if(current < slides.length-1) showSlide(current+1); }
+function previousSlide() { if(current > 0) showSlide(current-1); }
+function restart() {
+  if(confirm("Restart the lesson and reset activities?")) location.reload();
+}
+document.addEventListener("keydown",e => {
+  if(["INPUT","TEXTAREA","SELECT"].includes(document.activeElement.tagName)) {
+    if(e.key === "Escape") document.activeElement.blur();
+    return;
+  }
+  if(e.key === "ArrowRight") nextSlide();
+  if(e.key === "ArrowLeft") previousSlide();
+  if(e.key === "Escape" && document.body.classList.contains("presentation")) togglePresentation();
+});
+const dots = document.getElementById("dots");
+slides.forEach((s,i) => {
+  const d=document.createElement("button");
+  d.className="dot"+(i===0?" active":"");
+  d.title=s.dataset.title;
+  d.setAttribute("aria-label",`Go to slide ${i+1}: ${s.dataset.title}`);
+  d.onclick=()=>showSlide(i);
+  dots.appendChild(d);
+});
+const overviewGrid=document.getElementById("overviewGrid");
+slides.forEach((s,i)=>{
+  const b=document.createElement("button");
+  b.className="overview-item"+(i===0?" active":"");
+  b.innerHTML=`<span>SLIDE ${i+1}</span>${s.dataset.title}`;
+  b.onclick=()=>{showSlide(i);toggleOverview();};
+  overviewGrid.appendChild(b);
+});
+function toggleOverview(){document.getElementById("overview").classList.toggle("open");}
+function togglePresentation(){document.body.classList.toggle("presentation");}
+function reveal(id,button) {
+  document.getElementById(id).classList.add("show");
+  if(button) button.disabled=true;
+}
+function hint(id){document.getElementById(id).classList.toggle("show");}
+function feedback(id,text,correct) {
+  const el=document.getElementById(id);
+  el.textContent=text;
+  el.className="feedback"+(correct===true?" correct":correct===false?" wrong":"");
+}
+function gcd(a,b) {
+  a=Math.abs(a);b=Math.abs(b);
+  while(b){const t=b;b=a%b;a=t;}
+  return a||1;
+}
+function equivalent(a,b,c,d) {
+  return Number.isFinite(a)&&Number.isFinite(b)&&Number.isFinite(c)&&Number.isFinite(d)
+    && b!==0&&d!==0&&a*d===c*b;
+}
+function fraction(n,d) {
+  return `<span class="frac"><span class="top">${n}</span><span class="bottom">${d}</span></span>`;
+}
+const names=["zero","one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve"];
+function words(n,d) {
+  const den=["","whole","half","thirds","quarters","fifths","sixths","sevenths","eighths","ninths","tenths","elevenths","twelfths"];
+  return `${names[n]||n} ${n===1&&d===2?"half":den[d]||"parts"}`;
+}
+function renderBar(id,d,n,selected=false) {
+  const el=document.getElementById(id);
+  if(!el)return;
+  el.innerHTML="";
+  for(let i=0;i<d;i++){
+    const p=document.createElement("div");
+    p.className="part"+(i<n?" shaded":"")+(selected?" clickable":"");
+    p.setAttribute("aria-label",`${i<n?"shaded":"unshaded"} part ${i+1} of ${d}`);
+    el.appendChild(p);
+  }
+}
+
+/* ---------- Slide 1 ---------- */
+function votePizza(yes,button) {
+  document.querySelectorAll("#pizzaFeedback ~ *").forEach(()=>{});
+  feedback("pizzaFeedback",yes?"Correct! Both fractions show the same amount.":"Not quite. Look at the shaded parts again.",yes);
+  document.querySelectorAll("#pizzaFeedback").forEach(()=>{});
+  document.getElementById("pizzaReveal").classList.add("show");
+  button.parentElement.querySelectorAll("button").forEach(b=>b.classList.remove("selected"));
+  button.classList.add("selected");
+}
+
+/* ---------- Slide 2 ---------- */
+renderBar("bar2",2,1);
+renderBar("bar4",4,2);
+renderBar("bar8",8,4);
+
+/* ---------- Slide 3 ---------- */
+function updateExplorer() {
+  const d=+document.getElementById("partsSlider").value;
+  const s=+document.getElementById("shadeSlider").value;
+  document.getElementById("shadeSlider").max=d;
+  if(s>d)document.getElementById("shadeSlider").value=d;
+  const n=Math.min(s,d);
+  document.getElementById("partsValue").textContent=d;
+  document.getElementById("shadeValue").textContent=n;
+  document.getElementById("explorerFraction").innerHTML=fraction(n,d);
+  document.getElementById("explorerWords").textContent=words(n,d);
+  renderBar("explorerBar",d,n);
+}
+function findEquivalent() {
+  const d=+document.getElementById("partsSlider").value;
+  const n=+document.getElementById("shadeSlider").value;
+  if(n===0){document.getElementById("equivalentResult").innerHTML=`<div class="feedback">Zero is equivalent to zero. Try shading some parts to discover more.</div>`;document.getElementById("equivalentResult").classList.add("show");return;}
+  const k=2;
+  const nd=n*k,dd=d*k;
+  document.getElementById("equivalentResult").innerHTML=`
+    <div class="rule"><div class="big">${n}/${d} = ${nd}/${dd}</div>
+    <p>Both numbers were multiplied by ${k}. The shaded amount stays the same.</p>
+    <div id="eqNewBar" class="bar"></div></div>`;
+  document.getElementById("equivalentResult").classList.add("show");
+  renderBar("eqNewBar",dd,nd);
+}
+
+/* ---------- Slide 4 ---------- */
+function renderRectangle() {
+  renderBar("rectangleA",2,1);
+  const el=document.getElementById("rectangleB");
+  el.innerHTML="";
+  for(let i=0;i<4;i++){
+    const p=document.createElement("div");
+    p.className="part clickable"+(rectSelected.includes(i)?" shaded":"");
+    p.textContent="";
+    p.onclick=()=>toggleRect(i);
+    p.setAttribute("aria-label",`Quarter ${i+1}`);
+    el.appendChild(p);
+  }
+  document.getElementById("rectTop").textContent=rectSelected.length;
+}
+let rectSelected=[];
+function toggleRect(i) {
+  if(rectSelected.includes(i))rectSelected=rectSelected.filter(x=>x!==i);
+  else rectSelected.push(i);
+  renderRectangle();
+  const n=rectSelected.length;
+  feedback("rectFeedback",n===2?"Correct! Two quarters equal one half.":`You have shaded ${n} quarter${n===1?"":"s"}.`,n===2?true:null);
+  document.getElementById("rectReveal").classList.toggle("show",n===2);
+}
+function resetRect(){rectSelected=[];renderRectangle();feedback("rectFeedback","Click any quarter to shade or unshade it.",null);document.getElementById("rectReveal").classList.remove("show");}
+
+/* ---------- Slide 5 ---------- */
+function ruleChoice(button,correct) {
+  button.parentElement.querySelectorAll("button").forEach(b=>b.classList.remove("selected"));
+  button.classList.add("selected");
+  feedback("ruleFeedback",correct?"Correct! Multiply or divide both numbers by the same non-zero number.":"Not quite. Both numbers must have the same operation.",correct);
+}
+
+/* ---------- Slide 6 ---------- */
+function renderBuildBars() {
+  const el=document.getElementById("buildBars");
+  el.innerHTML=`<div><p class="small">3/4</p><div id="buildOld" class="bar"></div></div><div><p class="small">6/8</p><div id="buildNew" class="bar"></div></div>`;
+  renderBar("buildOld",4,3);
+  renderBar("buildNew",8,6);
+}
+function checkBuild() {
+  const n=+document.getElementById("buildTop").value;
+  const d=+document.getElementById("buildBottom").value;
+  if(d<=0||!Number.isInteger(n)||!Number.isInteger(d)){feedback("buildFeedback","Enter whole numbers with a denominator greater than zero.",false);return;}
+  const ok=equivalent(3,4,n,d);
+  feedback("buildFeedback",ok?"Excellent! Both fractions represent the same amount.":"Check that you multiplied both numbers by the same number.",ok);
+  if(ok)document.getElementById("buildFeedback").textContent=`Correct! 3/4 = ${n}/${d}.`;
+}
+
+/* ---------- Slide 7 ---------- */
+function checkMissing7() {
+  const n=+document.getElementById("missing7").value;
+  const ok=n===4;
+  feedback("missing7Feedback",ok?"Correct! The numerator must also be multiplied by 2.":"Try again. 5 became 10, so what happened to the denominator?",ok);
+  if(ok)document.getElementById("missing7Reveal").classList.add("show");
+}
+
+/* ---------- Slide 8 ---------- */
+function check8(n,button) {
+  button.parentElement.querySelectorAll("button").forEach(b=>b.classList.remove("selected"));
+  button.classList.add("selected");
+  const ok=n===3;
+  feedback("feedback8",ok?"Correct! Both numbers were divided by 2.":"Not quite. Divide 6 and 12 by the same number to make the denominator 6.",ok);
+  if(ok)document.getElementById("reveal8").classList.add("show");
+}
+
+/* ---------- Slide 9 ---------- */
+function mistake9(button,index) {
+  button.parentElement.querySelectorAll("button").forEach(b=>b.classList.remove("selected"));
+  button.classList.add("selected");
+  const ok=index===0;
+  feedback("feedback9",ok?"Correct! The student used different operations on the numerator and denominator.":"Look carefully at what happened to the numerator and denominator.",ok);
+  if(ok)document.getElementById("reveal9").classList.add("show");
+}
+
+/* ---------- Slide 10 ---------- */
+let pairIndex=0;
+const pairs=[{a:1,b:2,c:3,d:6,answer:true},{a:2,b:3,c:6,d:9,answer:true},{a:3,b:4,c:6,d:10,answer:false}];
+function renderPair10() {
+  renderBar("pair10a",2,1);
+  renderBar("pair10b",3,2);
+  renderBar("pair10c",4,3);
+  document.getElementById("pair10a").innerHTML+=`<p class="small">1/2 = 3/6</p>`;
+  document.getElementById("pair10b").innerHTML+=`<p class="small">2/3 = 6/9</p>`;
+  document.getElementById("pair10c").innerHTML+=`<p class="small">3/4 ≠ 6/10</p>`;
+}
+function check10(answer,button) {
+  const pair=pairs[pairIndex];
+  const ok=answer===pair.answer;
+  feedback("feedback10",ok?"Correct! Well done.":`Not quite. ${pair.a} × ${pair.d} ${pair.a*pair.d===pair.c*pair.b?"equals":"does not equal"} ${pair.c} × ${pair.b}.`,ok);
+  document.getElementById("next10").style.display="inline-block";
+  document.querySelectorAll("#q10 ~ * .choice").forEach(b=>b.disabled=true);
+}
+function next10() {
+  pairIndex++;
+  if(pairIndex>=pairs.length){pairIndex=0;document.getElementById("q10").textContent="All three pairs complete!";document.getElementById("next10").style.display="none";feedback("feedback10","You checked all three pairs. Great work!",true);return;}
+  const p=pairs[pairIndex];
+  document.getElementById("q10").textContent=`Pair ${pairIndex+1}: Are these fractions equivalent?`;
+  document.getElementById("next10").style.display="none";
+  document.getElementById("feedback10").textContent="Choose YES or NO.";
+  document.getElementById("feedback10").className="feedback";
+  document.querySelectorAll("#q10 ~ * .choice").forEach(b=>{b.disabled=false;b.classList.remove("selected");});
+}
+
+/* ---------- Slide 11 ---------- */
+const wallRows=[1,2,3,4,5,6,8,10,12];
+let wallTarget={n:1,d:2};
+function renderWall() {
+  const el=document.getElementById("fractionWall");
+  el.innerHTML="";
+  wallRows.forEach(d=>{
+    const row=document.createElement("div");
+    row.className="wall-row";
+    const label=document.createElement("div");
+    label.className="wall-label";
+    label.textContent=d===1?"Whole":`${d}ths`;
+    const track=document.createElement("div");
+    track.className="wall-track";
+    for(let n=0;n<d;n++){
+      const p=document.createElement("div");
+      p.className="part";
+      const value=(n+1)/d;
+      const target=wallTarget.n/wallTarget.d;
+      if(Math.abs(value-target)<.000001)p.classList.add("highlight");
+      p.setAttribute("aria-label",`${n+1}/${d}`);
+      p.title=`${n+1}/${d}`;
+      p.onclick=()=>{wallTarget={n:n+1,d};renderWall();};
+      track.appendChild(p);
+    }
+    row.append(label,track);
+    el.appendChild(row);
+  });
+  const eq=[];
+  for(const d of wallRows){
+    for(let n=1;n<=d;n++){
+      if(equivalent(wallTarget.n,wallTarget.d,n,d))eq.push(`${n}/${d}`);
+    }
+  }
+  document.getElementById("wallQuestion").textContent=`Which fractions are equal to ${wallTarget.n}/${wallTarget.d}?`;
+  document.getElementById("wallAnswer").textContent=`Equivalent fractions: ${eq.join(", ")}`;
+}
+function setWallTarget(n,d){wallTarget={n,d};renderWall();}
+
+/* ---------- Slide 12 ---------- */
+function check12(answer,button) {
+  button.parentElement.querySelectorAll("button").forEach(b=>b.classList.remove("selected"));
+  button.classList.add("selected");
+  const ok=answer==="Same amount";
+  feedback("feedback12",ok?"Correct! 4/8 = 2/4. They ate the same amount.":"Look at the shaded parts. Both chocolate bars show one half.",ok);
+  if(ok)document.getElementById("reveal12").classList.add("show");
+}
+
+/* ---------- Slide 13 ---------- */
+let cups=0;
+function renderCups() {
+  const el=document.getElementById("measuringCup");
+  el.innerHTML="";
+  for(let i=0;i<2;i++){
+    const c=document.createElement("div");
+    c.style.cssText="width:65px;height:85px;border:3px solid #64748B;border-radius:5px 5px 12px 12px;position:relative;background:#0B1220;overflow:hidden";
+    const milk=document.createElement("div");
+    milk.style.cssText=`position:absolute;bottom:0;left:0;right:0;height:${i<cups?100:0}%;background:#DBEAFE;transition:height .2s`;
+    c.appendChild(milk);
+    el.appendChild(c);
+  }
+}
+function addCup() {
+  if(cups<2)cups++;
+  renderCups();
+  document.getElementById("cupCount").textContent=`${cups} / 2 cups`;
+  feedback("cupFeedback",cups===2?"You reached one half. Two quarter-cups make one half!":`You added ${cups} quarter-cup${cups===1?"":"s"}. Keep going.`,cups===2);
+  if(cups===2)document.getElementById("reveal13").classList.add("show");
+}
+function resetCups(){cups=0;renderCups();document.getElementById("cupCount").textContent="0 / 2 cups";feedback("cupFeedback","Add quarter-cups until you reach one half.",null);document.getElementById("reveal13").classList.remove("show");}
+
+/* ---------- Slide 14 ---------- */
+const matchPairs=[["1/2","3/6"],["2/3","4/6"],["3/4","6/8"]];
+let selectedMatch=null;
+let matches={};
+function renderMatches() {
+  const left=document.getElementById("matchLeft");
+  const right=document.getElementById("matchRight");
+  left.innerHTML="";right.innerHTML="";
+  const rights=["6/8","3/6","4/6","2/5"];
+  matchPairs.forEach((pair,i)=>{
+    const b=document.createElement("button");
+    b.className="match-card"+(matches[i]?" matched":"");
+    b.textContent=pair[0];
+    b.disabled=!!matches[i];
+    b.onclick=()=>selectMatch(i,"left");
+    left.appendChild(b);
+  });
+  rights.forEach(value=>{
+    const b=document.createElement("button");
+    b.className="match-card";
+    const matchedIndex=Object.keys(matches).find(i=>matches[i]===value);
+    if(matchedIndex!==undefined)b.classList.add("matched");
+    if(selectedMatch && selectedMatch.side==="right" && selectedMatch.value===value)b.classList.add("selected");
+    b.textContent=value;
+    b.disabled=matchedIndex!==undefined;
+    b.onclick=()=>selectMatch(value,"right");
+    right.appendChild(b);
+  });
+}
+function selectMatch(value,side) {
+  if(side==="left" && matches[value])return;
+  if(side==="left"){
+    selectedMatch={side:"left",value};
+    feedback("matchFeedback",`Selected ${matchPairs[value][0]}. Now select its equivalent fraction.`,null);
+  }else if(selectedMatch && selectedMatch.side==="left"){
+    const leftValue=matchPairs[selectedMatch.value][0];
+    const ok=equivalent(...leftValue.split("/").map(Number),...value.split("/").map(Number));
+    if(ok){
+      matches[selectedMatch.value]=value;
+      document.getElementById("matchCount").textContent=`${Object.keys(matches).length} / 3 matched`;
+      feedback("matchFeedback",`Correct! ${leftValue} = ${value}.`,true);
+      selectedMatch=null;
+    }else{
+      feedback("matchFeedback",`${value} is not equivalent to ${leftValue}. Try again.`,false);
+    }
+  }else{
+    feedback("matchFeedback","Select a fraction from the left first.",null);
+  }
+  renderMatches();
+}
+function checkMatches() {
+  const n=Object.keys(matches).length;
+  feedback("matchFeedback",n===3?"All three pairs are matched correctly!":"You have matched "+n+" of 3 pairs. Keep trying.",n===3);
+}
+function resetMatches(){matches={};selectedMatch=null;document.getElementById("matchCount").textContent="0 / 3 matched";renderMatches();feedback("matchFeedback","Select one card from each column.",null);}
+
+/* ---------- Slide 15 ---------- */
+let multipleAnswers=[];
+function addMultiple() {
+  const n=+document.getElementById("multiTop").value;
+  const d=+document.getElementById("multiBottom").value;
+  if(!Number.isInteger(n)||!Number.isInteger(d)||d<=0){feedback("multiFeedback","Enter whole numbers with a denominator greater than zero.",false);return;}
+  if(!equivalent(4,5,n,d)){feedback("multiFeedback","That fraction is not equivalent to 4/5. Try multiplying both numbers by the same number.",false);return;}
+  const key=`${n}/${d}`;
+  if(multipleAnswers.includes(key)){feedback("multiFeedback","You already found that fraction. Find a different one.",false);return;}
+  multipleAnswers.push(key);
+  const tag=document.createElement("span");
+  tag.className="badge";
+  tag.textContent=key;
+  document.getElementById("multiAnswers").appendChild(tag);
+  feedback("multiFeedback",`Correct! You have found ${multipleAnswers.length} different equivalent fraction${multipleAnswers.length===1?"":"s"}.`,true);
+  document.getElementById("multiTop").value="";
+  document.getElementById("multiBottom").value="";
+}
+
+/* ---------- Slide 16 ---------- */
+function check16() {
+  const n=+document.getElementById("brain16").value;
+  const ok=n===8;
+  feedback("feedback16",ok?"Correct! You multiplied the numerator by 4.":"Try again. What number multiplied by 3 gives 12?",ok);
+  if(ok)document.getElementById("reveal16").classList.add("show");
+}
+
+/* ---------- Slide 17 ---------- */
+function check17(answer,button) {
+  button.parentElement.querySelectorAll("button").forEach(b=>b.classList.remove("selected"));
+  button.classList.add("selected");
+  const ok=answer==="equal";
+  feedback("feedback17",ok?"Correct! 3/4 = 6/8, so neither is greater.":"Look at the shaded bars. Do they show the same amount?",ok);
+  if(ok)document.getElementById("reveal17").classList.add("show");
+}
+
+/* ---------- Slide 18 ---------- */
+const quiz=[
+ {q:"Complete: 3/5 = ?/10",type:"number",answer:6,explain:"5 became 10 by multiplying by 2, so 3 became 6."},
+ {q:"Is 2/4 = 1/2?",type:"choice",answer:"yes",options:["YES","NO"],explain:"2/4 simplifies to 1/2 when both numbers are divided by 2."},
+ {q:"Make 2/3 into a fraction with denominator 12.",type:"number",answer:8,explain:"3 × 4 = 12, so 2 × 4 = 8. The answer is 8/12."},
+ {q:"Explain why 2/5 and 4/10 are equivalent.",type:"text",answer:"",explain:"The numerator and denominator of 2/5 were both multiplied by 2, so the value stays the same."}
+];
+let quizIndex=0,quizScore=0,quizDone=false;
+function renderQuiz() {
+  if(quizDone)return;
+  const q=quiz[quizIndex];
+  document.getElementById("quizNumber").textContent=`Question ${quizIndex+1} of ${quiz.length}`;
+  document.getElementById("quizQuestion").textContent=q.q;
+  const answer=document.getElementById("quizAnswer");
+  answer.innerHTML="";
+  if(q.type==="number"){
+    answer.innerHTML=`<input id="quizInput" class="number-input" type="number" min="0" placeholder="Answer" aria-label="Quiz answer">`;
+  }else if(q.type==="choice"){
+    answer.innerHTML=`<div class="choice-grid">${q.options.map(x=>`<button class="choice" onclick="selectQuizChoice(this,'${x.toLowerCase()}')">${x}</button>`).join("")}</div>`;
+  }else{
+    answer.innerHTML=`<textarea id="quizInput" placeholder="Explain your answer..." aria-label="Quiz explanation"></textarea>`;
+  }
+  document.getElementById("quizFeedback").textContent="Take your time.";
+  document.getElementById("quizFeedback").className="feedback";
+  document.getElementById("quizSubmit").style.display="inline-block";
+  document.getElementById("quizNext").style.display="none";
+  document.getElementById("quizProgress").innerHTML=quiz.map((x,i)=>`<div class="quiz-dot ${i<quizIndex?"done":i===quizIndex?"active":""}"></div>`).join("");
+}
+let quizChoice=null;
+function selectQuizChoice(button,value){
+  quizChoice=value;
+  button.parentElement.querySelectorAll("button").forEach(b=>b.classList.remove("selected"));
+  button.classList.add("selected");
+}
+function submitQuiz() {
+  if(quizDone)return;
+  const q=quiz[quizIndex];
+  let correct=false;
+  let response="";
+  if(q.type==="number"){
+    const input=document.getElementById("quizInput");
+    if(!input||input.value.trim()===""){feedback("quizFeedback","Enter an answer first.",false);return;}
+    correct=+input.value===q.answer;
+    response=input.value;
+  }else if(q.type==="choice"){
+    if(!quizChoice){feedback("quizFeedback","Choose YES or NO first.",false);return;}
+    correct=quizChoice===q.answer;
+    response=quizChoice;
+  }else{
+    const input=document.getElementById("quizInput");
+    if(!input||input.value.trim().length<10){feedback("quizFeedback","Write a little more explanation.",false);return;}
+    response=input.value;
+    const t=response.toLowerCase();
+    correct=(t.includes("same")||t.includes("equal"))&&(t.includes("multiply")||t.includes("×")||t.includes("times"))&&t.includes("2");
+  }
+  if(correct)quizScore++;
+  feedback("quizFeedback",correct?"Correct! "+q.explain:"Not quite. "+q.explain,correct);
+  document.getElementById("quizSubmit").style.display="none";
+  document.getElementById("quizNext").style.display="inline-block";
+  document.getElementById("quizNext").textContent=quizIndex===quiz.length-1?"See final score →":"Next question →";
+}
+function nextQuiz(){
+  if(quizIndex<quiz.length-1){quizIndex++;quizChoice=null;renderQuiz();}
+  else{
+    quizDone=true;
+    document.getElementById("quizNext").style.display="none";
+    document.getElementById("quizSubmit").style.display="none";
+    const final=document.getElementById("quizFinal");
+    final.classList.add("show");
+    final.innerHTML=`<h2>Quiz complete!</h2><div class="big">${quizScore} / ${quiz.length}</div><p>${quizScore===4?"Fantastic! You have mastered these fraction skills.":"Good effort! Review the explanations and try again."}</p><button class="primary" onclick="resetQuiz()">Retry quiz</button>`;
+  }
+}
+function resetQuiz(){quizIndex=0;quizScore=0;quizDone=false;quizChoice=null;document.getElementById("quizFinal").classList.remove("show");renderQuiz();}
+
+/* ---------- Slide 19: drawing and exit ticket ---------- */
+let drawingReady=false,ctx,drawing=false,lastX=0,lastY=0;
+function initDrawing(){
+  if(drawingReady)return;
+  const canvas=document.getElementById("drawing");
+  ctx=canvas.getContext("2d");
+  ctx.lineWidth=5;ctx.lineCap="round";ctx.strokeStyle="#306998";
+  canvas.addEventListener("pointerdown",e=>{
+    drawing=true;const p=canvasPoint(e);lastX=p.x;lastY=p.y;canvas.setPointerCapture(e.pointerId);
+  });
+  canvas.addEventListener("pointermove",e=>{
+    if(!drawing)return;
+    const p=canvasPoint(e);ctx.beginPath();ctx.moveTo(lastX,lastY);ctx.lineTo(p.x,p.y);ctx.stroke();lastX=p.x;lastY=p.y;
+  });
+  ["pointerup","pointercancel","pointerleave"].forEach(ev=>canvas.addEventListener(ev,()=>drawing=false));
+  clearDrawing();
+  drawingReady=true;
+}
+function canvasPoint(e){
+  const c=document.getElementById("drawing");
+  const r=c.getBoundingClientRect();
+  return {x:(e.clientX-r.left)*c.width/r.width,y:(e.clientY-r.top)*c.height/r.height};
+}
+function clearDrawing(){
+  const c=document.getElementById("drawing");
+  if(!ctx)ctx=c.getContext("2d");
+  ctx.clearRect(0,0,c.width,c.height);
+  ctx.strokeStyle="#64748B";ctx.lineWidth=4;
+  ctx.beginPath();ctx.moveTo(c.width/2,20);ctx.lineTo(c.width/2,c.height-20);ctx.stroke();
+  ctx.strokeStyle="#306998";ctx.lineWidth=5;
+}
+function submitExit(){
+  const one=document.getElementById("exit1").value.trim();
+  const two=document.getElementById("exit2").value.trim();
+  const three=document.getElementById("exit3").value.trim();
+  if(!one||!two||!three){feedback("exitFeedback","Please complete questions 1, 2, and 3 before submitting.",false);return;}
+  const validTwo=+two===8;
+  feedback("exitFeedback",validTwo?"Your exit ticket has been submitted. Well done!":"Your exit ticket has been recorded. Review question 2 with your teacher.",validTwo);
+  document.getElementById("exitSummary").classList.add("show");
+  document.getElementById("exitSummary").innerHTML=`
+    <div class="card"><h3>Your responses</h3>
+    <p><strong>1.</strong> ${escapeHTML(one)}</p>
+    <p><strong>2.</strong> ${escapeHTML(two)}</p>
+    <p><strong>3.</strong> ${escapeHTML(three)}</p>
+    <p><strong>4.</strong> Your drawing has been recorded on the canvas.</p></div>`;
+}
+function escapeHTML(str){
+  return str.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+
+/* ---------- Slide 20 ---------- */
+function checkFinal(){
+  const n=+document.getElementById("finalTop").value;
+  const d=+document.getElementById("finalBottom").value;
+  const ok=d>20&&equivalent(5,6,n,d);
+  feedback("finalFeedback",ok?"Brilliant! Your fraction is equivalent to 5/6 and has a denominator greater than 20.":"Try again. Multiply both numbers by the same number, and make the denominator greater than 20.",ok);
+}
+
+/* ---------- Initialise ---------- */
+renderRectangle();
+renderBuildBars();
+renderBar("bar612",12,6);
+renderBar("bar36",6,3);
+renderPair10();
+renderWall();
+renderBar("chocSara",8,4);
+renderBar("chocAli",4,2);
+renderMatches();
+renderBar("compare34",4,3);
+renderBar("compare68",8,6);
+renderCups();
+showSlide(0);
+</script>
+</body>
+</html>
