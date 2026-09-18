@@ -1,0 +1,2449 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Converting Mixed Numbers to Improper Fractions</title>
+<style>
+  :root{
+    --ink:#172033;
+    --muted:#526070;
+    --paper:#f7f9fc;
+    --card:#ffffff;
+    --line:#cbd5e1;
+    --blue:#2563eb;
+    --blue-soft:#dbeafe;
+    --purple:#7c3aed;
+    --purple-soft:#ede9fe;
+    --green:#15803d;
+    --green-soft:#dcfce7;
+    --amber:#b45309;
+    --amber-soft:#fef3c7;
+    --cyan:#0891b2;
+    --cyan-soft:#cffafe;
+    --orange:#ea580c;
+    --pink:#be185d;
+    --shadow:0 10px 28px rgba(15,23,42,.10);
+    --radius:20px;
+  }
+
+*{box-sizing:border-box}
+
+html,body{
+margin:0;
+min-height:100%;
+font-family:Arial, Helvetica, sans-serif;
+background:var(--paper);
+color:var(--ink);
+}
+
+body{
+font-size:1.2rem;
+line-height:1.55;
+}
+
+button,input{
+font:inherit;
+}
+
+button{
+cursor:pointer;
+}
+
+button:focus-visible,
+input:focus-visible{
+outline:4px solid #f59e0b;
+outline-offset:3px;
+}
+
+.app{
+min-height:100vh;
+display:flex;
+flex-direction:column;
+}
+
+header{
+background:#fff;
+border-bottom:1px solid var(--line);
+position:sticky;
+top:0;
+z-index:50;
+}
+
+.topbar{
+max-width:1250px;
+margin:auto;
+padding:14px 22px 10px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:18px;
+}
+
+.brand{
+font-weight:800;
+font-size:1.25rem;
+}
+
+.slide-counter{
+font-weight:800;
+color:var(--blue);
+white-space:nowrap;
+}
+
+.progress-track{
+height:9px;
+background:#e2e8f0;
+overflow:hidden;
+}
+
+.progress-fill{
+height:100%;
+width:5.26%;
+background:linear-gradient(90deg,var(--blue),var(--purple));
+transition:width .35s ease;
+}
+
+main{
+flex:1;
+width:100%;
+}
+
+.deck{
+max-width:1200px;
+margin:0 auto;
+padding:34px 22px 130px;
+}
+
+.slide{
+display:none;
+animation:slideIn .28s ease;
+}
+
+.slide.active{
+display:block;
+}
+
+@keyframes slideIn{
+from{opacity:0;transform:translateY(12px)}
+to{opacity:1;transform:translateY(0)}
+}
+
+.slide-header{
+margin-bottom:24px;
+}
+
+.section-label{
+display:inline-block;
+padding:7px 13px;
+border-radius:999px;
+background:var(--blue-soft);
+color:#1e40af;
+font-weight:800;
+font-size:1rem;
+margin-bottom:10px;
+}
+
+h1{
+font-size:clamp(2rem,4vw,3.2rem);
+line-height:1.1;
+margin:0 0 10px;
+}
+
+h2{
+font-size:clamp(1.7rem,3vw,2.5rem);
+line-height:1.15;
+margin:0 0 10px;
+}
+
+h3{
+font-size:1.45rem;
+margin:0 0 10px;
+}
+
+p{
+margin:8px 0 14px;
+}
+
+.subtitle{
+color:var(--muted);
+max-width:820px;
+}
+
+.card{
+background:var(--card);
+border:2px solid var(--line);
+border-radius:var(--radius);
+padding:25px;
+box-shadow:var(--shadow);
+margin-bottom:20px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:20px;
+}
+
+.three-grid{
+display:grid;
+grid-template-columns:repeat(3,minmax(0,1fr));
+gap:18px;
+}
+
+.center{
+text-align:center;
+}
+
+.big-number{
+font-size:3.2rem;
+font-weight:900;
+}
+
+.instruction{
+background:#f8fafc;
+border-left:7px solid var(--blue);
+padding:16px 18px;
+border-radius:12px;
+margin:18px 0;
+}
+
+/* STACKED FRACTIONS */
+.fraction{
+display:inline-grid;
+grid-template-rows:auto 5px auto;
+vertical-align:middle;
+min-width:90px;
+margin:0 7px;
+text-align:center;
+font-size:2.5rem;
+font-weight:900;
+line-height:1;
+}
+
+.fraction .num,
+.fraction .den{
+min-width:90px;
+padding:8px 14px;
+}
+
+.fraction .num{
+text-decoration:underline;
+text-decoration-thickness:4px;
+text-underline-offset:7px;
+background:#eff6ff;
+border:3px solid var(--blue);
+border-bottom:0;
+border-radius:10px 10px 0 0;
+}
+
+.fraction .bar{
+height:5px;
+width:100%;
+background:var(--ink);
+}
+
+.fraction .den{
+background:#fef3c7;
+border:3px solid var(--amber);
+border-top:0;
+border-radius:0 0 10px 10px;
+}
+
+.fraction.compact{
+font-size:2rem;
+min-width:70px;
+}
+
+.fraction.compact .num,
+.fraction.compact .den{
+min-width:70px;
+padding:6px 10px;
+}
+
+.fraction.small{
+font-size:1.5rem;
+min-width:54px;
+}
+
+.fraction.small .num,
+.fraction.small .den{
+min-width:54px;
+padding:5px 8px;
+}
+
+.fraction-parts{
+display:flex;
+justify-content:center;
+align-items:center;
+flex-wrap:wrap;
+gap:15px;
+}
+
+.annotated-number{
+display:inline-flex;
+align-items:center;
+gap:10px;
+flex-wrap:wrap;
+justify-content:center;
+}
+
+.whole-zone{
+display:inline-flex;
+align-items:center;
+justify-content:center;
+min-width:85px;
+min-height:85px;
+padding:10px;
+border:5px solid var(--purple);
+border-radius:50%;
+background:var(--purple-soft);
+font-size:3rem;
+font-weight:900;
+}
+
+.den-zone{
+display:inline-flex;
+align-items:center;
+justify-content:center;
+min-width:75px;
+min-height:70px;
+padding:10px;
+border:4px solid var(--amber);
+border-radius:12px;
+background:var(--amber-soft);
+font-size:2.5rem;
+font-weight:900;
+}
+
+.num-zone{
+display:inline-flex;
+align-items:center;
+justify-content:center;
+min-width:75px;
+min-height:70px;
+padding:10px;
+border:4px solid var(--blue);
+border-radius:12px;
+background:var(--blue-soft);
+font-size:2.5rem;
+font-weight:900;
+text-decoration:underline;
+text-decoration-thickness:4px;
+text-underline-offset:7px;
+}
+
+.annotation-label{
+display:block;
+font-size:.85rem;
+font-weight:900;
+text-transform:uppercase;
+letter-spacing:.05em;
+margin-top:7px;
+}
+
+.annotation-item{
+text-align:center;
+}
+
+.arrow{
+font-size:2rem;
+font-weight:900;
+color:var(--blue);
+}
+
+/* VISUAL BLOCKS */
+.whole-blocks{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:12px;
+margin:18px 0;
+}
+
+.whole-shape{
+width:100px;
+height:100px;
+border:5px solid #1e40af;
+background:#60a5fa;
+border-radius:16px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:2.6rem;
+font-weight:900;
+color:#fff;
+}
+
+.thirds,.quarters,.eighths{
+display:grid;
+gap:5px;
+width:min(430px,100%);
+margin:18px auto;
+}
+
+.thirds{grid-template-columns:repeat(3,1fr)}
+.quarters{grid-template-columns:repeat(4,1fr)}
+.eighths{grid-template-columns:repeat(8,1fr)}
+
+.part{
+min-height:65px;
+border:3px solid #334155;
+background:#f8fafc;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:900;
+}
+
+.part.filled{
+background:#60a5fa;
+color:#fff;
+}
+
+.visual-label{
+text-align:center;
+font-weight:800;
+color:var(--muted);
+}
+
+.choice-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
+gap:14px;
+margin-top:18px;
+}
+
+.choice-btn{
+min-height:68px;
+border:3px solid #94a3b8;
+border-radius:15px;
+background:#fff;
+color:var(--ink);
+font-weight:800;
+padding:12px 15px;
+transition:.2s;
+}
+
+.choice-btn:hover{
+border-color:var(--blue);
+transform:translateY(-2px);
+}
+
+.choice-btn.selected{
+border-color:var(--blue);
+background:var(--blue-soft);
+}
+
+.choice-btn.correct{
+border-color:var(--green);
+background:var(--green-soft);
+color:#14532d;
+}
+
+.choice-btn.retry{
+border-color:var(--amber);
+background:var(--amber-soft);
+}
+
+.feedback{
+display:none;
+padding:15px 18px;
+border-radius:13px;
+margin-top:16px;
+font-weight:800;
+}
+
+.feedback.show{
+display:block;
+}
+
+.feedback.success{
+background:var(--green-soft);
+color:#14532d;
+border:2px solid #86efac;
+}
+
+.feedback.retry{
+background:var(--amber-soft);
+color:#78350f;
+border:2px solid #fbbf24;
+}
+
+.hint{
+display:none;
+background:#eff6ff;
+border:2px solid #93c5fd;
+color:#1e3a8a;
+border-radius:12px;
+padding:13px 16px;
+margin-top:13px;
+}
+
+.hint.show{
+display:block;
+}
+
+.input-row{
+display:flex;
+justify-content:center;
+align-items:center;
+gap:10px;
+flex-wrap:wrap;
+margin:18px 0;
+}
+
+.answer-input{
+width:105px;
+min-height:58px;
+border:3px solid #64748b;
+border-radius:12px;
+text-align:center;
+font-size:1.7rem;
+font-weight:900;
+background:#fff;
+}
+
+.answer-input.correct-input{
+border-color:var(--green);
+background:var(--green-soft);
+}
+
+.answer-input.retry-input{
+border-color:var(--amber);
+background:var(--amber-soft);
+}
+
+.math-line{
+display:flex;
+justify-content:center;
+align-items:center;
+flex-wrap:wrap;
+gap:9px;
+font-size:2rem;
+font-weight:900;
+margin:18px 0;
+}
+
+.operation{
+padding:8px 14px;
+border-radius:10px;
+background:#f1f5f9;
+border:2px solid #cbd5e1;
+}
+
+.step-card{
+position:relative;
+padding-top:54px;
+}
+
+.step-number{
+position:absolute;
+top:16px;
+left:18px;
+width:38px;
+height:38px;
+border-radius:50%;
+background:var(--blue);
+color:white;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:900;
+}
+
+.rule-box{
+border:4px solid var(--purple);
+background:var(--purple-soft);
+border-radius:18px;
+padding:22px;
+text-align:center;
+margin:20px 0;
+}
+
+.rule-flow{
+display:flex;
+justify-content:center;
+align-items:center;
+flex-wrap:wrap;
+gap:10px;
+margin-top:15px;
+}
+
+.flow-box{
+padding:15px 18px;
+border:3px solid var(--blue);
+border-radius:13px;
+background:#eff6ff;
+font-weight:900;
+}
+
+.comparison{
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:22px;
+}
+
+.compare-card{
+border:3px solid #cbd5e1;
+border-radius:18px;
+padding:20px;
+text-align:center;
+}
+
+.compare-card.highlight{
+border-color:var(--blue);
+background:#eff6ff;
+}
+
+.proof-row{
+display:flex;
+justify-content:center;
+align-items:center;
+flex-wrap:wrap;
+gap:10px;
+font-size:1.6rem;
+font-weight:900;
+}
+
+.block-group{
+display:flex;
+justify-content:center;
+flex-wrap:wrap;
+gap:8px;
+margin:15px 0;
+}
+
+.third-block{
+width:48px;
+height:65px;
+border:3px solid #334155;
+background:#60a5fa;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:900;
+color:#fff;
+}
+
+.third-block.empty{
+background:#fff;
+color:var(--ink);
+}
+
+.match-board{
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:14px;
+}
+
+.match-item{
+border:3px solid #94a3b8;
+border-radius:14px;
+padding:16px;
+background:#fff;
+text-align:center;
+min-height:88px;
+display:flex;
+align-items:center;
+justify-content:center;
+transition:.2s;
+}
+
+.match-item.active{
+border-color:var(--purple);
+background:var(--purple-soft);
+}
+
+.match-item.matched{
+border-color:var(--green);
+background:var(--green-soft);
+}
+
+.match-column h3{
+text-align:center;
+}
+
+.stacked-answer{
+display:inline-flex;
+flex-direction:column;
+align-items:center;
+gap:0;
+}
+
+.stacked-answer input{
+width:90px;
+height:55px;
+text-align:center;
+font-size:1.8rem;
+font-weight:900;
+border:3px solid #64748b;
+border-radius:10px;
+}
+
+.stacked-answer .input-bar{
+width:90px;
+height:4px;
+background:var(--ink);
+margin:4px 0;
+}
+
+.question-list{
+display:grid;
+gap:16px;
+}
+
+.question-card{
+border:2px solid var(--line);
+border-radius:16px;
+padding:18px;
+background:#fff;
+}
+
+.question-number{
+font-weight:900;
+color:var(--blue);
+margin-bottom:5px;
+}
+
+.practice-grid{
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:18px;
+}
+
+.memory-card{
+max-width:850px;
+margin:30px auto;
+text-align:center;
+padding:35px;
+border:5px solid var(--purple);
+background:var(--purple-soft);
+border-radius:25px;
+}
+
+.memory-formula{
+font-size:clamp(1.8rem,4vw,3rem);
+font-weight:900;
+line-height:1.4;
+}
+
+.badge{
+display:inline-flex;
+align-items:center;
+gap:10px;
+padding:12px 20px;
+border-radius:999px;
+background:#fef3c7;
+border:3px solid #f59e0b;
+font-weight:900;
+font-size:1.3rem;
+}
+
+.nav-controls{
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+background:rgba(255,255,255,.97);
+backdrop-filter:blur(10px);
+border-top:1px solid var(--line);
+z-index:60;
+}
+
+.nav-inner{
+max-width:1200px;
+margin:auto;
+padding:13px 22px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:15px;
+}
+
+.nav-button{
+min-width:130px;
+min-height:54px;
+border:3px solid var(--blue);
+background:#fff;
+color:#1e40af;
+border-radius:14px;
+font-weight:900;
+}
+
+.nav-button.primary{
+background:var(--blue);
+color:#fff;
+}
+
+.nav-button:hover{
+filter:brightness(.96);
+transform:translateY(-1px);
+}
+
+.slide-dots{
+display:flex;
+gap:5px;
+justify-content:center;
+flex-wrap:wrap;
+max-width:500px;
+}
+
+.dot{
+width:10px;
+height:10px;
+border-radius:50%;
+background:#cbd5e1;
+border:0;
+padding:0;
+}
+
+.dot.active{
+background:var(--blue);
+transform:scale(1.35);
+}
+
+.success-banner{
+display:none;
+margin-top:24px;
+padding:24px;
+border-radius:20px;
+border:4px solid var(--green);
+background:var(--green-soft);
+text-align:center;
+}
+
+.success-banner.show{
+display:block;
+animation:pop .35s ease;
+}
+
+@keyframes pop{
+0%{transform:scale(.96);opacity:0}
+100%{transform:scale(1);opacity:1}
+}
+
+.score-strip{
+display:flex;
+justify-content:center;
+flex-wrap:wrap;
+gap:12px;
+margin-top:15px;
+}
+
+.score-chip{
+padding:9px 14px;
+border-radius:999px;
+background:#fff;
+border:2px solid var(--line);
+font-weight:800;
+}
+
+.small-note{
+font-size:1rem;
+color:var(--muted);
+}
+
+.label-tag{
+display:inline-block;
+padding:4px 8px;
+border-radius:6px;
+font-size:.82rem;
+font-weight:900;
+margin-bottom:5px;
+}
+
+.label-whole{
+background:var(--purple-soft);
+color:#5b21b6;
+}
+
+.label-den{
+background:var(--amber-soft);
+color:#92400e;
+}
+
+.label-num{
+background:var(--blue-soft);
+color:#1e40af;
+}
+
+@media(max-width:800px){
+.grid,
+.comparison,
+.practice-grid,
+.match-board{
+grid-template-columns:1fr;
+}
+
+```
+.three-grid{
+  grid-template-columns:1fr;
+}
+
+.deck{
+  padding:24px 15px 125px;
+}
+
+.card{
+  padding:19px;
+}
+
+.fraction{
+  font-size:2.3rem;
+}
+
+.topbar{
+  padding:12px 15px 9px;
+}
+
+.brand{
+  font-size:1rem;
+}
+
+.nav-button{
+  min-width:105px;
+}
+
+.slide-dots{
+  display:none;
+}
+```
+
+}
+
+@media(max-width:500px){
+body{
+font-size:1.15rem;
+}
+
+```
+.whole-zone{
+  min-width:72px;
+  min-height:72px;
+  font-size:2.4rem;
+}
+
+.den-zone,.num-zone{
+  min-width:65px;
+  min-height:60px;
+  font-size:2rem;
+}
+
+.math-line{
+  font-size:1.55rem;
+}
+
+.nav-inner{
+  padding:10px;
+}
+
+.nav-button{
+  min-width:90px;
+  padding:8px;
+}
+```
+
+} </style>
+
+</head>
+
+<body>
+<div class="app">
+
+<header>
+  <div class="topbar">
+    <div class="brand">🧩 Mixed Numbers → Improper Fractions</div>
+    <div class="slide-counter" id="slideCounter">Slide 1 of 19</div>
+  </div>
+  <div class="progress-track" aria-label="Lesson progress">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+</header>
+
+<main>
+<div class="deck">
+
+<!-- SLIDE 1 -->
+
+<section class="slide active" data-slide="1">
+  <div class="slide-header">
+    <span class="section-label">SECTION 1 • VISUAL FOUNDATION</span>
+    <h1>Warm-Up: Whole or Part? 🧩</h1>
+    <p class="subtitle">Before we convert anything, let's notice the <strong>whole</strong> pieces and the <strong>fractional</strong> piece.</p>
+  </div>
+
+  <div class="card center">
+    <div class="whole-blocks">
+      <div class="whole-shape">🍕</div>
+      <div class="whole-shape">🍕</div>
+      <div class="whole-shape" style="background:linear-gradient(to right,#60a5fa 50%,#fff 50%);color:#172033;">½</div>
+    </div>
+    <p class="visual-label">2 whole pizzas + one half pizza</p>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Q1. How many whole pizzas do you see?</h3>
+      <div class="choice-grid" id="s1q1">
+        <button class="choice-btn" onclick="checkChoice('s1q1',this,1)">1</button>
+        <button class="choice-btn" onclick="checkChoice('s1q1',this,2)">2</button>
+        <button class="choice-btn" onclick="checkChoice('s1q1',this,3)">3</button>
+      </div>
+      <div class="feedback" id="s1q1Feedback"></div>
+    </div>
+
+```
+<div class="card">
+  <h3>Q2. How much of the next pizza is left?</h3>
+  <div class="choice-grid" id="s1q2">
+    <button class="choice-btn" onclick="checkChoice('s1q2',this,'quarter')">
+      <span class="fraction small"><span class="num">1</span><span class="bar"></span><span class="den">4</span></span>
+    </button>
+    <button class="choice-btn" onclick="checkChoice('s1q2',this,'half')">
+      <span class="fraction small"><span class="num">1</span><span class="bar"></span><span class="den">2</span></span>
+    </button>
+    <button class="choice-btn" onclick="checkChoice('s1q2',this,'threequarter')">
+      <span class="fraction small"><span class="num">3</span><span class="bar"></span><span class="den">4</span></span>
+    </button>
+  </div>
+  <div class="feedback" id="s1q2Feedback"></div>
+</div>
+```
+
+  </div>
+
+  <div class="card center">
+    <div class="instruction">
+      <strong>Key idea:</strong>
+      <div class="fraction-parts">
+        <span class="big-number">2</span>
+        <span>wholes +</span>
+        <span class="fraction compact"><span class="num">1</span><span class="bar"></span><span class="den">2</span></span>
+        <span>=</span>
+        <span class="annotated-number">
+          <span class="whole-zone">2</span>
+          <span class="fraction compact"><span class="num">1</span><span class="bar"></span><span class="den">2</span></span>
+        </span>
+      </div>
+      <p>A <strong>mixed number</strong> has a whole number + a fraction.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 2 -->
+
+<section class="slide" data-slide="2">
+  <div class="slide-header">
+    <span class="section-label">SECTION 1 • VISUAL FOUNDATION</span>
+    <h1>Meet the Mixed Number 👋</h1>
+    <p class="subtitle">A mixed number tells us about whole groups and a leftover part.</p>
+  </div>
+
+  <div class="card center">
+    <div class="annotated-number">
+      <div class="annotation-item">
+        <span class="label-tag label-whole">WHOLE</span><br>
+        <span class="whole-zone">2</span>
+      </div>
+      <span class="arrow">+</span>
+      <div class="annotation-item">
+        <span class="label-tag label-num">NUMERATOR</span><br>
+        <span class="fraction compact"><span class="num">1</span><span class="bar"></span><span class="den">3</span></span>
+      </div>
+    </div>
+
+```
+<div class="whole-blocks">
+  <div class="whole-shape">🟦</div>
+  <div class="whole-shape">🟦</div>
+</div>
+
+<div class="thirds">
+  <div class="part filled">🟦</div>
+  <div class="part">⬜</div>
+  <div class="part">⬜</div>
+</div>
+
+<div class="three-grid">
+  <div class="card" style="box-shadow:none;">
+    <span class="label-tag label-whole">WHOLE</span>
+    <div class="big-number">2</div>
+    <p>Two complete groups.</p>
+  </div>
+  <div class="card" style="box-shadow:none;">
+    <span class="label-tag label-num">NUMERATOR</span>
+    <div class="big-number">1</div>
+    <p>One part is selected.</p>
+  </div>
+  <div class="card" style="box-shadow:none;">
+    <span class="label-tag label-den">DENOMINATOR</span>
+    <div class="big-number">3</div>
+    <p>The whole is split into three equal parts.</p>
+  </div>
+</div>
+```
+
+  </div>
+</section>
+
+<!-- SLIDE 3 -->
+
+<section class="slide" data-slide="3">
+  <div class="slide-header">
+    <span class="section-label">SECTION 1 • VISUAL FOUNDATION</span>
+    <h1>What Is an Improper Fraction?</h1>
+    <p class="subtitle">An improper fraction has a numerator that is as large as or larger than its denominator.</p>
+  </div>
+
+  <div class="card center">
+    <h3>Look at seven one-third blocks.</h3>
+
+```
+<div class="block-group">
+  <div class="third-block">1</div>
+  <div class="third-block">1</div>
+  <div class="third-block">1</div>
+  <div class="third-block">1</div>
+  <div class="third-block">1</div>
+  <div class="third-block">1</div>
+  <div class="third-block">1</div>
+</div>
+
+<div class="proof-row">
+  <span class="fraction compact"><span class="num">3</span><span class="bar"></span><span class="den">3</span></span>
+  <span>+</span>
+  <span class="fraction compact"><span class="num">3</span><span class="bar"></span><span class="den">3</span></span>
+  <span>+</span>
+  <span class="fraction compact"><span class="num">1</span><span class="bar"></span><span class="den">3</span></span>
+</div>
+
+<p class="instruction">
+  Two complete groups make <strong>2 wholes</strong>, with <strong>1 third</strong> left.
+</p>
+
+<div class="fraction-parts">
+  <span class="whole-zone">2</span>
+  <span class="fraction compact"><span class="num">1</span><span class="bar"></span><span class="den">3</span></span>
+</div>
+```
+
+  </div>
+</section>
+
+<!-- SLIDE 4 -->
+
+<section class="slide" data-slide="4">
+  <div class="slide-header">
+    <span class="section-label">SECTION 1 • VISUAL FOUNDATION</span>
+    <h1>Mixed vs Improper 🔄</h1>
+    <p class="subtitle">The appearance changes, but the total amount stays exactly the same.</p>
+  </div>
+
+  <div class="comparison">
+    <div class="compare-card highlight">
+      <h3>Mixed Number</h3>
+      <div class="fraction-parts">
+        <span class="whole-zone">2</span>
+        <span class="fraction compact"><span class="num">1</span><span class="bar"></span><span class="den">3</span></span>
+      </div>
+      <div class="block-group">
+        <div class="third-block">1</div>
+        <div class="third-block">1</div>
+        <div class="third-block">1</div>
+        <div class="third-block">1</div>
+        <div class="third-block">1</div>
+        <div class="third-block">1</div>
+        <div class="third-block">1</div>
+      </div>
+    </div>
+
+```
+<div class="compare-card">
+  <h3>Improper Fraction</h3>
+  <span class="fraction">
+    <span class="num">7</span>
+    <span class="bar"></span>
+    <span class="den">3</span>
+  </span>
+  <div class="block-group">
+    <div class="third-block">1</div>
+    <div class="third-block">1</div>
+    <div class="third-block">1</div>
+    <div class="third-block">1</div>
+    <div class="third-block">1</div>
+    <div class="third-block">1</div>
+    <div class="third-block">1</div>
+  </div>
+</div>
+```
+
+  </div>
+
+  <div class="rule-box">
+    <h3>💡 KEY IDEA</h3>
+    <p><strong>Different forms, same total value.</strong></p>
+  </div>
+</section>
+
+<!-- SLIDE 5 -->
+
+<section class="slide" data-slide="5">
+  <div class="slide-header">
+    <span class="section-label">SECTION 1 • VISUAL FOUNDATION</span>
+    <h1>The Big Question 🤔</h1>
+    <p class="subtitle">How can we change a mixed number into an improper fraction without drawing every piece?</p>
+  </div>
+
+  <div class="card center">
+    <div class="fraction-parts">
+      <span class="whole-zone">2</span>
+      <span class="fraction compact"><span class="num">1</span><span class="bar"></span><span class="den">3</span></span>
+      <span class="arrow">→</span>
+      <span class="fraction compact"><span class="num">?</span><span class="bar"></span><span class="den">3</span></span>
+    </div>
+
+```
+<h3>How many thirds are in 2 wholes?</h3>
+<div class="choice-grid">
+  <button class="choice-btn" onclick="slide5Answer(this,3)">3</button>
+  <button class="choice-btn" onclick="slide5Answer(this,6)">6</button>
+  <button class="choice-btn" onclick="slide5Answer(this,9)">9</button>
+</div>
+
+<div class="feedback" id="s5Feedback"></div>
+
+<div class="instruction">
+  <strong>1 whole</strong> contains three thirds.
+  Therefore, <strong>2 wholes</strong> contain six thirds.
+  <div class="math-line">
+    <span class="whole-zone" style="min-width:65px;min-height:65px;font-size:2rem;">2</span>
+    <span>×</span>
+    <span class="den-zone">3</span>
+    <span>=</span>
+    <span class="num-zone">6</span>
+  </div>
+</div>
+```
+
+  </div>
+</section>
+
+<!-- SLIDE 6 -->
+
+<section class="slide" data-slide="6">
+  <div class="slide-header">
+    <span class="section-label">SECTION 2 • MULTIPLICATION RULE</span>
+    <h1>Build It Step by Step 🧱</h1>
+    <p class="subtitle">Follow the same visual route every time: <strong>WHOLE → × DENOMINATOR → + NUMERATOR → SAME DENOMINATOR</strong>.</p>
+  </div>
+
+  <div class="grid">
+    <div class="card step-card center">
+      <span class="step-number">1</span>
+      <span class="label-tag label-whole">WHOLE</span>
+      <span class="whole-zone">2</span>
+      <span class="arrow">×</span>
+      <span class="label-tag label-den">DENOMINATOR</span>
+      <span class="den-zone">3</span>
+      <div class="math-line">2 × 3 = <span class="num-zone">6</span></div>
+      <p>Make six thirds from the two wholes.</p>
+    </div>
+
+```
+<div class="card step-card center">
+  <span class="step-number">2</span>
+  <span class="num-zone">6</span>
+  <span class="arrow">+</span>
+  <span class="label-tag label-num">NUMERATOR</span>
+  <span class="num-zone">1</span>
+  <div class="math-line">6 + 1 = <span class="num-zone">7</span></div>
+  <p>Add the leftover one third.</p>
+</div>
+```
+
+  </div>
+
+  <div class="card center">
+    <span class="step-number">3</span>
+    <h3>Keep the denominator the SAME.</h3>
+    <div class="fraction-parts">
+      <span class="num-zone">7</span>
+      <span class="arrow">over</span>
+      <span class="den-zone">3</span>
+    </div>
+    <p class="instruction">Final improper fraction:</p>
+    <span class="fraction">
+      <span class="num">7</span>
+      <span class="bar"></span>
+      <span class="den">3</span>
+    </span>
+  </div>
+</section>
+
+<!-- SLIDE 7 -->
+
+<section class="slide" data-slide="7">
+  <div class="slide-header">
+    <span class="section-label">SECTION 2 • THE PATTERN</span>
+    <h1>The Pattern 🧠</h1>
+    <p class="subtitle">Once you see the route, every mixed number follows the same structure.</p>
+  </div>
+
+  <div class="rule-box">
+    <div class="rule-flow">
+      <div class="flow-box">WHOLE</div>
+      <div class="arrow">×</div>
+      <div class="flow-box">DENOMINATOR</div>
+      <div class="arrow">+</div>
+      <div class="flow-box">NUMERATOR</div>
+      <div class="arrow">=</div>
+      <div class="flow-box">NEW NUMERATOR</div>
+    </div>
+    <p><strong>Denominator stays the SAME.</strong></p>
+  </div>
+
+  <div class="card center">
+    <h3>Worked example</h3>
+
+```
+<div class="annotated-number">
+  <div class="annotation-item">
+    <span class="label-tag label-whole">WHOLE</span><br>
+    <span class="whole-zone">3</span>
+  </div>
+
+  <div class="annotation-item">
+    <span class="label-tag label-num">NUMERATOR</span><br>
+    <span class="num-zone">2</span>
+  </div>
+
+  <div class="annotation-item">
+    <span class="label-tag label-den">DENOMINATOR</span><br>
+    <span class="den-zone">5</span>
+  </div>
+</div>
+
+<div class="math-line">
+  <span>3 × 5</span><span>=</span><span class="num-zone">15</span>
+  <span>→</span>
+  <span>15 + 2</span><span>=</span><span class="num-zone">17</span>
+</div>
+
+<p>Keep the denominator <strong>5</strong>.</p>
+
+<span class="fraction">
+  <span class="num">17</span>
+  <span class="bar"></span>
+  <span class="den">5</span>
+</span>
+```
+
+  </div>
+</section>
+
+<!-- SLIDE 8 -->
+
+<section class="slide" data-slide="8">
+  <div class="slide-header">
+    <span class="section-label">SECTION 2 • GUIDED PRACTICE</span>
+    <h1>Interactive: Build the Fraction 🎯</h1>
+    <p class="subtitle">Convert the mixed number by completing each step.</p>
+  </div>
+
+  <div class="card center">
+    <div class="fraction-parts">
+      <span class="whole-zone">2</span>
+      <span class="fraction compact"><span class="num">3</span><span class="bar"></span><span class="den">4</span></span>
+    </div>
+
+```
+<div class="step-card card">
+  <span class="step-number">1</span>
+  <div class="math-line">
+    <span>2 × 4 =</span>
+    <input class="answer-input" id="s8a" inputmode="numeric" aria-label="Step 1 answer">
+  </div>
+</div>
+
+<div class="step-card card">
+  <span class="step-number">2</span>
+  <div class="math-line">
+    <span>8 + 3 =</span>
+    <input class="answer-input" id="s8b" inputmode="numeric" aria-label="Step 2 answer">
+  </div>
+</div>
+
+<div class="step-card card">
+  <span class="step-number">3</span>
+  <div class="math-line">
+    <span>Keep denominator</span>
+    <input class="answer-input" id="s8c" inputmode="numeric" aria-label="Denominator answer">
+  </div>
+</div>
+
+<button class="nav-button primary" onclick="checkSlide8()">Check My Steps</button>
+<button class="nav-button" onclick="hint('s8Hint')">💡 Hint</button>
+<div class="hint" id="s8Hint">Multiply the whole by the denominator first. Then add the numerator. The denominator does not change.</div>
+<div class="feedback" id="s8Feedback"></div>
+
+<div id="s8Final" style="display:none;margin-top:20px;">
+  <p><strong>Great!</strong> Your final fraction is:</p>
+  <span class="fraction"><span class="num">11</span><span class="bar"></span><span class="den">4</span></span>
+</div>
+```
+
+  </div>
+</section>
+
+<!-- SLIDE 9 -->
+
+<section class="slide" data-slide="9">
+  <div class="slide-header">
+    <span class="section-label">SECTION 2 • WHY IT WORKS</span>
+    <h1>Why Does It Work? 🔍</h1>
+    <p class="subtitle">The rule is not a trick. It simply counts how many equal pieces we have.</p>
+  </div>
+
+  <div class="card center">
+    <h3>Two whole pizzas cut into quarters</h3>
+
+```
+<div class="quarters">
+  <div class="part filled">¼</div>
+  <div class="part filled">¼</div>
+  <div class="part filled">¼</div>
+  <div class="part filled">¼</div>
+</div>
+
+<div class="quarters">
+  <div class="part filled">¼</div>
+  <div class="part filled">¼</div>
+  <div class="part filled">¼</div>
+  <div class="part filled">¼</div>
+</div>
+
+<p><strong>2 wholes = 8 quarters.</strong></p>
+
+<div class="quarters">
+  <div class="part filled">¼</div>
+  <div class="part filled">¼</div>
+  <div class="part filled">¼</div>
+  <div class="part">⬜</div>
+</div>
+
+<p>Then add three more quarters.</p>
+
+<div class="proof-row">
+  <span class="num-zone">8</span>
+  <span>+</span>
+  <span class="num-zone">3</span>
+  <span>=</span>
+  <span class="num-zone">11</span>
+  <span>quarters</span>
+</div>
+
+<span class="fraction">
+  <span class="num">11</span>
+  <span class="bar"></span>
+  <span class="den">4</span>
+</span>
+```
+
+  </div>
+</section>
+
+<!-- SLIDE 10 -->
+
+<section class="slide" data-slide="10">
+  <div class="slide-header">
+    <span class="section-label">SECTION 2 • YOUR TURN</span>
+    <h1>Your Turn 👆</h1>
+    <p class="subtitle">Convert the mixed number. Use the same three-step route.</p>
+  </div>
+
+  <div class="card center">
+    <div class="fraction-parts">
+      <span class="whole-zone">1</span>
+      <span class="fraction compact"><span class="num">2</span><span class="bar"></span><span class="den">5</span></span>
+    </div>
+
+```
+<div class="math-line">
+  <span>1 × 5 =</span>
+  <input class="answer-input" id="s10a" inputmode="numeric" aria-label="First answer">
+</div>
+
+<div class="math-line">
+  <span>5 + 2 =</span>
+  <input class="answer-input" id="s10b" inputmode="numeric" aria-label="Second answer">
+</div>
+
+<div class="math-line">
+  <span>Denominator:</span>
+  <input class="answer-input" id="s10c" inputmode="numeric" aria-label="Denominator answer">
+</div>
+
+<button class="nav-button primary" onclick="checkSlide10()">Check</button>
+<button class="nav-button" onclick="hint('s10Hint')">💡 Hint</button>
+<div class="hint" id="s10Hint">Start with 1 × 5. Then add the numerator 2. Keep 5 at the bottom.</div>
+<div class="feedback" id="s10Feedback"></div>
+
+<div id="s10Final" style="display:none;margin-top:20px;">
+  <span class="fraction"><span class="num">7</span><span class="bar"></span><span class="den">5</span></span>
+</div>
+```
+
+  </div>
+</section>
+
+<!-- SLIDE 11 -->
+
+<section class="slide" data-slide="11">
+  <div class="slide-header">
+    <span class="section-label">SECTION 3 • MISTAKE DETECTIVE</span>
+    <h1>Don't Change the Denominator! ⚠️</h1>
+    <p class="subtitle">Let's inspect a student's answer carefully.</p>
+  </div>
+
+  <div class="card center">
+    <div class="fraction-parts">
+      <span class="whole-zone">3</span>
+      <span class="fraction compact"><span class="num">1</span><span class="bar"></span><span class="den">4</span></span>
+      <span class="arrow">→</span>
+      <span class="fraction compact"><span class="num">13</span><span class="bar"></span><span class="den">12</span></span>
+    </div>
+
+```
+<h3>What went wrong?</h3>
+
+<div class="choice-grid">
+  <button class="choice-btn" onclick="checkChoice('s11',this,'denominator')">They changed the denominator.</button>
+  <button class="choice-btn" onclick="checkChoice('s11',this,'multiply')">They forgot to multiply.</button>
+  <button class="choice-btn" onclick="checkChoice('s11',this,'add')">They added incorrectly.</button>
+</div>
+
+<div class="feedback" id="s11Feedback"></div>
+
+<div class="rule-box">
+  <strong>RULE:</strong>
+  <p>The denominator stays the <strong>SAME</strong>!</p>
+</div>
+```
+
+  </div>
+</section>
+
+<!-- SLIDE 12 -->
+
+<section class="slide" data-slide="12">
+  <div class="slide-header">
+    <span class="section-label">SECTION 3 • MISTAKE DETECTIVE</span>
+    <h1>Find the Mistake 🕵️</h1>
+    <p class="subtitle">Which student followed the correct multiplication rule?</p>
+  </div>
+
+  <div class="comparison">
+    <div class="compare-card">
+      <h3>Student A</h3>
+      <div class="math-line">2 × 3 = 6</div>
+      <div class="math-line">6 + 2 = 8</div>
+      <span class="fraction compact"><span class="num">8</span><span class="bar"></span><span class="den">3</span></span>
+    </div>
+
+```
+<div class="compare-card">
+  <h3>Student B</h3>
+  <div class="math-line">2 + 3 = 5</div>
+  <div class="math-line">5 + 2 = 7</div>
+  <span class="fraction compact"><span class="num">7</span><span class="bar"></span><span class="den">3</span></span>
+</div>
+```
+
+  </div>
+
+  <div class="card center">
+    <h3>Who is correct?</h3>
+    <div class="choice-grid">
+      <button class="choice-btn" onclick="slide12Answer(this,'A')">Student A</button>
+      <button class="choice-btn" onclick="slide12Answer(this,'B')">Student B</button>
+    </div>
+    <div class="feedback" id="s12Feedback"></div>
+  </div>
+</section>
+
+<!-- SLIDE 13 -->
+
+<section class="slide" data-slide="13">
+  <div class="slide-header">
+    <span class="section-label">SECTION 3 • MATCHING</span>
+    <h1>Match the Pairs 🧩</h1>
+    <p class="subtitle">Click one mixed number, then click its matching improper fraction.</p>
+  </div>
+
+  <div class="card">
+    <div class="match-board">
+      <div class="match-column">
+        <h3>Mixed Numbers</h3>
+
+```
+    <button class="match-item" data-match="a" onclick="selectMatch(this,'a')">
+      <span class="whole-zone" style="min-width:55px;min-height:55px;font-size:1.8rem;">1</span>
+      <span class="fraction small"><span class="num">1</span><span class="bar"></span><span class="den">2</span></span>
+    </button>
+
+    <button class="match-item" data-match="b" onclick="selectMatch(this,'b')">
+      <span class="whole-zone" style="min-width:55px;min-height:55px;font-size:1.8rem;">2</span>
+      <span class="fraction small"><span class="num">1</span><span class="bar"></span><span class="den">3</span></span>
+    </button>
+
+    <button class="match-item" data-match="c" onclick="selectMatch(this,'c')">
+      <span class="whole-zone" style="min-width:55px;min-height:55px;font-size:1.8rem;">2</span>
+      <span class="fraction small"><span class="num">3</span><span class="bar"></span><span class="den">4</span></span>
+    </button>
+
+    <button class="match-item" data-match="d" onclick="selectMatch(this,'d')">
+      <span class="whole-zone" style="min-width:55px;min-height:55px;font-size:1.8rem;">3</span>
+      <span class="fraction small"><span class="num">1</span><span class="bar"></span><span class="den">5</span></span>
+    </button>
+  </div>
+
+  <div class="match-column">
+    <h3>Improper Fractions</h3>
+
+    <button class="match-item" data-match="c" onclick="selectMatch(this,'c')">
+      <span class="fraction compact"><span class="num">11</span><span class="bar"></span><span class="den">4</span></span>
+    </button>
+
+    <button class="match-item" data-match="a" onclick="selectMatch(this,'a')">
+      <span class="fraction compact"><span class="num">3</span><span class="bar"></span><span class="den">2</span></span>
+    </button>
+
+    <button class="match-item" data-match="d" onclick="selectMatch(this,'d')">
+      <span class="fraction compact"><span class="num">16</span><span class="bar"></span><span class="den">5</span></span>
+    </button>
+
+    <button class="match-item" data-match="b" onclick="selectMatch(this,'b')">
+      <span class="fraction compact"><span class="num">7</span><span class="bar"></span><span class="den">3</span></span>
+    </button>
+  </div>
+</div>
+
+<div class="feedback" id="s13Feedback"></div>
+```
+
+  </div>
+</section>
+
+<!-- SLIDE 14 -->
+
+<section class="slide" data-slide="14">
+  <div class="slide-header">
+    <span class="section-label">SECTION 3 • MISSING NUMBER</span>
+    <h1>Missing Number Challenge ⭐</h1>
+    <p class="subtitle">Build the new numerator one small step at a time.</p>
+  </div>
+
+  <div class="card center">
+    <div class="fraction-parts">
+      <span class="whole-zone">2</span>
+      <span class="fraction compact"><span class="num">1</span><span class="bar"></span><span class="den">3</span></span>
+      <span class="arrow">=</span>
+      <span class="fraction compact"><span class="num">?</span><span class="bar"></span><span class="den">3</span></span>
+    </div>
+
+```
+<div class="math-line">
+  <span>2 × 3 =</span>
+  <span class="num-zone">6</span>
+</div>
+
+<div class="math-line">
+  <span>6 + 1 =</span>
+  <input class="answer-input" id="s14" inputmode="numeric" aria-label="Missing numerator">
+</div>
+
+<button class="nav-button primary" onclick="checkSlide14()">Check</button>
+<div class="feedback" id="s14Feedback"></div>
+
+<div id="s14Final" style="display:none;margin-top:18px;">
+  <span class="fraction"><span class="num">7</span><span class="bar"></span><span class="den">3</span></span>
+</div>
+```
+
+  </div>
+</section>
+
+<!-- SLIDE 15 -->
+
+<section class="slide" data-slide="15">
+  <div class="slide-header">
+    <span class="section-label">SECTION 3 • SPEED BUMP</span>
+    <h1>Identify the Parts 🛑</h1>
+    <p class="subtitle">Slow down and label the mixed number before calculating.</p>
+  </div>
+
+  <div class="card center">
+    <div class="fraction-parts">
+      <div class="annotation-item">
+        <span class="label-tag label-whole">WHOLE</span>
+        <div class="whole-zone">4</div>
+      </div>
+      <div class="annotation-item">
+        <span class="label-tag label-num">NUMERATOR</span>
+        <div class="num-zone">2</div>
+      </div>
+      <div class="annotation-item">
+        <span class="label-tag label-den">DENOMINATOR</span>
+        <div class="den-zone">7</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="practice-grid">
+    <div class="card">
+      <h3>Whole number?</h3>
+      <input class="answer-input" id="s15a" inputmode="numeric">
+    </div>
+
+```
+<div class="card">
+  <h3>Denominator?</h3>
+  <input class="answer-input" id="s15b" inputmode="numeric">
+</div>
+
+<div class="card">
+  <h3>Numerator?</h3>
+  <input class="answer-input" id="s15c" inputmode="numeric">
+</div>
+
+<div class="card">
+  <h3>Calculate: (whole × denominator) + numerator</h3>
+  <input class="answer-input" id="s15d" inputmode="numeric">
+</div>
+```
+
+  </div>
+
+  <div class="card center">
+    <button class="nav-button primary" onclick="checkSlide15()">Check All</button>
+    <div class="feedback" id="s15Feedback"></div>
+    <div id="s15Final" style="display:none;margin-top:20px;">
+      <span class="fraction"><span class="num">30</span><span class="bar"></span><span class="den">7</span></span>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 16 -->
+
+<section class="slide" data-slide="16">
+  <div class="slide-header">
+    <span class="section-label">SECTION 4 • INDEPENDENT PRACTICE</span>
+    <h1>Independent Practice ✏️</h1>
+    <p class="subtitle">Complete each improper fraction. Work carefully; accuracy matters more than speed.</p>
+  </div>
+
+  <div class="question-list">
+
+```
+<div class="question-card">
+  <div class="question-number">Question 1</div>
+  <div class="fraction-parts">
+    <span class="whole-zone">1</span>
+    <span class="fraction compact"><span class="num">1</span><span class="bar"></span><span class="den">3</span></span>
+    <span>=</span>
+    <div class="stacked-answer">
+      <input id="s16q1n" inputmode="numeric" aria-label="Question 1 numerator">
+      <div class="input-bar"></div>
+      <input id="s16q1d" inputmode="numeric" aria-label="Question 1 denominator">
+    </div>
+  </div>
+  <div class="feedback" id="s16q1f"></div>
+</div>
+
+<div class="question-card">
+  <div class="question-number">Question 2</div>
+  <div class="fraction-parts">
+    <span class="whole-zone">2</span>
+    <span class="fraction compact"><span class="num">1</span><span class="bar"></span><span class="den">4</span></span>
+    <span>=</span>
+    <div class="stacked-answer">
+      <input id="s16q2n" inputmode="numeric" aria-label="Question 2 numerator">
+      <div class="input-bar"></div>
+      <input id="s16q2d" inputmode="numeric" aria-label="Question 2 denominator">
+    </div>
+  </div>
+  <div class="feedback" id="s16q2f"></div>
+</div>
+
+<div class="question-card">
+  <div class="question-number">Question 3</div>
+  <div class="fraction-parts">
+    <span class="whole-zone">3</span>
+    <span class="fraction compact"><span class="num">2</span><span class="bar"></span><span class="den">5</span></span>
+    <span>=</span>
+    <div class="stacked-answer">
+      <input id="s16q3n" inputmode="numeric" aria-label="Question 3 numerator">
+      <div class="input-bar"></div>
+      <input id="s16q3d" inputmode="numeric" aria-label="Question 3 denominator">
+    </div>
+  </div>
+  <div class="feedback" id="s16q3f"></div>
+</div>
+
+<div class="question-card">
+  <div class="question-number">Question 4</div>
+  <div class="fraction-parts">
+    <span class="whole-zone">2</span>
+    <span class="fraction compact"><span class="num">3</span><span class="bar"></span><span class="den">7</span></span>
+    <span>=</span>
+    <div class="stacked-answer">
+      <input id="s16q4n" inputmode="numeric" aria-label="Question 4 numerator">
+      <div class="input-bar"></div>
+      <input id="s16q4d" inputmode="numeric" aria-label="Question 4 denominator">
+    </div>
+  </div>
+  <div class="feedback" id="s16q4f"></div>
+</div>
+
+<div class="question-card">
+  <div class="question-number">Question 5</div>
+  <div class="fraction-parts">
+    <span class="whole-zone">4</span>
+    <span class="fraction compact"><span class="num">1</span><span class="bar"></span><span class="den">3</span></span>
+    <span>=</span>
+    <div class="stacked-answer">
+      <input id="s16q5n" inputmode="numeric" aria-label="Question 5 numerator">
+      <div class="input-bar"></div>
+      <input id="s16q5d" inputmode="numeric" aria-label="Question 5 denominator">
+    </div>
+  </div>
+  <div class="feedback" id="s16q5f"></div>
+</div>
+```
+
+  </div>
+
+  <div class="card center">
+    <button class="nav-button primary" onclick="checkSlide16()">Check Practice</button>
+  </div>
+</section>
+
+<!-- SLIDE 17 -->
+
+<section class="slide" data-slide="17">
+  <div class="slide-header">
+    <span class="section-label">SECTION 4 • CHALLENGE</span>
+    <h1>Challenge Round 🚀</h1>
+    <p class="subtitle">One more example. Keep following the same route.</p>
+  </div>
+
+  <div class="card center">
+    <div class="fraction-parts">
+      <span class="whole-zone">5</span>
+      <span class="fraction compact"><span class="num">3</span><span class="bar"></span><span class="den">8</span></span>
+    </div>
+
+```
+<div class="math-line">
+  <span>5 × 8 =</span>
+  <input class="answer-input" id="s17a" inputmode="numeric">
+</div>
+
+<div class="math-line">
+  <span>40 + 3 =</span>
+  <input class="answer-input" id="s17b" inputmode="numeric">
+</div>
+
+<div class="math-line">
+  <span>Denominator:</span>
+  <input class="answer-input" id="s17c" inputmode="numeric">
+</div>
+
+<button class="nav-button primary" onclick="checkSlide17()">Check Challenge</button>
+<button class="nav-button" onclick="hint('s17Hint')">💡 Hint</button>
+<div class="hint" id="s17Hint">Multiply 5 by 8, then add 3. The denominator stays 8.</div>
+<div class="feedback" id="s17Feedback"></div>
+
+<div id="s17Final" style="display:none;margin-top:18px;">
+  <span class="fraction"><span class="num">43</span><span class="bar"></span><span class="den">8</span></span>
+</div>
+```
+
+  </div>
+</section>
+
+<!-- SLIDE 18 -->
+
+<section class="slide" data-slide="18">
+  <div class="slide-header">
+    <span class="section-label">SECTION 4 • MEMORY TRICK</span>
+    <h1>Final Memory Trick 🧠</h1>
+    <p class="subtitle">Keep this simple pattern in your mind.</p>
+  </div>
+
+  <div class="memory-card">
+    <div class="memory-formula">
+      <span class="whole-zone">WHOLE</span>
+      <span>×</span>
+      <span class="den-zone">DENOMINATOR</span>
+      <span>+</span>
+      <span class="num-zone">NUMERATOR</span>
+    </div>
+
+```
+<div style="font-size:2.2rem;font-weight:900;margin:15px;">↓</div>
+
+<div class="memory-formula">
+  <span class="num-zone">NEW NUMERATOR</span>
+</div>
+
+<div style="font-size:2.2rem;font-weight:900;margin:15px;">+</div>
+
+<div class="memory-formula">
+  <span class="den-zone">SAME DENOMINATOR</span>
+</div>
+```
+
+  </div>
+
+  <div class="card center">
+    <h3>Say it aloud:</h3>
+    <p style="font-size:1.5rem;font-weight:800;">
+      <strong>Whole × denominator, plus numerator, over the SAME denominator.</strong>
+    </p>
+  </div>
+</section>
+
+<!-- SLIDE 19 -->
+
+<section class="slide" data-slide="19">
+  <div class="slide-header">
+    <span class="section-label">FINAL CHECK</span>
+    <h1>Exit Ticket 🎟️</h1>
+    <p class="subtitle">Show what you know. Take your time and use the memory trick if needed.</p>
+  </div>
+
+  <div class="question-list">
+
+```
+<div class="question-card">
+  <div class="question-number">Q1. Convert</div>
+  <div class="fraction-parts">
+    <span class="whole-zone">2</span>
+    <span class="fraction compact"><span class="num">1</span><span class="bar"></span><span class="den">2</span></span>
+    <span>=</span>
+    <div class="stacked-answer">
+      <input id="s19q1n" inputmode="numeric">
+      <div class="input-bar"></div>
+      <input id="s19q1d" inputmode="numeric">
+    </div>
+  </div>
+  <div class="feedback" id="s19q1f"></div>
+</div>
+
+<div class="question-card">
+  <div class="question-number">Q2. Convert</div>
+  <div class="fraction-parts">
+    <span class="whole-zone">3</span>
+    <span class="fraction compact"><span class="num">1</span><span class="bar"></span><span class="den">4</span></span>
+    <span>=</span>
+    <div class="stacked-answer">
+      <input id="s19q2n" inputmode="numeric">
+      <div class="input-bar"></div>
+      <input id="s19q2d" inputmode="numeric">
+    </div>
+  </div>
+  <div class="feedback" id="s19q2f"></div>
+</div>
+
+<div class="question-card">
+  <div class="question-number">Q3. Convert</div>
+  <div class="fraction-parts">
+    <span class="whole-zone">4</span>
+    <span class="fraction compact"><span class="num">2</span><span class="bar"></span><span class="den">3</span></span>
+    <span>=</span>
+    <div class="stacked-answer">
+      <input id="s19q3n" inputmode="numeric">
+      <div class="input-bar"></div>
+      <input id="s19q3d" inputmode="numeric">
+    </div>
+  </div>
+  <div class="feedback" id="s19q3f"></div>
+</div>
+
+<div class="question-card">
+  <div class="question-number">Q4. True or False</div>
+  <p>The denominator stays the same when converting a mixed number.</p>
+  <div class="choice-grid">
+    <button class="choice-btn" onclick="checkExitChoice(this,'true')">True</button>
+    <button class="choice-btn" onclick="checkExitChoice(this,'false')">False</button>
+  </div>
+  <div class="feedback" id="s19q4f"></div>
+</div>
+
+<div class="question-card">
+  <div class="question-number">Q5. Complete the formula</div>
+  <div class="math-line">
+    <span>Whole ×</span>
+    <input class="answer-input" id="s19q5" aria-label="Formula missing word">
+    <span>+</span>
+    <span>Numerator</span>
+  </div>
+  <div class="small-note">Type the word that belongs in the blank.</div>
+  <div class="feedback" id="s19q5f"></div>
+</div>
+```
+
+  </div>
+
+  <div class="card center">
+    <button class="nav-button primary" onclick="finishDeck()">🎉 Finish Deck</button>
+
+```
+<div class="success-banner" id="finishBanner">
+  <div style="font-size:3.5rem;">⭐</div>
+  <h2 id="finishTitle">Great work!</h2>
+  <p id="finishMessage"></p>
+  <div class="badge" id="finishBadge">⭐ Fraction Converter</div>
+  <div class="score-strip">
+    <div class="score-chip" id="finalScore">Correct: 0</div>
+    <div class="score-chip" id="finalAccuracy">Accuracy: 0%</div>
+  </div>
+</div>
+```
+
+  </div>
+</section>
+
+</div>
+</main>
+
+<div class="nav-controls">
+  <div class="nav-inner">
+    <button class="nav-button" id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+
+```
+<div class="slide-dots" id="slideDots" aria-label="Slide navigation"></div>
+
+<button class="nav-button primary" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+```
+
+  </div>
+</div>
+
+</div>
+
+<script>
+"use strict";
+
+const TOTAL_SLIDES = 19;
+let currentSlide = 1;
+
+const state = {
+  attempts: 0,
+  correct: 0,
+  completed: new Set(),
+  matchFirst: null,
+  matches: new Set()
+};
+
+const totalTasks = 24;
+
+function $(id){
+  return document.getElementById(id);
+}
+
+function showFeedback(id, message, type){
+  const el = $(id);
+  if(!el) return;
+  el.textContent = message;
+  el.className = "feedback show " + type;
+}
+
+function clearFeedback(id){
+  const el = $(id);
+  if(el){
+    el.textContent = "";
+    el.className = "feedback";
+  }
+}
+
+function record(taskId, correct){
+  state.attempts++;
+
+  if(correct && !state.completed.has(taskId)){
+    state.completed.add(taskId);
+    state.correct++;
+  }
+
+  updateProgress();
+}
+
+function updateProgress(){
+  const percent = Math.round((currentSlide / TOTAL_SLIDES) * 100);
+  $("progressFill").style.width = percent + "%";
+  $("slideCounter").textContent = "Slide " + currentSlide + " of " + TOTAL_SLIDES;
+}
+
+function createDots(){
+  const container = $("slideDots");
+  for(let i=1;i<=TOTAL_SLIDES;i++){
+    const dot = document.createElement("button");
+    dot.className = "dot" + (i===1 ? " active" : "");
+    dot.setAttribute("aria-label","Go to slide " + i);
+    dot.addEventListener("click",()=>goToSlide(i));
+    container.appendChild(dot);
+  }
+}
+
+function updateDots(){
+  document.querySelectorAll(".dot").forEach((dot,index)=>{
+    dot.classList.toggle("active", index+1 === currentSlide);
+  });
+}
+
+function goToSlide(number){
+  if(number < 1 || number > TOTAL_SLIDES) return;
+
+  document.querySelectorAll(".slide").forEach(slide=>{
+    slide.classList.remove("active");
+  });
+
+  const target = document.querySelector('[data-slide="' + number + '"]');
+  if(target) target.classList.add("active");
+
+  currentSlide = number;
+  updateProgress();
+  updateDots();
+
+  $("prevBtn").disabled = currentSlide === 1;
+  $("nextBtn").disabled = currentSlide === TOTAL_SLIDES;
+
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function changeSlide(direction){
+  goToSlide(currentSlide + direction);
+}
+
+function checkChoice(groupId, button, value){
+  const correctAnswers = {
+    s1q1:2,
+    s1q2:"half",
+    s11:"denominator"
+  };
+
+  const correct = value === correctAnswers[groupId];
+
+  document.querySelectorAll("#" + groupId + " .choice-btn").forEach(btn=>{
+    btn.classList.remove("selected","correct","retry");
+  });
+
+  button.classList.add(correct ? "correct" : "retry");
+
+  const feedbackId = groupId + "Feedback";
+
+  if(correct){
+    showFeedback(feedbackId,"✅ Correct! Nice careful thinking.","success");
+
+    if(groupId==="s1q1") record("s1q1",true);
+    if(groupId==="s1q2") record("s1q2",true);
+    if(groupId==="s11") record("s11",true);
+  }else{
+    showFeedback(feedbackId,"Almost! Look again at the picture and try once more.","retry");
+  }
+}
+
+function slide5Answer(button,value){
+  document.querySelectorAll(".slide[data-slide='5'] .choice-btn").forEach(b=>{
+    b.classList.remove("correct","retry");
+  });
+
+  if(value===6){
+    button.classList.add("correct");
+    showFeedback("s5Feedback","✅ Yes! Two wholes contain six thirds.","success");
+    record("s5",true);
+  }else{
+    button.classList.add("retry");
+    showFeedback("s5Feedback","Try again. Count how many groups of three thirds are in two wholes.","retry");
+  }
+}
+
+function hint(id){
+  const el = $(id);
+  if(el) el.classList.toggle("show");
+}
+
+function readNumber(id){
+  const value = $(id)?.value.trim();
+  return Number(value);
+}
+
+function checkSlide8(){
+  const a = readNumber("s8a");
+  const b = readNumber("s8b");
+  const c = readNumber("s8c");
+
+  if(a===8 && b===11 && c===4){
+    ["s8a","s8b","s8c"].forEach(id=>$(id).classList.add("correct-input"));
+    showFeedback("s8Feedback","🎉 Excellent! You built the fraction correctly.","success");
+    $("s8Final").style.display="block";
+    record("s8",true);
+  }else{
+    showFeedback("s8Feedback","Good attempt. Check each step: multiply first, then add, then keep the denominator.","retry");
+  }
+}
+
+function checkSlide10(){
+  const a = readNumber("s10a");
+  const b = readNumber("s10b");
+  const c = readNumber("s10c");
+
+  if(a===5 && b===7 && c===5){
+    showFeedback("s10Feedback","🎉 Correct! You followed the pattern.","success");
+    $("s10Final").style.display="block";
+    record("s10",true);
+  }else{
+    showFeedback("s10Feedback","Try again. Start with whole × denominator, then add the numerator.","retry");
+  }
+}
+
+function slide12Answer(button,value){
+  document.querySelectorAll(".slide[data-slide='12'] .choice-btn").forEach(b=>{
+    b.classList.remove("correct","retry");
+  });
+
+  if(value==="A"){
+    button.classList.add("correct");
+    showFeedback(
+      "s12Feedback",
+      "✅ Student A is correct. Student B added the whole number and denominator instead of multiplying them.",
+      "success"
+    );
+    record("s12",true);
+  }else{
+    button.classList.add("retry");
+    showFeedback(
+      "s12Feedback",
+      "Look closely at the first step. The rule says WHOLE × DENOMINATOR, not WHOLE + DENOMINATOR.",
+      "retry"
+    );
+  }
+}
+
+function selectMatch(button,key){
+  if(button.classList.contains("matched")) return;
+
+  if(state.matchFirst===null){
+    state.matchFirst = {button,key};
+    button.classList.add("active");
+    showFeedback("s13Feedback","Now choose the matching fraction.","success");
+    return;
+  }
+
+  const first = state.matchFirst;
+
+  if(first.button===button){
+    button.classList.remove("active");
+    state.matchFirst=null;
+    return;
+  }
+
+  if(first.key===key){
+    first.button.classList.remove("active");
+    first.button.classList.add("matched");
+    button.classList.add("matched");
+    state.matches.add(key);
+    state.matchFirst=null;
+
+    if(state.matches.size===4){
+      showFeedback("s13Feedback","🎉 Perfect! All four pairs match.","success");
+      record("s13",true);
+    }else{
+      showFeedback("s13Feedback","✅ Match found! Keep going.","success");
+    }
+  }else{
+    first.button.classList.remove("active");
+    button.classList.add("retry");
+    showFeedback("s13Feedback","Not quite. Compare the whole number and denominator, then try another pair.","retry");
+
+    setTimeout(()=>button.classList.remove("retry"),700);
+    state.matchFirst=null;
+  }
+}
+
+function checkSlide14(){
+  const value = readNumber("s14");
+
+  if(value===7){
+    showFeedback("s14Feedback","⭐ Correct! Six thirds plus one more third makes seven thirds.","success");
+    $("s14Final").style.display="block";
+    record("s14",true);
+  }else{
+    showFeedback("s14Feedback","Try again. You already found six thirds. Add the one extra third.","retry");
+  }
+}
+
+function checkSlide15(){
+  const a=readNumber("s15a");
+  const b=readNumber("s15b");
+  const c=readNumber("s15c");
+  const d=readNumber("s15d");
+
+  if(a===4 && b===7 && c===2 && d===30){
+    showFeedback("s15Feedback","🎉 Excellent! You identified every part correctly.","success");
+    $("s15Final").style.display="block";
+    record("s15",true);
+  }else{
+    showFeedback("s15Feedback","Check each labelled part. Remember: whole × denominator, then + numerator.","retry");
+  }
+}
+
+function checkSlide16(){
+  const answers = [
+    ["s16q1n","s16q1d",4,3,"s16q1f","s16q1"],
+    ["s16q2n","s16q2d",9,4,"s16q2f","s16q2"],
+    ["s16q3n","s16q3d",17,5,"s16q3f","s16q3"],
+    ["s16q4n","s16q4d",17,7,"s16q4f","s16q4"],
+    ["s16q5n","s16q5d",13,3,"s16q5f","s16q5"]
+  ];
+
+  answers.forEach(item=>{
+    const [nId,dId,correctN,correctD,feedbackId,taskId]=item;
+    const correct = readNumber(nId)===correctN && readNumber(dId)===correctD;
+
+    if(correct){
+      showFeedback(feedbackId,"✅ Correct!","success");
+      $(nId).classList.add("correct-input");
+      $(dId).classList.add("correct-input");
+      record(taskId,true);
+    }else{
+      showFeedback(feedbackId,"Keep working. Check whole × denominator, then add numerator.","retry");
+    }
+  });
+}
+
+function checkSlide17(){
+  const a=readNumber("s17a");
+  const b=readNumber("s17b");
+  const c=readNumber("s17c");
+
+  if(a===40 && b===43 && c===8){
+    showFeedback("s17Feedback","🚀 Fantastic! You completed the challenge correctly.","success");
+    $("s17Final").style.display="block";
+    record("s17",true);
+  }else{
+    showFeedback("s17Feedback","Use the memory trick: 5 × 8, then + 3, and keep 8.","retry");
+  }
+}
+
+function checkExitChoice(button,value){
+  document.querySelectorAll(".slide[data-slide='19'] .choice-btn").forEach(b=>{
+    if(b!==button) b.classList.remove("correct","retry");
+  });
+
+  if(value==="true"){
+    button.classList.add("correct");
+    showFeedback("s19q4f","✅ Correct! The denominator stays the same.","success");
+    record("s19q4",true);
+  }else{
+    button.classList.add("retry");
+    showFeedback("s19q4f","Try again. The denominator is the bottom number, and it stays the same.","retry");
+  }
+}
+
+function checkExitInputs(){
+  const questions = [
+    ["s19q1n","s19q1d",5,2,"s19q1f","s19q1"],
+    ["s19q2n","s19q2d",13,4,"s19q2f","s19q2"],
+    ["s19q3n","s19q3d",14,3,"s19q3f","s19q3"]
+  ];
+
+  questions.forEach(item=>{
+    const [n,d,cn,cd,fid,tid]=item;
+    const correct=readNumber(n)===cn && readNumber(d)===cd;
+
+    if(correct){
+      showFeedback(fid,"✅ Correct!","success");
+      record(tid,true);
+    }else{
+      showFeedback(fid,"Try again. Use whole × denominator, then add the numerator.","retry");
+    }
+  });
+}
+
+function checkExitFormula(){
+  const value=$( "s19q5").value.trim().toLowerCase();
+
+  if(value==="denominator"){
+    showFeedback("s19q5f","✅ Correct! Whole × denominator + numerator.","success");
+    record("s19q5",true);
+  }else{
+    showFeedback("s19q5f","Think about the number at the bottom of the fraction.","retry");
+  }
+}
+
+function finishDeck(){
+  checkExitInputs();
+  checkExitFormula();
+
+  const completed=state.completed.size;
+  const accuracy=state.attempts ? Math.round((state.correct/state.attempts)*100) : 0;
+
+  $("finishBanner").classList.add("show");
+  $("finalScore").textContent="Correct: " + state.correct + " / " + totalTasks;
+  $("finalAccuracy").textContent="Accuracy: " + accuracy + "%";
+
+  if(completed===totalTasks){
+    $("finishTitle").textContent="🎉 Deck Complete!";
+    $("finishMessage").textContent="You completed every activity. You followed the conversion pattern carefully from start to finish.";
+    $("finishBadge").textContent="⭐ Mixed Number Master";
+  }else if(completed>=Math.ceil(totalTasks*.7)){
+    $("finishTitle").textContent="🌟 Strong Work!";
+    $("finishMessage").textContent="You have completed " + completed + " of " + totalTasks + " activities. Review any unfinished questions and keep practising the pattern.";
+    $("finishBadge").textContent="⭐ Strong Fraction Solver";
+  }else{
+    $("finishTitle").textContent="🌱 Good Start!";
+    $("finishMessage").textContent="You have completed " + completed + " of " + totalTasks + " activities. Keep using the visual route: WHOLE → × DENOMINATOR → + NUMERATOR → SAME DENOMINATOR.";
+    $("finishBadge").textContent="⭐ Keep Practising";
+  }
+
+  updateProgress();
+}
+
+document.addEventListener("keydown",function(event){
+  const tag=document.activeElement?.tagName?.toLowerCase();
+
+  if(tag==="input" || tag==="textarea" || tag==="select") return;
+
+  if(event.key==="ArrowRight"){
+    event.preventDefault();
+    changeSlide(1);
+  }
+
+  if(event.key==="ArrowLeft"){
+    event.preventDefault();
+    changeSlide(-1);
+  }
+});
+
+document.querySelectorAll("input").forEach(input=>{
+  input.addEventListener("keydown",function(event){
+    if(event.key==="Enter"){
+      event.preventDefault();
+      const slide=this.closest(".slide");
+      const button=slide?.querySelector(".primary");
+      if(button) button.click();
+    }
+  });
+});
+
+createDots();
+updateProgress();
+updateDots();
+</script>
+
+</body>
+</html>

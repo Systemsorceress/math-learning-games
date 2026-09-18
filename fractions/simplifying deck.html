@@ -1,0 +1,2682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Simplifying Fractions by Cancelling Common Factors</title>
+
+<style>
+:root{
+  --bg:#f5f7fb;
+  --card:#fff;
+  --ink:#172033;
+  --muted:#526176;
+  --line:#aeb9c9;
+  --blue:#174ea6;
+  --blue-bg:#e8f0fe;
+  --top:#dceaff;
+  --bottom:#f0e4ff;
+  --green:#176b3a;
+  --green-bg:#e6f6ed;
+  --amber:#795500;
+  --amber-bg:#fff4d2;
+  --red:#9b2c2c;
+  --red-bg:#fff0f0;
+  --shadow:0 4px 16px rgba(20,35,55,.10);
+}
+
+*{box-sizing:border-box}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:1.2rem;
+  line-height:1.5;
+}
+
+button,input{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+button:focus,
+input:focus{
+  outline:4px solid #b7cff5;
+  outline-offset:2px;
+}
+
+.app{
+  max-width:1250px;
+  margin:auto;
+  padding-bottom:120px;
+}
+
+/* ================= HEADER ================= */
+
+header{
+  position:sticky;
+  top:0;
+  z-index:50;
+  background:white;
+  border-bottom:2px solid var(--line);
+  padding:15px 25px;
+}
+
+.header-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+}
+
+.title{
+  font-size:1.35rem;
+  font-weight:900;
+}
+
+.progress-label{
+  font-weight:800;
+  white-space:nowrap;
+}
+
+.progress-track{
+  height:12px;
+  background:#dce2eb;
+  border-radius:20px;
+  overflow:hidden;
+  margin-top:10px;
+}
+
+.progress-fill{
+  height:100%;
+  width:0%;
+  background:var(--blue);
+  transition:width .35s ease;
+}
+
+/* ================= CONTENT ================= */
+
+main{
+  padding:25px;
+}
+
+.part{
+  margin:35px 0 50px;
+}
+
+.part-heading{
+  border-left:8px solid var(--blue);
+  padding:12px 18px;
+  background:var(--blue-bg);
+  border-radius:8px;
+  font-size:1.7rem;
+  margin-bottom:22px;
+}
+
+.activity{
+  background:var(--card);
+  border:2px solid var(--line);
+  border-radius:18px;
+  padding:25px;
+  margin:22px 0;
+  box-shadow:var(--shadow);
+}
+
+.activity h3{
+  margin-top:0;
+  font-size:1.45rem;
+}
+
+.instruction{
+  color:var(--muted);
+  font-size:1.2rem;
+}
+
+.center{
+  text-align:center;
+}
+
+.two-column{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:22px;
+}
+
+.three-column{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+}
+
+/* ================= FRACTIONS ================= */
+
+.fraction{
+  display:inline-flex;
+  flex-direction:column;
+  min-width:90px;
+  vertical-align:middle;
+  font-size:2.5rem;
+  font-weight:900;
+  line-height:1;
+  margin:5px 8px;
+}
+
+.fraction .num,
+.fraction .den{
+  padding:8px 16px;
+  text-align:center;
+}
+
+.fraction .num{
+  background:var(--top);
+  border:2px solid #8ca9d4;
+  border-bottom:0;
+  border-radius:10px 10px 0 0;
+}
+
+.fraction .den{
+  background:var(--bottom);
+  border:2px solid #ae97cf;
+  border-top:4px solid var(--ink);
+  border-radius:0 0 10px 10px;
+}
+
+.equation{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:10px;
+  font-size:2rem;
+  font-weight:900;
+}
+
+.operator{
+  font-size:2rem;
+}
+
+/* ================= LABEL ZONES ================= */
+
+.number-zone{
+  border:2px solid var(--line);
+  border-radius:14px;
+  padding:16px;
+  text-align:center;
+}
+
+.number-zone.top{
+  background:var(--top);
+}
+
+.number-zone.bottom{
+  background:var(--bottom);
+}
+
+.zone-label{
+  font-size:.95rem;
+  font-weight:900;
+  display:block;
+  letter-spacing:.06em;
+}
+
+/* ================= BUTTONS ================= */
+
+.button-row{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:12px;
+  margin:18px 0;
+}
+
+.btn{
+  background:#fff;
+  color:var(--ink);
+  border:2px solid #738198;
+  border-radius:12px;
+  padding:13px 22px;
+  min-height:54px;
+  font-weight:800;
+  font-size:1.2rem;
+  transition:.15s;
+}
+
+.btn:hover{
+  transform:translateY(-2px);
+  border-color:var(--blue);
+}
+
+.btn.primary{
+  background:var(--blue);
+  color:white;
+  border-color:var(--blue);
+}
+
+.btn.yes{
+  border-color:#39815a;
+}
+
+.btn.no{
+  border-color:#b66b37;
+}
+
+.btn.selected{
+  background:var(--blue-bg);
+  border-color:var(--blue);
+}
+
+.btn.correct{
+  background:var(--green-bg);
+  border-color:#55936e;
+  color:var(--green);
+}
+
+.btn.retry{
+  background:var(--amber-bg);
+  border-color:#c59b37;
+  color:var(--amber);
+}
+
+/* ================= FEEDBACK ================= */
+
+.feedback{
+  display:none;
+  margin:18px auto;
+  max-width:900px;
+  padding:15px 18px;
+  border-radius:12px;
+  font-weight:800;
+}
+
+.feedback.show{
+  display:block;
+}
+
+.feedback.success{
+  background:var(--green-bg);
+  border:2px solid #68a77f;
+  color:var(--green);
+}
+
+.feedback.hint{
+  background:var(--amber-bg);
+  border:2px solid #d5b14c;
+  color:var(--amber);
+}
+
+.feedback.error{
+  background:var(--red-bg);
+  border:2px solid #d98b8b;
+  color:var(--red);
+}
+
+/* ================= INPUTS ================= */
+
+.answer-input{
+  width:95px;
+  height:58px;
+  border:3px solid #7c899b;
+  border-radius:10px;
+  background:#fff;
+  text-align:center;
+  font-size:1.5rem;
+  font-weight:900;
+}
+
+.input-group{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:12px;
+  margin:18px 0;
+}
+
+.input-label{
+  font-weight:800;
+}
+
+/* ================= FRACTION BARS ================= */
+
+.fraction-bars{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:25px;
+}
+
+.bar-card{
+  border:2px solid var(--line);
+  border-radius:15px;
+  padding:18px;
+  background:#fff;
+}
+
+.bar-title{
+  text-align:center;
+  font-weight:900;
+  margin-bottom:12px;
+}
+
+.fraction-bar{
+  display:grid;
+  height:65px;
+  border:3px solid var(--ink);
+  border-radius:8px;
+  overflow:hidden;
+}
+
+.bar-4{
+  grid-template-columns:repeat(4,1fr);
+}
+
+.bar-6{
+  grid-template-columns:repeat(6,1fr);
+}
+
+.bar-8{
+  grid-template-columns:repeat(8,1fr);
+}
+
+.segment{
+  border-right:2px solid var(--ink);
+  background:white;
+}
+
+.segment:last-child{
+  border-right:0;
+}
+
+.segment.shaded{
+  background:#315f9e;
+}
+
+/* ================= FACTORS ================= */
+
+.factor-list{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:10px;
+}
+
+.factor-pill{
+  background:white;
+  border:2px solid #7c899b;
+  border-radius:10px;
+  padding:10px 16px;
+  font-size:1.25rem;
+  font-weight:900;
+}
+
+.factor-pill.common{
+  background:var(--green-bg);
+  border-color:#55936e;
+}
+
+/* ================= CHECKBOX ================= */
+
+.check-list{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:12px;
+}
+
+.check-option{
+  border:2px solid #8995a7;
+  border-radius:12px;
+  padding:12px 18px;
+  background:white;
+  display:flex;
+  align-items:center;
+  gap:9px;
+  font-weight:800;
+}
+
+.check-option input{
+  width:24px;
+  height:24px;
+  accent-color:var(--blue);
+}
+
+/* ================= STRATEGY ================= */
+
+.strategy{
+  position:sticky;
+  bottom:15px;
+  z-index:40;
+  margin:25px auto;
+  max-width:1000px;
+  background:#fff;
+  border:3px solid var(--blue);
+  border-radius:18px;
+  padding:18px;
+  box-shadow:0 6px 22px rgba(20,35,55,.18);
+}
+
+.strategy h3{
+  margin:0 0 12px;
+  text-align:center;
+}
+
+.strategy-steps{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+}
+
+.strategy-step{
+  text-align:center;
+  padding:12px;
+  background:var(--blue-bg);
+  border-radius:10px;
+  font-weight:900;
+}
+
+/* ================= SORTING ================= */
+
+.sort-card{
+  border:2px solid var(--line);
+  border-radius:15px;
+  padding:18px;
+  margin:15px 0;
+}
+
+.sort-status{
+  font-weight:900;
+  margin-top:10px;
+}
+
+/* ================= DYNAMIC PATH ================= */
+
+.route-box{
+  min-height:150px;
+  padding:20px;
+  background:#f9fbff;
+  border:2px dashed #8294ae;
+  border-radius:15px;
+  margin-top:20px;
+}
+
+/* ================= EXIT ================= */
+
+.completion-banner{
+  display:none;
+  background:var(--green-bg);
+  border:4px solid #55936e;
+  border-radius:20px;
+  padding:30px;
+  text-align:center;
+  margin:30px 0;
+}
+
+.completion-banner.show{
+  display:block;
+  animation:pop .5s ease;
+}
+
+.badge{
+  font-size:4rem;
+}
+
+@keyframes pop{
+  from{opacity:0;transform:scale(.85)}
+  to{opacity:1;transform:scale(1)}
+}
+
+/* ================= FOOTER SCORE ================= */
+
+.score-footer{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  z-index:100;
+  background:#fff;
+  border-top:2px solid var(--line);
+  box-shadow:0 -3px 15px rgba(0,0,0,.08);
+  padding:10px 20px;
+}
+
+.score-inner{
+  max-width:1250px;
+  margin:auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+}
+
+.score-text{
+  font-weight:900;
+}
+
+.accuracy-note{
+  color:var(--muted);
+  font-size:1rem;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:800px){
+
+  .two-column,
+  .fraction-bars,
+  .three-column,
+  .strategy-steps{
+    grid-template-columns:1fr;
+  }
+
+  main{
+    padding:15px;
+  }
+
+  .header-row{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .fraction{
+    font-size:2rem;
+  }
+
+  .equation{
+    font-size:1.5rem;
+  }
+
+  .score-inner{
+    flex-direction:column;
+    gap:3px;
+  }
+
+  .score-footer{
+    padding:8px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header>
+  <div class="header-row">
+    <div class="title">➗ Simplifying Fractions by Cancelling Common Factors</div>
+    <div class="progress-label">
+      <span id="progressPercent">0%</span> complete
+    </div>
+  </div>
+
+  <div class="progress-track">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+</header>
+
+
+<main>
+
+<!-- ======================================================
+PART A
+====================================================== -->
+
+<section class="part">
+
+<div class="part-heading">
+  PART A — Warm-Up: Equivalent Fractions
+</div>
+
+<!-- 1 -->
+<div class="activity center">
+  <h3>1. Same or Different? 🧩</h3>
+
+  <p class="instruction">
+    Look at the shaded parts. Do these fractions show the same amount?
+  </p>
+
+  <div class="fraction-bars">
+
+    <div class="bar-card">
+      <div class="bar-title">
+        <span class="fraction">
+          <span class="num">1</span>
+          <span class="den">2</span>
+        </span>
+      </div>
+
+      <div class="fraction-bar bar-4">
+        <div class="segment shaded"></div>
+        <div class="segment shaded"></div>
+        <div class="segment"></div>
+        <div class="segment"></div>
+      </div>
+    </div>
+
+    <div class="bar-card">
+      <div class="bar-title">
+        <span class="fraction">
+          <span class="num">2</span>
+          <span class="den">4</span>
+        </span>
+      </div>
+
+      <div class="fraction-bar bar-4">
+        <div class="segment shaded"></div>
+        <div class="segment shaded"></div>
+        <div class="segment"></div>
+        <div class="segment"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="button-row">
+    <button class="btn yes" onclick="warmup1(true)">YES</button>
+    <button class="btn no" onclick="warmup1(false)">NO</button>
+  </div>
+
+  <div class="feedback" id="a1feedback"></div>
+</div>
+
+
+<!-- 2 -->
+<div class="activity center">
+  <h3>2. Complete the Equivalent Fraction</h3>
+
+  <div class="equation">
+    <span class="fraction">
+      <span class="num">1</span>
+      <span class="den">3</span>
+    </span>
+
+    <span>=</span>
+
+    <span class="fraction">
+      <span class="num">?</span>
+      <span class="den">6</span>
+    </span>
+  </div>
+
+  <p><strong>Multiply the TOP and BOTTOM by 2.</strong></p>
+
+  <div class="input-group">
+    <span>1 × 2 =</span>
+    <input class="answer-input" id="a2input" type="number" oninput="checkA2()">
+  </div>
+
+  <div class="feedback" id="a2feedback"></div>
+</div>
+
+</section>
+
+
+<!-- ======================================================
+PART B
+====================================================== -->
+
+<section class="part">
+
+<div class="part-heading">
+  PART B — Find Common Factors
+</div>
+
+<div class="activity">
+
+  <h3>3. Find the Common Factors 🔍</h3>
+
+  <p class="instruction">
+    Select every number that divides BOTH 8 and 12 exactly.
+  </p>
+
+  <div class="two-column">
+
+    <div class="number-zone top">
+      <span class="zone-label">FACTORS OF 8</span>
+      <div class="factor-list">
+        <span class="factor-pill">1</span>
+        <span class="factor-pill">2</span>
+        <span class="factor-pill">4</span>
+        <span class="factor-pill">8</span>
+      </div>
+    </div>
+
+    <div class="number-zone bottom">
+      <span class="zone-label">FACTORS OF 12</span>
+      <div class="factor-list">
+        <span class="factor-pill">1</span>
+        <span class="factor-pill">2</span>
+        <span class="factor-pill">3</span>
+        <span class="factor-pill">4</span>
+        <span class="factor-pill">6</span>
+        <span class="factor-pill">12</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="check-list" style="margin-top:22px">
+    <label class="check-option">
+      <input type="checkbox" value="1" onchange="checkFactors()">
+      1
+    </label>
+
+    <label class="check-option">
+      <input type="checkbox" value="2" onchange="checkFactors()">
+      2
+    </label>
+
+    <label class="check-option">
+      <input type="checkbox" value="3" onchange="checkFactors()">
+      3
+    </label>
+
+    <label class="check-option">
+      <input type="checkbox" value="4" onchange="checkFactors()">
+      4
+    </label>
+
+    <label class="check-option">
+      <input type="checkbox" value="6" onchange="checkFactors()">
+      6
+    </label>
+  </div>
+
+  <div class="feedback" id="b3feedback"></div>
+
+</div>
+
+</section>
+
+
+<!-- ======================================================
+PART C
+====================================================== -->
+
+<section class="part">
+
+<div class="part-heading">
+  PART C — Can We Simplify?
+</div>
+
+<div class="activity">
+
+<h3>4. Interactive Card Sorting 🗂️</h3>
+
+<p class="instruction">
+  Decide whether each fraction can be simplified.
+</p>
+
+<div id="sortCards">
+
+  <div class="sort-card">
+    <strong>
+      A.
+      <span class="fraction">
+        <span class="num">3</span>
+        <span class="den">7</span>
+      </span>
+    </strong>
+
+    <div class="button-row">
+      <button class="btn" onclick="sortAnswer(0,true,this)">🟢 Can simplify</button>
+      <button class="btn" onclick="sortAnswer(0,false,this)">🔵 Already simplest</button>
+    </div>
+
+    <div class="feedback" id="sortFeedback0"></div>
+  </div>
+
+
+  <div class="sort-card">
+    <strong>
+      B.
+      <span class="fraction">
+        <span class="num">6</span>
+        <span class="den">9</span>
+      </span>
+    </strong>
+
+    <div class="button-row">
+      <button class="btn" onclick="sortAnswer(1,true,this)">🟢 Can simplify</button>
+      <button class="btn" onclick="sortAnswer(1,false,this)">🔵 Already simplest</button>
+    </div>
+
+    <div class="feedback" id="sortFeedback1"></div>
+  </div>
+
+
+  <div class="sort-card">
+    <strong>
+      C.
+      <span class="fraction">
+        <span class="num">5</span>
+        <span class="den">11</span>
+      </span>
+    </strong>
+
+    <div class="button-row">
+      <button class="btn" onclick="sortAnswer(2,true,this)">🟢 Can simplify</button>
+      <button class="btn" onclick="sortAnswer(2,false,this)">🔵 Already simplest</button>
+    </div>
+
+    <div class="feedback" id="sortFeedback2"></div>
+  </div>
+
+
+  <div class="sort-card">
+    <strong>
+      D.
+      <span class="fraction">
+        <span class="num">12</span>
+        <span class="den">16</span>
+      </span>
+    </strong>
+
+    <div class="button-row">
+      <button class="btn" onclick="sortAnswer(3,true,this)">🟢 Can simplify</button>
+      <button class="btn" onclick="sortAnswer(3,false,this)">🔵 Already simplest</button>
+    </div>
+
+    <div class="feedback" id="sortFeedback3"></div>
+  </div>
+
+</div>
+
+</div>
+</section>
+
+
+<!-- ======================================================
+PART D/E
+====================================================== -->
+
+<section class="part">
+
+<div class="part-heading">
+  PART D & E — Cancel Together & Keep Going
+</div>
+
+<!-- 5 -->
+
+<div class="activity center">
+
+<h3>5. Multi-Step Guide: Simplify</h3>
+
+<div class="equation">
+  <span class="fraction">
+    <span class="num">8</span>
+    <span class="den">12</span>
+  </span>
+</div>
+
+<h3>Step 1 — Choose a common factor</h3>
+
+<div class="button-row">
+  <button class="btn" onclick="guideFactor(2)">2</button>
+  <button class="btn" onclick="guideFactor(3)">3</button>
+  <button class="btn" onclick="guideFactor(5)">5</button>
+</div>
+
+<div class="feedback" id="guide1"></div>
+
+<div id="guideStep2" style="display:none">
+
+<h3>Step 2 — Divide TOP and BOTTOM</h3>
+
+<div class="input-group">
+  <span>8 ÷ 2 =</span>
+  <input class="answer-input" id="guideTop" type="number">
+
+  <span>12 ÷ 2 =</span>
+  <input class="answer-input" id="guideBottom" type="number">
+</div>
+
+<button class="btn primary" onclick="checkGuide2()">Check</button>
+
+<div class="feedback" id="guide2"></div>
+
+</div>
+
+<div id="guideStep3" style="display:none">
+
+<h3>Step 3 — Can we simplify the new fraction?</h3>
+
+<div class="equation">
+  <span class="fraction">
+    <span class="num">4</span>
+    <span class="den">6</span>
+  </span>
+</div>
+
+<div class="button-row">
+  <button class="btn yes" onclick="guideAgain(true)">YES</button>
+  <button class="btn no" onclick="guideAgain(false)">NO</button>
+</div>
+
+<div class="feedback" id="guide3"></div>
+
+</div>
+
+</div>
+
+
+<!-- 6 -->
+
+<div class="activity center">
+
+<h3>6. Finishing <span class="fraction">
+  <span class="num">4</span>
+  <span class="den">6</span>
+</span></h3>
+
+<p>Choose the common factor.</p>
+
+<div class="button-row">
+  <button class="btn" onclick="finishFactor(2)">2</button>
+  <button class="btn" onclick="finishFactor(3)">3</button>
+  <button class="btn" onclick="finishFactor(4)">4</button>
+</div>
+
+<div class="feedback" id="finish1"></div>
+
+<div id="finishInputs" style="display:none">
+
+  <div class="input-group">
+    <span>4 ÷ 2 =</span>
+    <input class="answer-input" id="finishTop" type="number">
+
+    <span>6 ÷ 2 =</span>
+    <input class="answer-input" id="finishBottom" type="number">
+  </div>
+
+  <button class="btn primary" onclick="checkFinish()">Check</button>
+
+  <div class="feedback" id="finish2"></div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ======================================================
+PART F
+====================================================== -->
+
+<section class="part">
+
+<div class="part-heading">
+  PART F — Mistake Detective 🕵️
+</div>
+
+<!-- 7 -->
+
+<div class="activity center">
+
+<h3>7. Ali's Work</h3>
+
+<div class="equation">
+
+  <span class="fraction">
+    <span class="num">12</span>
+    <span class="den">18</span>
+  </span>
+
+  <span>→</span>
+
+  <span class="fraction">
+    <span class="num">6</span>
+    <span class="den">9</span>
+  </span>
+
+</div>
+
+<p>Ali says he divided the top and bottom by 2.</p>
+
+<h3>Did Ali do it correctly?</h3>
+
+<div class="button-row">
+  <button class="btn yes" onclick="aliAnswer(true)">YES</button>
+  <button class="btn no" onclick="aliAnswer(false)">NO</button>
+</div>
+
+<div class="feedback" id="f7feedback"></div>
+
+</div>
+
+
+<!-- 8 -->
+
+<div class="activity">
+
+<h3>8. Spot the Error 🕵️</h3>
+
+<div class="equation">
+
+  <span class="fraction">
+    <span class="num">12</span>
+    <span class="den">18</span>
+  </span>
+
+  <span>→</span>
+
+  <span class="fraction">
+    <span class="num">6</span>
+    <span class="den">6</span>
+  </span>
+
+</div>
+
+<p><strong>What went wrong?</strong></p>
+
+<div class="button-row">
+
+<button class="btn" onclick="errorAnswer(0)">
+They divided TOP and BOTTOM by different numbers.
+</button>
+
+<button class="btn" onclick="errorAnswer(1)">
+They forgot the numerator.
+</button>
+
+<button class="btn" onclick="errorAnswer(2)">
+They chose a common factor.
+</button>
+
+</div>
+
+<div class="feedback" id="f8feedback"></div>
+
+<div class="rule" style="margin-top:22px">
+  ⭐ GOLDEN RULE ⭐<br>
+  TOP and BOTTOM must be divided by the <strong>SAME number</strong>.
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ======================================================
+PART G
+====================================================== -->
+
+<section class="part">
+
+<div class="part-heading">
+  PART G — Guided Practice
+</div>
+
+<!-- 9 -->
+
+<div class="activity center">
+
+<h3>9. Simplify</h3>
+
+<div class="equation">
+  <span class="fraction">
+    <span class="num">10</span>
+    <span class="den">15</span>
+  </span>
+</div>
+
+<h3>Step 1 — Factor</h3>
+
+<div class="button-row">
+  <button class="btn" onclick="guided10(5)">5</button>
+  <button class="btn" onclick="guided10(2)">2</button>
+  <button class="btn" onclick="guided10(3)">3</button>
+</div>
+
+<div class="feedback" id="g9f1"></div>
+
+<div id="g9inputs" style="display:none">
+
+<div class="input-group">
+  <span>10 ÷ 5 =</span>
+  <input class="answer-input" id="g9top">
+
+  <span>15 ÷ 5 =</span>
+  <input class="answer-input" id="g9bottom">
+</div>
+
+<button class="btn primary" onclick="checkG9()">Check</button>
+
+<div class="feedback" id="g9f2"></div>
+
+</div>
+
+</div>
+
+
+<!-- 10 -->
+
+<div class="activity center">
+
+<h3>10. Simplify</h3>
+
+<div class="equation">
+  <span class="fraction">
+    <span class="num">9</span>
+    <span class="den">12</span>
+  </span>
+</div>
+
+<h3>Step 1 — Factor</h3>
+
+<div class="button-row">
+  <button class="btn" onclick="guided9(3)">3</button>
+  <button class="btn" onclick="guided9(2)">2</button>
+  <button class="btn" onclick="guided9(4)">4</button>
+</div>
+
+<div class="feedback" id="g10f1"></div>
+
+<div id="g10inputs" style="display:none">
+
+<div class="input-group">
+  <span>9 ÷ 3 =</span>
+  <input class="answer-input" id="g10top">
+
+  <span>12 ÷ 3 =</span>
+  <input class="answer-input" id="g10bottom">
+</div>
+
+<button class="btn primary" onclick="checkG10()">Check</button>
+
+<div class="feedback" id="g10f2"></div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ======================================================
+PART H
+====================================================== -->
+
+<section class="part">
+
+<div class="part-heading">
+  PART H — Choose Your Own Factor
+</div>
+
+<div class="activity center">
+
+<h3>11. Simplify</h3>
+
+<div class="equation">
+  <span class="fraction">
+    <span class="num">12</span>
+    <span class="den">18</span>
+  </span>
+</div>
+
+<p>
+Choose <strong>2</strong>, <strong>3</strong>, or <strong>6</strong>.
+Different correct routes can lead to the same final answer.
+</p>
+
+<div class="button-row">
+  <button class="btn" onclick="dynamicRoute(2)">2</button>
+  <button class="btn" onclick="dynamicRoute(3)">3</button>
+  <button class="btn" onclick="dynamicRoute(6)">6</button>
+</div>
+
+<div class="route-box" id="routeBox">
+  Choose a factor to see your route.
+</div>
+
+<div class="feedback" id="h11feedback"></div>
+
+</div>
+
+</section>
+
+
+<!-- ======================================================
+PART I
+====================================================== -->
+
+<section class="part">
+
+<div class="part-heading">
+  PART I — Visual Fraction Challenge
+</div>
+
+<div class="activity center">
+
+<h3>12. Which Simpler Fraction Shows the Same Amount?</h3>
+
+<div class="equation">
+  <span class="fraction">
+    <span class="num">6</span>
+    <span class="den">8</span>
+  </span>
+</div>
+
+<div class="fraction-bar bar-8" style="max-width:750px;margin:20px auto">
+  <div class="segment shaded"></div>
+  <div class="segment shaded"></div>
+  <div class="segment shaded"></div>
+  <div class="segment shaded"></div>
+  <div class="segment shaded"></div>
+  <div class="segment shaded"></div>
+  <div class="segment"></div>
+  <div class="segment"></div>
+</div>
+
+<h3>Choose the fraction with the same value.</h3>
+
+<div class="button-row">
+  <button class="btn" onclick="visualChoice(0)">2/3</button>
+  <button class="btn" onclick="visualChoice(1)">3/4</button>
+  <button class="btn" onclick="visualChoice(2)">4/5</button>
+</div>
+
+<div class="feedback" id="i12feedback"></div>
+
+<div id="visualProof" class="callout" style="display:none">
+  <strong>Division proof:</strong><br><br>
+  6 ÷ 2 = 3<br>
+  8 ÷ 2 = 4<br><br>
+  Therefore:
+  <span class="fraction">
+    <span class="num">6</span>
+    <span class="den">8</span>
+  </span>
+  =
+  <span class="fraction">
+    <span class="num">3</span>
+    <span class="den">4</span>
+  </span>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ======================================================
+PART J
+====================================================== -->
+
+<section class="part">
+
+<div class="part-heading">
+  PART J — Independent Practice
+</div>
+
+<div class="activity">
+
+<h3>Work independently. Enter the simplified numerator and denominator.</h3>
+
+<div id="independentPractice">
+
+<!-- Generated by JS -->
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ======================================================
+PART K
+====================================================== -->
+
+<section class="part">
+
+<div class="part-heading">
+  PART K — Challenge Questions
+</div>
+
+<!-- 13 -->
+
+<div class="activity center">
+
+<h3>13. Challenge: Simplify</h3>
+
+<div class="equation">
+  <span class="fraction">
+    <span class="num">24</span>
+    <span class="den">36</span>
+  </span>
+</div>
+
+<p>
+Choose a divisor. A valid single-step divisor such as 12 is accepted,
+and smaller valid steps can also be used.
+</p>
+
+<div class="input-group">
+  <label class="input-label">
+    Divisor:
+    <input class="answer-input" id="challenge13factor" type="number">
+  </label>
+
+  <label class="input-label">
+    Result TOP:
+    <input class="answer-input" id="challenge13top" type="number">
+  </label>
+
+  <label class="input-label">
+    Result BOTTOM:
+    <input class="answer-input" id="challenge13bottom" type="number">
+  </label>
+</div>
+
+<button class="btn primary" onclick="checkChallenge13()">Check</button>
+
+<button class="btn" onclick="hintChallenge13()">💡 Hint</button>
+
+<div class="feedback" id="challenge13feedback"></div>
+
+</div>
+
+
+<!-- 14 -->
+
+<div class="activity center">
+
+<h3>14. Challenge: Simplify</h3>
+
+<div class="equation">
+  <span class="fraction">
+    <span class="num">30</span>
+    <span class="den">45</span>
+  </span>
+</div>
+
+<div class="input-group">
+  <span>30 ÷ 15 =</span>
+  <input class="answer-input" id="challenge14top">
+
+  <span>45 ÷ 15 =</span>
+  <input class="answer-input" id="challenge14bottom">
+</div>
+
+<button class="btn primary" onclick="checkChallenge14()">Check</button>
+
+<div class="feedback" id="challenge14feedback"></div>
+
+</div>
+
+</section>
+
+
+<!-- ======================================================
+PART L
+====================================================== -->
+
+<section class="part">
+
+<div class="part-heading">
+  PART L — Is It Fully Simplified?
+</div>
+
+<div class="activity">
+
+<h3>Choose the correct description for each fraction.</h3>
+
+<div class="sort-card">
+  <strong>
+    A.
+    <span class="fraction">
+      <span class="num">4</span>
+      <span class="den">6</span>
+    </span>
+  </strong>
+
+  <div class="button-row">
+    <button class="btn" onclick="fullySimple(0,true,this)">Can simplify more</button>
+    <button class="btn" onclick="fullySimple(0,false,this)">Fully simplified</button>
+  </div>
+
+  <div class="feedback" id="simple0"></div>
+</div>
+
+
+<div class="sort-card">
+  <strong>
+    B.
+    <span class="fraction">
+      <span class="num">3</span>
+      <span class="den">5</span>
+    </span>
+  </strong>
+
+  <div class="button-row">
+    <button class="btn" onclick="fullySimple(1,true,this)">Can simplify more</button>
+    <button class="btn" onclick="fullySimple(1,false,this)">Fully simplified</button>
+  </div>
+
+  <div class="feedback" id="simple1"></div>
+</div>
+
+
+<div class="sort-card">
+  <strong>
+    C.
+    <span class="fraction">
+      <span class="num">7</span>
+      <span class="den">9</span>
+    </span>
+  </strong>
+
+  <div class="button-row">
+    <button class="btn" onclick="fullySimple(2,true,this)">Can simplify more</button>
+    <button class="btn" onclick="fullySimple(2,false,this)">Fully simplified</button>
+  </div>
+
+  <div class="feedback" id="simple2"></div>
+</div>
+
+
+<div class="sort-card">
+  <strong>
+    D.
+    <span class="fraction">
+      <span class="num">12</span>
+      <span class="den">18</span>
+    </span>
+  </strong>
+
+  <div class="button-row">
+    <button class="btn" onclick="fullySimple(3,true,this)">Can simplify more</button>
+    <button class="btn" onclick="fullySimple(3,false,this)">Fully simplified</button>
+  </div>
+
+  <div class="feedback" id="simple3"></div>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ======================================================
+SUMMARY
+====================================================== -->
+
+<section class="part">
+
+<div class="part-heading">
+  🧠 Summary & Strategy
+</div>
+
+<div class="strategy" style="position:relative;bottom:auto">
+  <h3>YOUR PERSISTENT STRATEGY</h3>
+
+  <div class="strategy-steps">
+
+    <div class="strategy-step">
+      1️⃣ FIND<br>
+      <small>a common factor</small>
+    </div>
+
+    <div class="strategy-step">
+      2️⃣ DIVIDE<br>
+      <small>TOP and BOTTOM</small>
+    </div>
+
+    <div class="strategy-step">
+      3️⃣ CHECK<br>
+      <small>can I simplify again?</small>
+    </div>
+
+    <div class="strategy-step">
+      4️⃣ STOP<br>
+      <small>when fully simplified</small>
+    </div>
+
+  </div>
+</div>
+
+</section>
+
+
+<!-- ======================================================
+EXIT TICKET
+====================================================== -->
+
+<section class="part">
+
+<div class="part-heading">
+  🚪 Exit Ticket
+</div>
+
+<div class="activity">
+
+<h3>Show what you know.</h3>
+
+<!-- Exit 1 -->
+
+<div class="sort-card">
+  <h3>1. Simplify</h3>
+
+  <div class="equation">
+    <span class="fraction">
+      <span class="num">8</span>
+      <span class="den">12</span>
+    </span>
+
+    <span>=</span>
+
+    <span class="fraction">
+      <span class="num">?</span>
+      <span class="den">?</span>
+    </span>
+  </div>
+
+  <div class="input-group">
+    <input class="answer-input" id="exit1top">
+    <input class="answer-input" id="exit1bottom">
+  </div>
+</div>
+
+
+<!-- Exit 2 -->
+
+<div class="sort-card">
+  <h3>2. What is a common factor?</h3>
+
+  <div class="button-row">
+    <button class="btn exit2" onclick="exit2(this,false)">
+      A number that divides only the TOP
+    </button>
+
+    <button class="btn exit2" onclick="exit2(this,true)">
+      A number that divides BOTH numbers exactly
+    </button>
+
+    <button class="btn exit2" onclick="exit2(this,false)">
+      Any number we choose
+    </button>
+  </div>
+</div>
+
+
+<!-- Exit 3 -->
+
+<div class="sort-card">
+  <h3>3. True or False</h3>
+
+  <p>
+    When simplifying, the TOP and BOTTOM must be divided by the SAME number.
+  </p>
+
+  <div class="button-row">
+    <button class="btn exit3" onclick="exit3(this,true)">TRUE</button>
+    <button class="btn exit3" onclick="exit3(this,false)">FALSE</button>
+  </div>
+</div>
+
+
+<!-- Exit 4 -->
+
+<div class="sort-card">
+  <h3>4. Simplify</h3>
+
+  <div class="equation">
+    <span class="fraction">
+      <span class="num">18</span>
+      <span class="den">27</span>
+    </span>
+  </div>
+
+  <div class="input-group">
+    <input class="answer-input" id="exit4top">
+    <input class="answer-input" id="exit4bottom">
+  </div>
+</div>
+
+
+<!-- Exit 5 -->
+
+<div class="sort-card">
+  <h3>5. Can we simplify?</h3>
+
+  <p>
+    Look at:
+    <span class="fraction">
+      <span class="num">5</span>
+      <span class="den">8</span>
+    </span>
+  </p>
+
+  <div class="button-row">
+    <button class="btn exit5" onclick="exit5(this,true)">
+      YES — it has a common factor greater than 1
+    </button>
+
+    <button class="btn exit5" onclick="exit5(this,false)">
+      NO — it is fully simplified
+    </button>
+  </div>
+</div>
+
+
+<div class="center" style="margin-top:30px">
+
+  <button class="btn primary" style="font-size:1.4rem;padding:18px 35px"
+          onclick="submitWorksheet()">
+    🎉 Submit Worksheet
+  </button>
+
+</div>
+
+<div class="feedback" id="exitFeedback"></div>
+
+<div class="completion-banner" id="completionBanner">
+
+  <div class="badge">🏆</div>
+
+  <h2>Worksheet Complete!</h2>
+
+  <p id="finalScore"></p>
+
+  <p>
+    Remember:
+    <strong>FIND → DIVIDE → CHECK → STOP</strong>
+  </p>
+
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+
+<!-- SCORE FOOTER -->
+
+<div class="score-footer">
+
+  <div class="score-inner">
+
+    <div class="score-text">
+      Accuracy Score:
+      <span id="scoreDisplay">0</span> correct
+    </div>
+
+    <div class="accuracy-note">
+      💡 Focus on accuracy, not speed.
+    </div>
+
+  </div>
+
+</div>
+
+</div>
+
+
+<script>
+/* ============================================================
+   SCORE + PROGRESS SYSTEM
+============================================================ */
+
+let score=0;
+
+const completed=new Set();
+
+function markComplete(id){
+
+  if(!completed.has(id)){
+    completed.add(id);
+    score++;
+    updateProgress();
+  }
+
+}
+
+function updateProgress(){
+
+  document.getElementById("scoreDisplay").textContent=score;
+
+  const totalTasks=35;
+
+  const percent=Math.min(
+    100,
+    Math.round((completed.size/totalTasks)*100)
+  );
+
+  document.getElementById("progressPercent").textContent=percent+"%";
+  document.getElementById("progressFill").style.width=percent+"%";
+}
+
+function showFeedback(id,message,type){
+
+  const el=document.getElementById(id);
+
+  el.textContent=message;
+
+  el.className="feedback show "+type;
+}
+
+
+/* ============================================================
+   PART A
+============================================================ */
+
+function warmup1(correct){
+
+  if(correct){
+
+    showFeedback(
+      "a1feedback",
+      "✅ Yes! They have the same value.",
+      "success"
+    );
+
+    markComplete("a1");
+
+  }else{
+
+    showFeedback(
+      "a1feedback",
+      "💡 Look at the shaded area. Both bars show the same amount. Try YES.",
+      "hint"
+    );
+  }
+}
+
+
+function checkA2(){
+
+  const value=document.getElementById("a2input").value;
+
+  if(value==="2"){
+
+    showFeedback(
+      "a2feedback",
+      "🎉 Correct! 1 × 2 = 2, so the equivalent fraction has 2 on TOP and 6 on the BOTTOM.",
+      "success"
+    );
+
+    markComplete("a2");
+
+  }else if(value!==""){
+
+    showFeedback(
+      "a2feedback",
+      "💡 Hint: start with 1 and multiply it by 2.",
+      "hint"
+    );
+  }
+}
+
+
+/* ============================================================
+   PART B
+============================================================ */
+
+function checkFactors(){
+
+  const checked=[
+    ...document.querySelectorAll(
+      'input[type="checkbox"]:checked'
+    )
+  ].map(x=>x.value);
+
+  const correct=["1","2","4"];
+
+  const same=
+    checked.length===correct.length &&
+    correct.every(x=>checked.includes(x));
+
+  if(same){
+
+    showFeedback(
+      "b3feedback",
+      "✅ Common factors are 1, 2, and 4.",
+      "success"
+    );
+
+    markComplete("b3");
+
+  }else if(
+    checked.includes("3") ||
+    checked.includes("6")
+  ){
+
+    showFeedback(
+      "b3feedback",
+      "💡 3 and 6 divide 12, but they do not divide 8 exactly. Check which numbers divide BOTH.",
+      "hint"
+    );
+
+  }else{
+
+    showFeedback(
+      "b3feedback",
+      "Keep checking. The common factors are the numbers appearing in BOTH factor lists.",
+      "hint"
+    );
+  }
+}
+
+
+/* ============================================================
+   PART C
+============================================================ */
+
+const sortCorrect=[
+  false,
+  true,
+  false,
+  true
+];
+
+function sortAnswer(index,answer,button){
+
+  if(answer===sortCorrect[index]){
+
+    button.classList.add("correct");
+
+    showFeedback(
+      "sortFeedback"+index,
+      "✅ Correct! Great factor thinking.",
+      "success"
+    );
+
+    markComplete("sort"+index);
+
+  }else{
+
+    showFeedback(
+      "sortFeedback"+index,
+      "💡 Look for a common factor greater than 1.",
+      "hint"
+    );
+  }
+}
+
+
+/* ============================================================
+   PART D/E — MULTI STEP
+============================================================ */
+
+function guideFactor(value){
+
+  if(value===2){
+
+    showFeedback(
+      "guide1",
+      "🎉 Correct! 2 divides both 8 and 12.",
+      "success"
+    );
+
+    document.getElementById("guideStep2").style.display="block";
+
+    markComplete("guide1");
+
+  }else{
+
+    showFeedback(
+      "guide1",
+      "💡 Choose a number that divides BOTH 8 and 12 exactly. Try 2.",
+      "hint"
+    );
+  }
+}
+
+
+function checkGuide2(){
+
+  const top=document.getElementById("guideTop").value;
+  const bottom=document.getElementById("guideBottom").value;
+
+  if(top==="4" && bottom==="6"){
+
+    showFeedback(
+      "guide2",
+      "🎉 Excellent! You made the equivalent fraction with smaller numbers.",
+      "success"
+    );
+
+    document.getElementById("guideStep3").style.display="block";
+
+    markComplete("guide2");
+
+  }else{
+
+    showFeedback(
+      "guide2",
+      "💡 Calculate 8 ÷ 2 and 12 ÷ 2. Remember to divide BOTH.",
+      "hint"
+    );
+  }
+}
+
+
+function guideAgain(answer){
+
+  if(answer){
+
+    showFeedback(
+      "guide3",
+      "🎉 Yes! 4 and 6 have a common factor: 2. Let's simplify again.",
+      "success"
+    );
+
+    markComplete("guide3");
+
+  }else{
+
+    showFeedback(
+      "guide3",
+      "💡 Check 4 and 6. They are both divisible by 2.",
+      "hint"
+    );
+  }
+}
+
+
+function finishFactor(value){
+
+  if(value===2){
+
+    showFeedback(
+      "finish1",
+      "🎉 Correct! 2 divides both 4 and 6.",
+      "success"
+    );
+
+    document.getElementById("finishInputs").style.display="block";
+
+  }else{
+
+    showFeedback(
+      "finish1",
+      "💡 Choose a number that divides BOTH 4 and 6 exactly. Try 2.",
+      "hint"
+    );
+  }
+}
+
+
+function checkFinish(){
+
+  const top=document.getElementById("finishTop").value;
+  const bottom=document.getElementById("finishBottom").value;
+
+  if(top==="2" && bottom==="3"){
+
+    showFeedback(
+      "finish2",
+      "🎉 8/12 = 2/3. You simplified it completely!",
+      "success"
+    );
+
+    markComplete("finish");
+
+  }else{
+
+    showFeedback(
+      "finish2",
+      "💡 4 ÷ 2 = 2 and 6 ÷ 2 = 3.",
+      "hint"
+    );
+  }
+}
+
+
+/* ============================================================
+   PART F
+============================================================ */
+
+function aliAnswer(correct){
+
+  if(correct){
+
+    showFeedback(
+      "f7feedback",
+      "✅ Yes! Ali divided BOTH 12 and 18 by 2, so 12 becomes 6 and 18 becomes 9.",
+      "success"
+    );
+
+    markComplete("ali");
+
+  }else{
+
+    showFeedback(
+      "f7feedback",
+      "💡 Check whether Ali divided both numbers by the same number.",
+      "hint"
+    );
+  }
+}
+
+
+function errorAnswer(choice){
+
+  if(choice===0){
+
+    showFeedback(
+      "f8feedback",
+      "✅ Correct! The top changed from 12 to 6 by dividing by 2, but 18 to 6 requires dividing by 3. Different divisors break the rule.",
+      "success"
+    );
+
+    markComplete("error");
+
+  }else{
+
+    showFeedback(
+      "f8feedback",
+      "💡 The problem is about using the SAME divisor on TOP and BOTTOM.",
+      "hint"
+    );
+  }
+}
+
+
+/* ============================================================
+   PART G
+============================================================ */
+
+function guided10(value){
+
+  if(value===5){
+
+    showFeedback(
+      "g9f1",
+      "🎉 Correct! 5 divides both 10 and 15.",
+      "success"
+    );
+
+    document.getElementById("g9inputs").style.display="block";
+
+  }else{
+
+    showFeedback(
+      "g9f1",
+      "💡 Try a factor that divides BOTH 10 and 15. The useful factor here is 5.",
+      "hint"
+    );
+  }
+}
+
+
+function checkG9(){
+
+  const a=document.getElementById("g9top").value;
+  const b=document.getElementById("g9bottom").value;
+
+  if(a==="2" && b==="3"){
+
+    showFeedback(
+      "g9f2",
+      "🎉 Excellent! 10/15 simplifies to 2/3.",
+      "success"
+    );
+
+    markComplete("g9");
+
+  }else{
+
+    showFeedback(
+      "g9f2",
+      "💡 Calculate 10 ÷ 5 and 15 ÷ 5.",
+      "hint"
+    );
+  }
+}
+
+
+function guided9(value){
+
+  if(value===3){
+
+    showFeedback(
+      "g10f1",
+      "🎉 Correct! 3 divides both 9 and 12.",
+      "success"
+    );
+
+    document.getElementById("g10inputs").style.display="block";
+
+  }else{
+
+    showFeedback(
+      "g10f1",
+      "💡 Try a number that divides BOTH 9 and 12 exactly. The intended factor is 3.",
+      "hint"
+    );
+  }
+}
+
+
+function checkG10(){
+
+  const a=document.getElementById("g10top").value;
+  const b=document.getElementById("g10bottom").value;
+
+  if(a==="3" && b==="4"){
+
+    showFeedback(
+      "g10f2",
+      "🎉 Excellent! 9/12 simplifies to 3/4.",
+      "success"
+    );
+
+    markComplete("g10");
+
+  }else{
+
+    showFeedback(
+      "g10f2",
+      "💡 Calculate 9 ÷ 3 and 12 ÷ 3.",
+      "hint"
+    );
+  }
+}
+
+
+/* ============================================================
+   PART H — DYNAMIC PATH
+============================================================ */
+
+function dynamicRoute(factor){
+
+  const box=document.getElementById("routeBox");
+
+  if(factor===2){
+
+    box.innerHTML=`
+      <div class="equation">
+        <span class="fraction">
+          <span class="num">12</span>
+          <span class="den">18</span>
+        </span>
+        <span>→</span>
+        <span class="fraction">
+          <span class="num">6</span>
+          <span class="den">9</span>
+        </span>
+        <span>→</span>
+        <span class="fraction">
+          <span class="num">2</span>
+          <span class="den">3</span>
+        </span>
+      </div>
+      <p class="center">
+        First divide by 2. Then divide 6 and 9 by 3.
+      </p>
+    `;
+
+  }else if(factor===3){
+
+    box.innerHTML=`
+      <div class="equation">
+        <span class="fraction">
+          <span class="num">12</span>
+          <span class="den">18</span>
+        </span>
+        <span>→</span>
+        <span class="fraction">
+          <span class="num">4</span>
+          <span class="den">6</span>
+        </span>
+        <span>→</span>
+        <span class="fraction">
+          <span class="num">2</span>
+          <span class="den">3</span>
+        </span>
+      </div>
+      <p class="center">
+        First divide by 3. Then divide 4 and 6 by 2.
+      </p>
+    `;
+
+  }else{
+
+    box.innerHTML=`
+      <div class="equation">
+        <span class="fraction">
+          <span class="num">12</span>
+          <span class="den">18</span>
+        </span>
+        <span>→</span>
+        <span class="fraction">
+          <span class="num">2</span>
+          <span class="den">3</span>
+        </span>
+      </div>
+      <p class="center">
+        Divide TOP and BOTTOM directly by 6.
+      </p>
+    `;
+  }
+
+  showFeedback(
+    "h11feedback",
+    "🎉 Different routes, same simplified fraction!",
+    "success"
+  );
+
+  markComplete("dynamic");
+}
+
+
+/* ============================================================
+   PART I
+============================================================ */
+
+function visualChoice(choice){
+
+  if(choice===1){
+
+    showFeedback(
+      "i12feedback",
+      "🎉 Correct! 6/8 simplifies to 3/4.",
+      "success"
+    );
+
+    document.getElementById("visualProof").style.display="block";
+
+    markComplete("visual");
+
+  }else{
+
+    showFeedback(
+      "i12feedback",
+      "💡 Compare the amount shaded. Then think about dividing both 6 and 8 by the same factor.",
+      "hint"
+    );
+  }
+}
+
+
+/* ============================================================
+   PART J — GENERATED PRACTICE
+============================================================ */
+
+const independentQuestions=[
+  {n:6,d:8,a:3,b:4},
+  {n:10,d:20,a:1,b:2},
+  {n:12,d:15,a:4,b:5},
+  {n:14,d:21,a:2,b:3},
+  {n:16,d:24,a:2,b:3},
+  {n:18,d:27,a:2,b:3}
+];
+
+function renderIndependent(){
+
+  const container=document.getElementById("independentPractice");
+
+  independentQuestions.forEach((q,index)=>{
+
+    const div=document.createElement("div");
+
+    div.className="sort-card";
+
+    div.innerHTML=`
+      <h3>Practice ${index+1}</h3>
+
+      <div class="equation">
+
+        <span class="fraction">
+          <span class="num">${q.n}</span>
+          <span class="den">${q.d}</span>
+        </span>
+
+        <span>=</span>
+
+        <span class="fraction">
+          <span class="num">?</span>
+          <span class="den">?</span>
+        </span>
+
+      </div>
+
+      <div class="input-group">
+
+        <label class="input-label">
+          TOP
+          <input class="answer-input" id="ind${index}top" type="number">
+        </label>
+
+        <label class="input-label">
+          BOTTOM
+          <input class="answer-input" id="ind${index}bottom" type="number">
+        </label>
+
+      </div>
+
+      <div class="button-row">
+        <button class="btn primary" onclick="checkIndependent(${index})">
+          Check
+        </button>
+
+        <button class="btn" onclick="hintIndependent(${index})">
+          💡 Hint
+        </button>
+      </div>
+
+      <div class="feedback" id="indFeedback${index}"></div>
+    `;
+
+    container.appendChild(div);
+  });
+}
+
+
+function checkIndependent(index){
+
+  const q=independentQuestions[index];
+
+  const a=document.getElementById("ind"+index+"top").value;
+  const b=document.getElementById("ind"+index+"bottom").value;
+
+  if(a===String(q.a) && b===String(q.b)){
+
+    showFeedback(
+      "indFeedback"+index,
+      "🎉 Correct! Great simplifying.",
+      "success"
+    );
+
+    markComplete("ind"+index);
+
+  }else{
+
+    showFeedback(
+      "indFeedback"+index,
+      "💡 Try again. Find a common factor, then divide BOTH numbers by it.",
+      "hint"
+    );
+  }
+}
+
+
+function hintIndependent(index){
+
+  const q=independentQuestions[index];
+
+  let factor=1;
+
+  for(let i=2;i<=Math.min(q.n,q.d);i++){
+    if(q.n%i===0 && q.d%i===0){
+      factor=i;
+      break;
+    }
+  }
+
+  showFeedback(
+    "indFeedback"+index,
+    `💡 Hint: try dividing both ${q.n} and ${q.d} by ${factor}.`,
+    "hint"
+  );
+}
+
+
+/* ============================================================
+   PART K
+============================================================ */
+
+function gcd(a,b){
+
+  while(b!==0){
+    let temp=a%b;
+    a=b;
+    b=temp;
+  }
+
+  return Math.abs(a);
+}
+
+
+function checkChallenge13(){
+
+  const factor=Number(
+    document.getElementById("challenge13factor").value
+  );
+
+  const top=Number(
+    document.getElementById("challenge13top").value
+  );
+
+  const bottom=Number(
+    document.getElementById("challenge13bottom").value
+  );
+
+  if(
+    factor>1 &&
+    24%factor===0 &&
+    36%factor===0 &&
+    top===24/factor &&
+    bottom===36/factor
+  ){
+
+    showFeedback(
+      "challenge13feedback",
+      "🎉 Correct! Your divisor works in one step. The final simplified fraction is 2/3.",
+      "success"
+    );
+
+    markComplete("challenge13");
+
+  }else if(top===2 && bottom===3){
+
+    showFeedback(
+      "challenge13feedback",
+      "🎉 Your final result is correct! Check that your divisor also divides BOTH 24 and 36 exactly.",
+      "success"
+    );
+
+    markComplete("challenge13");
+
+  }else{
+
+    showFeedback(
+      "challenge13feedback",
+      "💡 Divide BOTH 24 and 36 by the same valid divisor. A direct choice is 12.",
+      "hint"
+    );
+  }
+}
+
+
+function hintChallenge13(){
+
+  showFeedback(
+    "challenge13feedback",
+    "💡 One easy route is: 24 ÷ 12 = 2 and 36 ÷ 12 = 3.",
+    "hint"
+  );
+}
+
+
+function checkChallenge14(){
+
+  const top=document.getElementById("challenge14top").value;
+  const bottom=document.getElementById("challenge14bottom").value;
+
+  if(top==="2" && bottom==="3"){
+
+    showFeedback(
+      "challenge14feedback",
+      "🎉 Correct! 30 ÷ 15 = 2 and 45 ÷ 15 = 3.",
+      "success"
+    );
+
+    markComplete("challenge14");
+
+  }else{
+
+    showFeedback(
+      "challenge14feedback",
+      "💡 Use the divisor 15. Work out 30 ÷ 15 and 45 ÷ 15.",
+      "hint"
+    );
+  }
+}
+
+
+/* ============================================================
+   PART L
+============================================================ */
+
+const simpleAnswers=[
+  true,
+  false,
+  false,
+  true
+];
+
+function fullySimple(index,answer,button){
+
+  if(answer===simpleAnswers[index]){
+
+    button.classList.add("correct");
+
+    showFeedback(
+      "simple"+index,
+      "✅ Correct! Good use of common factors.",
+      "success"
+    );
+
+    markComplete("simple"+index);
+
+  }else{
+
+    showFeedback(
+      "simple"+index,
+      "💡 Check whether the TOP and BOTTOM share a factor greater than 1.",
+      "hint"
+    );
+  }
+}
+
+
+/* ============================================================
+   EXIT TICKET
+============================================================ */
+
+let exit2Answer=null;
+let exit3Answer=null;
+let exit5Answer=null;
+
+
+function exit2(button,answer){
+
+  document.querySelectorAll(".exit2").forEach(b=>{
+    b.classList.remove("selected");
+  });
+
+  button.classList.add("selected");
+
+  exit2Answer=answer;
+}
+
+
+function exit3(button,answer){
+
+  document.querySelectorAll(".exit3").forEach(b=>{
+    b.classList.remove("selected");
+  });
+
+  button.classList.add("selected");
+
+  exit3Answer=answer;
+}
+
+
+function exit5(button,answer){
+
+  document.querySelectorAll(".exit5").forEach(b=>{
+    b.classList.remove("selected");
+  });
+
+  button.classList.add("selected");
+
+  exit5Answer=answer;
+}
+
+
+function submitWorksheet(){
+
+  let exitScore=0;
+
+  const q1a=document.getElementById("exit1top").value;
+  const q1b=document.getElementById("exit1bottom").value;
+
+  if(q1a==="2" && q1b==="3"){
+    exitScore++;
+  }
+
+  if(exit2Answer===true){
+    exitScore++;
+  }
+
+  if(exit3Answer===true){
+    exitScore++;
+  }
+
+  const q4a=document.getElementById("exit4top").value;
+  const q4b=document.getElementById("exit4bottom").value;
+
+  if(q4a==="2" && q4b==="3"){
+    exitScore++;
+  }
+
+  if(exit5Answer===false){
+    exitScore++;
+  }
+
+  const total=5;
+
+  showFeedback(
+    "exitFeedback",
+    `You scored ${exitScore} out of ${total} on the Exit Ticket.`,
+    exitScore===total ? "success" : "hint"
+  );
+
+  if(exitScore===total){
+
+    markComplete("exit");
+
+    document.getElementById("completionBanner").classList.add("show");
+
+    document.getElementById("finalScore").textContent=
+      `🌟 Perfect Exit Ticket — ${exitScore}/${total}! Your worksheet is complete.`;
+
+  }else{
+
+    document.getElementById("completionBanner").classList.add("show");
+
+    document.getElementById("finalScore").textContent=
+      `You scored ${exitScore}/${total}. Review the highlighted ideas and try again — accuracy grows with practice!`;
+  }
+
+  document.getElementById("completionBanner")
+    .scrollIntoView({behavior:"smooth",block:"center"});
+}
+
+
+/* ============================================================
+   INITIALISE
+============================================================ */
+
+renderIndependent();
+updateProgress();
+
+</script>
+
+</body>
+</html>

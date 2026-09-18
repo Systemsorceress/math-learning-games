@@ -1,0 +1,2328 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interactive Worksheet — Mixed Numbers → Improper Fractions</title>
+<style>
+:root{
+  --ink:#172033;
+  --muted:#526070;
+  --bg:#f5f7fb;
+  --card:#ffffff;
+  --line:#cbd5e1;
+  --blue:#2563eb;
+  --blue-soft:#dbeafe;
+  --green:#15803d;
+  --green-soft:#dcfce7;
+  --orange:#c2410c;
+  --orange-soft:#ffedd5;
+  --purple:#7c3aed;
+  --purple-soft:#ede9fe;
+  --shadow:0 8px 24px rgba(15,23,42,.08);
+  --radius:18px;
+}
+
+*{box-sizing:border-box}
+
+html{scroll-behavior:smooth}
+
+body{
+margin:0;
+background:var(--bg);
+color:var(--ink);
+font-family:Arial,Helvetica,sans-serif;
+font-size:1.2rem;
+line-height:1.55;
+}
+
+button,input,textarea{font:inherit}
+
+button{
+cursor:pointer;
+touch-action:manipulation;
+}
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible{
+outline:4px solid #f59e0b;
+outline-offset:3px;
+}
+
+.app{
+min-height:100vh;
+}
+
+header{
+position:sticky;
+top:0;
+z-index:100;
+background:#fff;
+border-bottom:1px solid var(--line);
+}
+
+.header-inner{
+max-width:1250px;
+margin:auto;
+padding:14px 22px 10px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:20px;
+}
+
+.title-small{
+font-weight:900;
+font-size:1.2rem;
+}
+
+.progress-info{
+font-weight:900;
+color:#1e40af;
+white-space:nowrap;
+}
+
+.progress-track{
+height:10px;
+background:#e2e8f0;
+}
+
+.progress-fill{
+height:100%;
+width:0%;
+background:linear-gradient(90deg,var(--blue),var(--purple));
+transition:width .35s ease;
+}
+
+main{
+max-width:1250px;
+margin:auto;
+padding:30px 22px 100px;
+}
+
+.intro{
+background:#fff;
+border:2px solid var(--line);
+border-radius:var(--radius);
+padding:25px;
+margin-bottom:24px;
+box-shadow:var(--shadow);
+}
+
+h1{
+font-size:clamp(2rem,4vw,3.2rem);
+line-height:1.1;
+margin:0 0 10px;
+}
+
+h2{
+font-size:clamp(1.7rem,3vw,2.4rem);
+line-height:1.15;
+margin:0 0 12px;
+}
+
+h3{
+font-size:1.45rem;
+line-height:1.2;
+margin:0 0 12px;
+}
+
+p{margin:8px 0 14px}
+
+.muted{color:var(--muted)}
+
+.part-label{
+display:inline-block;
+padding:7px 13px;
+border-radius:999px;
+background:var(--blue-soft);
+color:#1e40af;
+font-weight:900;
+font-size:1rem;
+margin-bottom:10px;
+}
+
+.question-card{
+background:var(--card);
+border:2px solid var(--line);
+border-radius:var(--radius);
+padding:25px;
+margin-bottom:22px;
+box-shadow:var(--shadow);
+}
+
+.question-heading{
+display:flex;
+align-items:flex-start;
+gap:13px;
+margin-bottom:18px;
+}
+
+.q-number{
+flex:0 0 auto;
+width:46px;
+height:46px;
+border-radius:50%;
+background:var(--blue);
+color:white;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:900;
+font-size:1.15rem;
+}
+
+.q-title{
+flex:1;
+}
+
+.q-title h3{
+margin:0;
+}
+
+.center{text-align:center}
+
+.two-col{
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:20px;
+}
+
+.three-col{
+display:grid;
+grid-template-columns:repeat(3,minmax(0,1fr));
+gap:18px;
+}
+
+/* Fraction system */
+.fraction{
+display:inline-grid;
+grid-template-rows:auto 5px auto;
+min-width:88px;
+vertical-align:middle;
+margin:0 6px;
+text-align:center;
+font-size:2.35rem;
+font-weight:900;
+line-height:1;
+}
+
+.fraction .num,
+.fraction .den{
+min-width:88px;
+padding:8px 13px;
+}
+
+.fraction .num{
+background:#f0fdf4;
+border:3px solid var(--green);
+border-bottom:0;
+border-radius:10px 10px 0 0;
+text-decoration:underline;
+text-decoration-thickness:4px;
+text-underline-offset:6px;
+}
+
+.fraction .bar{
+height:5px;
+background:var(--ink);
+width:100%;
+}
+
+.fraction .den{
+background:var(--orange-soft);
+border:3px solid var(--orange);
+border-top:0;
+border-radius:0 0 10px 10px;
+}
+
+.fraction.small{
+font-size:1.8rem;
+min-width:68px;
+}
+
+.fraction.small .num,
+.fraction.small .den{
+min-width:68px;
+padding:6px 10px;
+}
+
+/* Mixed number annotation */
+.mixed-number{
+display:inline-flex;
+align-items:center;
+justify-content:center;
+gap:9px;
+flex-wrap:wrap;
+font-size:2.3rem;
+font-weight:900;
+}
+
+.whole-zone{
+display:inline-flex;
+align-items:center;
+justify-content:center;
+min-width:80px;
+min-height:80px;
+padding:8px 14px;
+border:5px solid var(--blue);
+border-radius:50%;
+background:var(--blue-soft);
+font-size:2.5rem;
+font-weight:900;
+}
+
+.num-zone{
+display:inline-flex;
+align-items:center;
+justify-content:center;
+min-width:70px;
+min-height:65px;
+padding:8px 13px;
+border:4px solid var(--green);
+border-radius:12px;
+background:var(--green-soft);
+font-size:2.2rem;
+font-weight:900;
+text-decoration:underline;
+text-decoration-thickness:4px;
+text-underline-offset:6px;
+}
+
+.den-zone{
+display:inline-flex;
+align-items:center;
+justify-content:center;
+min-width:70px;
+min-height:65px;
+padding:8px 13px;
+border:4px solid var(--orange);
+border-radius:12px;
+background:var(--orange-soft);
+font-size:2.2rem;
+font-weight:900;
+}
+
+.annotation-tag{
+display:block;
+font-size:.82rem;
+font-weight:900;
+letter-spacing:.05em;
+text-transform:uppercase;
+margin-bottom:5px;
+}
+
+.whole-tag{color:#1e40af}
+.num-tag{color:#166534}
+.den-tag{color:#9a3412}
+
+.annotated-part{
+text-align:center;
+}
+
+.annotation-row{
+display:flex;
+justify-content:center;
+align-items:flex-start;
+flex-wrap:wrap;
+gap:20px;
+margin:18px 0;
+}
+
+.arrow{
+font-size:2rem;
+font-weight:900;
+color:var(--blue);
+align-self:center;
+}
+
+/* Input fractions */
+.stacked-input{
+display:inline-flex;
+flex-direction:column;
+align-items:center;
+vertical-align:middle;
+}
+
+.stacked-input input{
+width:90px;
+height:58px;
+border:3px solid #64748b;
+border-radius:10px;
+text-align:center;
+font-size:1.7rem;
+font-weight:900;
+background:#fff;
+}
+
+.stacked-input .input-bar{
+width:90px;
+height:5px;
+background:var(--ink);
+margin:4px 0;
+}
+
+/* General inputs */
+.answer-input{
+width:105px;
+height:58px;
+border:3px solid #64748b;
+border-radius:11px;
+text-align:center;
+font-size:1.65rem;
+font-weight:900;
+background:#fff;
+}
+
+.answer-input.wide{
+width:180px;
+}
+
+.answer-input.correct-input,
+.stacked-input input.correct-input{
+border-color:var(--green);
+background:var(--green-soft);
+}
+
+.answer-input.retry-input,
+.stacked-input input.retry-input{
+border-color:var(--orange);
+background:var(--orange-soft);
+}
+
+.math-row{
+display:flex;
+align-items:center;
+justify-content:center;
+flex-wrap:wrap;
+gap:9px;
+margin:17px 0;
+font-size:1.7rem;
+font-weight:900;
+}
+
+.math-chip{
+padding:9px 14px;
+background:#f8fafc;
+border:2px solid var(--line);
+border-radius:11px;
+}
+
+/* Buttons */
+.choice-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(135px,1fr));
+gap:13px;
+margin-top:15px;
+}
+
+.choice-btn,
+.action-btn{
+min-height:62px;
+border:3px solid #94a3b8;
+border-radius:13px;
+background:#fff;
+color:var(--ink);
+padding:10px 15px;
+font-weight:900;
+transition:.18s ease;
+}
+
+.choice-btn:hover,
+.action-btn:hover{
+border-color:var(--blue);
+transform:translateY(-1px);
+}
+
+.choice-btn.correct{
+border-color:var(--green);
+background:var(--green-soft);
+color:#14532d;
+}
+
+.choice-btn.retry{
+border-color:var(--orange);
+background:var(--orange-soft);
+color:#7c2d12;
+}
+
+.action-btn.primary{
+background:var(--blue);
+color:#fff;
+border-color:var(--blue);
+}
+
+.action-btn.hint-btn{
+border-color:#8b5cf6;
+color:#5b21b6;
+background:var(--purple-soft);
+}
+
+.button-row{
+display:flex;
+justify-content:center;
+align-items:center;
+flex-wrap:wrap;
+gap:12px;
+margin-top:18px;
+}
+
+/* Feedback */
+.feedback{
+display:none;
+margin-top:16px;
+padding:14px 17px;
+border-radius:13px;
+font-weight:900;
+}
+
+.feedback.show{
+display:block;
+}
+
+.feedback.success{
+background:var(--green-soft);
+color:#14532d;
+border:2px solid #86efac;
+}
+
+.feedback.retry{
+background:var(--orange-soft);
+color:#7c2d12;
+border:2px solid #fdba74;
+}
+
+.hint{
+display:none;
+margin-top:13px;
+padding:14px 17px;
+border-radius:13px;
+background:var(--blue-soft);
+color:#1e3a8a;
+border:2px solid #93c5fd;
+}
+
+.hint.show{display:block}
+
+.rule-card{
+background:var(--purple-soft);
+border:4px solid var(--purple);
+border-radius:18px;
+padding:22px;
+text-align:center;
+margin:20px 0;
+}
+
+.visual-row{
+display:flex;
+justify-content:center;
+align-items:center;
+flex-wrap:wrap;
+gap:10px;
+}
+
+.whole-blocks{
+display:flex;
+justify-content:center;
+gap:8px;
+flex-wrap:wrap;
+margin:15px 0;
+}
+
+.block{
+width:64px;
+height:64px;
+border:3px solid #334155;
+background:#60a5fa;
+color:#fff;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:900;
+border-radius:8px;
+}
+
+.segment-bar{
+display:grid;
+gap:5px;
+width:min(430px,100%);
+margin:20px auto;
+}
+
+.segment-bar.three{grid-template-columns:repeat(3,1fr)}
+.segment-bar.four{grid-template-columns:repeat(4,1fr)}
+
+.segment{
+min-height:65px;
+border:3px solid #334155;
+background:#fff;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:900;
+}
+
+.segment.filled{
+background:#60a5fa;
+color:#fff;
+}
+
+/* Anchor */
+.anchor{
+position:sticky;
+top:67px;
+z-index:20;
+background:#fff;
+border:4px solid var(--purple);
+border-radius:18px;
+padding:18px;
+margin-bottom:25px;
+box-shadow:var(--shadow);
+}
+
+.anchor-title{
+font-weight:900;
+color:#5b21b6;
+text-align:center;
+margin-bottom:10px;
+}
+
+.anchor-steps{
+display:flex;
+justify-content:center;
+align-items:center;
+flex-wrap:wrap;
+gap:10px;
+}
+
+.anchor-step{
+padding:10px 16px;
+border-radius:12px;
+font-weight:900;
+background:var(--purple-soft);
+border:2px solid #a78bfa;
+}
+
+/* Completion */
+.final-banner{
+display:none;
+margin-top:24px;
+padding:28px;
+border-radius:22px;
+border:4px solid var(--green);
+background:var(--green-soft);
+text-align:center;
+animation:pop .3s ease;
+}
+
+.final-banner.show{display:block}
+
+@keyframes pop{
+from{opacity:0;transform:scale(.97)}
+to{opacity:1;transform:scale(1)}
+}
+
+.badge{
+display:inline-block;
+padding:12px 20px;
+border-radius:999px;
+background:#fef3c7;
+border:3px solid #f59e0b;
+font-weight:900;
+margin-top:12px;
+}
+
+.score-row{
+display:flex;
+justify-content:center;
+flex-wrap:wrap;
+gap:12px;
+margin-top:18px;
+}
+
+.score-chip{
+padding:10px 15px;
+background:#fff;
+border:2px solid var(--line);
+border-radius:999px;
+font-weight:900;
+}
+
+/* Exit explanation */
+textarea{
+width:100%;
+min-height:130px;
+resize:vertical;
+border:3px solid #64748b;
+border-radius:13px;
+padding:14px;
+background:#fff;
+}
+
+/* Section dividers */
+.section-divider{
+margin:38px 0 25px;
+padding:18px 0;
+border-top:4px solid #dbeafe;
+}
+
+.section-divider h2{
+color:#1e3a8a;
+}
+
+/* Responsive */
+@media(max-width:850px){
+.two-col,
+.three-col{
+grid-template-columns:1fr;
+}
+
+main{
+padding:24px 15px 80px;
+}
+
+.question-card{
+padding:20px;
+}
+
+.anchor{
+top:63px;
+}
+}
+
+@media(max-width:520px){
+body{font-size:1.15rem}
+
+.header-inner{
+padding:11px 14px;
+}
+
+.title-small{
+font-size:1rem;
+}
+
+.progress-info{
+font-size:.95rem;
+}
+
+.whole-zone{
+min-width:68px;
+min-height:68px;
+font-size:2.15rem;
+}
+
+.num-zone,
+.den-zone{
+min-width:62px;
+min-height:58px;
+font-size:1.9rem;
+}
+
+.fraction{
+font-size:2rem;
+min-width:76px;
+}
+
+.fraction .num,
+.fraction .den{
+min-width:76px;
+}
+
+.stacked-input input{
+width:78px;
+}
+
+.stacked-input .input-bar{
+width:78px;
+}
+} </style>
+
+</head>
+
+<body>
+<div class="app">
+
+<header>
+  <div class="header-inner">
+    <div class="title-small">Interactive Worksheet — Mixed Numbers → Improper Fractions</div>
+    <div class="progress-info" id="progressText">0% complete</div>
+  </div>
+  <div class="progress-track">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+</header>
+
+<main>
+
+<div class="intro">
+  <h1>Interactive Worksheet</h1>
+  <h2>Mixed Numbers → Improper Fractions</h2>
+  <p class="muted">
+    Work at your own pace. Use the same routine every time:
+    <strong>1️⃣ MULTIPLY → 2️⃣ ADD → 3️⃣ KEEP</strong>.
+  </p>
+</div>
+
+<div class="anchor">
+  <div class="anchor-title">⭐ Your Persistent Strategy Card</div>
+  <div class="anchor-steps">
+    <div class="anchor-step">1️⃣ MULTIPLY</div>
+    <div>→</div>
+    <div class="anchor-step">2️⃣ ADD</div>
+    <div>→</div>
+    <div class="anchor-step">3️⃣ KEEP</div>
+  </div>
+</div>
+
+<!-- PART A -->
+
+<div class="section-divider">
+  <span class="part-label">PART A</span>
+  <h2>Know Your Numbers</h2>
+</div>
+
+<!-- Q1 -->
+
+<section class="question-card" id="q1">
+  <div class="question-heading">
+    <div class="q-number">1</div>
+    <div class="q-title">
+      <h3>Interactive Labeling</h3>
+      <p>Click each number in the mixed number to identify its job.</p>
+    </div>
+  </div>
+
+  <div class="center">
+    <div class="annotation-row">
+      <div class="annotated-part">
+        <span class="annotation-tag whole-tag">WHOLE NUMBER</span>
+        <button class="whole-zone" onclick="labelQ1('whole',this)" aria-label="Click number 3 to identify the whole number">3</button>
+      </div>
+
+```
+  <div class="annotated-part">
+    <span class="annotation-tag num-tag">NUMERATOR</span>
+    <button class="num-zone" onclick="labelQ1('numerator',this)" aria-label="Click number 2 to identify the numerator">2</button>
+  </div>
+
+  <div class="annotated-part">
+    <span class="annotation-tag den-tag">DENOMINATOR</span>
+    <button class="den-zone" onclick="labelQ1('denominator',this)" aria-label="Click number 5 to identify the denominator">5</button>
+  </div>
+</div>
+
+<div class="feedback" id="q1Feedback"></div>
+<button class="action-btn hint-btn" onclick="toggleHint('q1Hint')">💡 Hint</button>
+<div class="hint" id="q1Hint">
+  The whole number is outside the fraction. The numerator is on top. The denominator is underneath.
+</div>
+```
+
+  </div>
+</section>
+
+<!-- Q2 -->
+
+<section class="question-card" id="q2">
+  <div class="question-heading">
+    <div class="q-number">2</div>
+    <div class="q-title">
+      <h3>Quick Check</h3>
+      <p>Identify all three parts of the mixed number.</p>
+    </div>
+  </div>
+
+  <div class="center">
+    <div class="mixed-number" aria-label="Four and three sevenths">
+      <span class="whole-zone">4</span>
+      <span class="fraction small">
+        <span class="num">3</span>
+        <span class="bar"></span>
+        <span class="den">7</span>
+      </span>
+    </div>
+  </div>
+
+  <div class="three-col" style="margin-top:22px;">
+    <div class="center">
+      <span class="annotation-tag whole-tag">WHOLE NUMBER</span><br>
+      <input class="answer-input" id="q2Whole" inputmode="numeric" aria-label="Whole number">
+    </div>
+
+```
+<div class="center">
+  <span class="annotation-tag num-tag">NUMERATOR</span><br>
+  <input class="answer-input" id="q2Num" inputmode="numeric" aria-label="Numerator">
+</div>
+
+<div class="center">
+  <span class="annotation-tag den-tag">DENOMINATOR</span><br>
+  <input class="answer-input" id="q2Den" inputmode="numeric" aria-label="Denominator">
+</div>
+```
+
+  </div>
+
+  <div class="button-row">
+    <button class="action-btn primary" onclick="checkQ2()">Check</button>
+    <button class="action-btn hint-btn" onclick="toggleHint('q2Hint')">💡 Hint</button>
+  </div>
+
+  <div class="hint" id="q2Hint">Read from left to right: whole number first, then the top of the fraction, then the bottom.</div>
+  <div class="feedback" id="q2Feedback"></div>
+</section>
+
+<!-- PART B -->
+
+<div class="section-divider">
+  <span class="part-label">PART B</span>
+  <h2>Warm-Up: Count the Parts</h2>
+</div>
+
+<!-- Q3 -->
+
+<section class="question-card" id="q3">
+  <div class="question-heading">
+    <div class="q-number">3</div>
+    <div class="q-title">
+      <h3>One Whole in Thirds</h3>
+      <p>One whole is made from how many thirds?</p>
+    </div>
+  </div>
+
+  <div class="center">
+    <div class="segment-bar three">
+      <div class="segment filled">⅓</div>
+      <div class="segment filled">⅓</div>
+      <div class="segment filled">⅓</div>
+    </div>
+
+```
+<div class="choice-grid">
+  <button class="choice-btn" onclick="checkChoice('q3',this,false)">
+    <span class="fraction small"><span class="num">1</span><span class="bar"></span><span class="den">3</span></span>
+  </button>
+  <button class="choice-btn" onclick="checkChoice('q3',this,false)">
+    <span class="fraction small"><span class="num">2</span><span class="bar"></span><span class="den">3</span></span>
+  </button>
+  <button class="choice-btn" onclick="checkChoice('q3',this,true)">
+    <span class="fraction small"><span class="num">3</span><span class="bar"></span><span class="den">3</span></span>
+  </button>
+</div>
+
+<div class="feedback" id="q3Feedback"></div>
+```
+
+  </div>
+</section>
+
+<!-- Q4 -->
+
+<section class="question-card" id="q4">
+  <div class="question-heading">
+    <div class="q-number">4</div>
+    <div class="q-title">
+      <h3>One Whole in Fourths</h3>
+      <p>One whole is made from how many fourths?</p>
+    </div>
+  </div>
+
+  <div class="center">
+    <div class="segment-bar four">
+      <div class="segment filled">¼</div>
+      <div class="segment filled">¼</div>
+      <div class="segment filled">¼</div>
+      <div class="segment filled">¼</div>
+    </div>
+
+```
+<div class="choice-grid">
+  <button class="choice-btn" onclick="checkChoice('q4',this,false)">
+    <span class="fraction small"><span class="num">2</span><span class="bar"></span><span class="den">4</span></span>
+  </button>
+  <button class="choice-btn" onclick="checkChoice('q4',this,false)">
+    <span class="fraction small"><span class="num">3</span><span class="bar"></span><span class="den">4</span></span>
+  </button>
+  <button class="choice-btn" onclick="checkChoice('q4',this,true)">
+    <span class="fraction small"><span class="num">4</span><span class="bar"></span><span class="den">4</span></span>
+  </button>
+</div>
+
+<div class="feedback" id="q4Feedback"></div>
+```
+
+  </div>
+</section>
+
+<!-- PART C -->
+
+<div class="section-divider">
+  <span class="part-label">PART C</span>
+  <h2>Build an Improper Fraction</h2>
+</div>
+
+<!-- Q5 -->
+
+<section class="question-card" id="q5">
+  <div class="question-heading">
+    <div class="q-number">5</div>
+    <div class="q-title">
+      <h3>Convert the Mixed Number</h3>
+      <div class="mixed-number">
+        <span class="whole-zone">2</span>
+        <span class="fraction small"><span class="num">1</span><span class="bar"></span><span class="den">3</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="math-row">
+    <span>2 × 3 =</span>
+    <input class="answer-input" id="q5a" inputmode="numeric">
+  </div>
+
+  <div class="math-row">
+    <span>6 + 1 =</span>
+    <input class="answer-input" id="q5b" inputmode="numeric">
+  </div>
+
+  <div class="math-row">
+    <span>Denominator =</span>
+    <input class="answer-input" id="q5c" inputmode="numeric">
+  </div>
+
+  <div class="center">
+    <p>Final answer:</p>
+    <div class="stacked-input">
+      <input id="q5n" inputmode="numeric" aria-label="Final numerator">
+      <div class="input-bar"></div>
+      <input id="q5d" inputmode="numeric" aria-label="Final denominator">
+    </div>
+  </div>
+
+  <div class="button-row">
+    <button class="action-btn primary" onclick="checkMultiStep('q5',[
+      ['q5a',6],['q5b',7],['q5c',3],['q5n',7],['q5d',3]
+    ],'q5Feedback','q5Final')">Check</button>
+    <button class="action-btn hint-btn" onclick="toggleHint('q5Hint')">💡 Hint</button>
+  </div>
+
+  <div class="hint" id="q5Hint">Multiply the whole by the denominator. Then add the numerator. The denominator stays 3.</div>
+  <div class="feedback" id="q5Feedback"></div>
+
+  <div id="q5Final" style="display:none;" class="center">
+    <p>🎉 Your improper fraction is:</p>
+    <span class="fraction"><span class="num">7</span><span class="bar"></span><span class="den">3</span></span>
+  </div>
+</section>
+
+<!-- Q6 -->
+
+<section class="question-card" id="q6">
+  <div class="question-heading">
+    <div class="q-number">6</div>
+    <div class="q-title">
+      <h3>Convert Again</h3>
+      <div class="mixed-number">
+        <span class="whole-zone">1</span>
+        <span class="fraction small"><span class="num">2</span><span class="bar"></span><span class="den">4</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="math-row">
+    <span>1 × 4 =</span>
+    <input class="answer-input" id="q6a" inputmode="numeric">
+  </div>
+
+  <div class="math-row">
+    <span>4 + 2 =</span>
+    <input class="answer-input" id="q6b" inputmode="numeric">
+  </div>
+
+  <div class="math-row">
+    <span>Denominator =</span>
+    <input class="answer-input" id="q6c" inputmode="numeric">
+  </div>
+
+  <div class="center">
+    <p>Final answer:</p>
+    <div class="stacked-input">
+      <input id="q6n" inputmode="numeric">
+      <div class="input-bar"></div>
+      <input id="q6d" inputmode="numeric">
+    </div>
+  </div>
+
+  <div class="button-row">
+    <button class="action-btn primary" onclick="checkMultiStep('q6',[
+      ['q6a',4],['q6b',6],['q6c',4],['q6n',6],['q6d',4]
+    ],'q6Feedback','q6Final')">Check</button>
+    <button class="action-btn hint-btn" onclick="toggleHint('q6Hint')">💡 Hint</button>
+  </div>
+
+  <div class="hint" id="q6Hint">Start with 1 × 4. Then add 2. Keep 4 as the denominator.</div>
+  <div class="feedback" id="q6Feedback"></div>
+
+  <div id="q6Final" style="display:none;" class="center">
+    <p>🎉 Correct!</p>
+    <span class="fraction"><span class="num">6</span><span class="bar"></span><span class="den">4</span></span>
+  </div>
+</section>
+
+<!-- PART D -->
+
+<div class="section-divider">
+  <span class="part-label">PART D</span>
+  <h2>Guided Practice</h2>
+</div>
+
+<!-- Q7 -->
+
+<section class="question-card" id="q7">
+  <div class="question-heading">
+    <div class="q-number">7</div>
+    <div class="q-title">
+      <h3>Convert</h3>
+      <div class="mixed-number">
+        <span class="whole-zone">3</span>
+        <span class="fraction small"><span class="num">2</span><span class="bar"></span><span class="den">5</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="math-row">3 × 5 = <input class="answer-input" id="q7a"></div>
+  <div class="math-row">15 + 2 = <input class="answer-input" id="q7b"></div>
+  <div class="math-row">Denominator = <input class="answer-input" id="q7c"></div>
+
+  <div class="center">
+    <div class="stacked-input">
+      <input id="q7n">
+      <div class="input-bar"></div>
+      <input id="q7d">
+    </div>
+  </div>
+
+  <div class="button-row">
+    <button class="action-btn primary" onclick="checkMultiStep('q7',[
+      ['q7a',15],['q7b',17],['q7c',5],['q7n',17],['q7d',5]
+    ],'q7Feedback','q7Final')">Check</button>
+    <button class="action-btn hint-btn" onclick="toggleHint('q7Hint')">💡 Hint</button>
+  </div>
+  <div class="hint" id="q7Hint">Whole × denominator gives 15. Then add numerator 2. Keep denominator 5.</div>
+  <div class="feedback" id="q7Feedback"></div>
+  <div id="q7Final" style="display:none;" class="center"><p>Excellent! 🎉</p></div>
+</section>
+
+<!-- Q8 -->
+
+<section class="question-card" id="q8">
+  <div class="question-heading">
+    <div class="q-number">8</div>
+    <div class="q-title">
+      <h3>Convert</h3>
+      <div class="mixed-number">
+        <span class="whole-zone">2</span>
+        <span class="fraction small"><span class="num">3</span><span class="bar"></span><span class="den">4</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="math-row">2 × 4 = <input class="answer-input" id="q8a"></div>
+  <div class="math-row"><input class="answer-input" id="q8b"> + 3 = <input class="answer-input" id="q8c"></div>
+  <div class="math-row">Denominator = <input class="answer-input" id="q8d"></div>
+
+  <div class="center">
+    <div class="stacked-input">
+      <input id="q8n">
+      <div class="input-bar"></div>
+      <input id="q8den">
+    </div>
+  </div>
+
+  <div class="button-row">
+    <button class="action-btn primary" onclick="checkMultiStep('q8',[
+      ['q8a',8],['q8b',8],['q8c',11],['q8d',4],['q8n',11],['q8den',4]
+    ],'q8Feedback','q8Final')">Check</button>
+    <button class="action-btn hint-btn" onclick="toggleHint('q8Hint')">💡 Hint</button>
+  </div>
+  <div class="hint" id="q8Hint">First make 8. Then use 8 + 3. Keep 4.</div>
+  <div class="feedback" id="q8Feedback"></div>
+  <div id="q8Final" style="display:none;" class="center"><p>Excellent! 🎉</p></div>
+</section>
+
+<!-- Q9 -->
+
+<section class="question-card" id="q9">
+  <div class="question-heading">
+    <div class="q-number">9</div>
+    <div class="q-title">
+      <h3>Convert</h3>
+      <div class="mixed-number">
+        <span class="whole-zone">4</span>
+        <span class="fraction small"><span class="num">1</span><span class="bar"></span><span class="den">6</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="math-row">4 × 6 = <input class="answer-input" id="q9a"></div>
+  <div class="math-row"><input class="answer-input" id="q9b"> + 1 = <input class="answer-input" id="q9c"></div>
+  <div class="math-row">Denominator = <input class="answer-input" id="q9d"></div>
+
+  <div class="center">
+    <div class="stacked-input">
+      <input id="q9n">
+      <div class="input-bar"></div>
+      <input id="q9den">
+    </div>
+  </div>
+
+  <div class="button-row">
+    <button class="action-btn primary" onclick="checkMultiStep('q9',[
+      ['q9a',24],['q9b',24],['q9c',25],['q9d',6],['q9n',25],['q9den',6]
+    ],'q9Feedback','q9Final')">Check</button>
+    <button class="action-btn hint-btn" onclick="toggleHint('q9Hint')">💡 Hint</button>
+  </div>
+  <div class="hint" id="q9Hint">Four groups of six make 24. Add the one extra sixth. Keep 6.</div>
+  <div class="feedback" id="q9Feedback"></div>
+  <div id="q9Final" style="display:none;" class="center"><p>Excellent! 🎉</p></div>
+</section>
+
+<!-- PART E -->
+
+<div class="section-divider">
+  <span class="part-label">PART E</span>
+  <h2>Choose the Correct Answer</h2>
+</div>
+
+<!-- Q10 -->
+
+<section class="question-card">
+  <div class="question-heading">
+    <div class="q-number">10</div>
+    <div class="q-title">
+      <h3>Convert the mixed number</h3>
+      <div class="mixed-number">
+        <span class="whole-zone">2</span>
+        <span class="fraction small"><span class="num">1</span><span class="bar"></span><span class="den">3</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="choice-grid">
+    <button class="choice-btn" onclick="radioQuestion('q10',this,false)">
+      <span class="fraction small"><span class="num">5</span><span class="bar"></span><span class="den">3</span></span>
+    </button>
+    <button class="choice-btn" onclick="radioQuestion('q10',this,false)">
+      <span class="fraction small"><span class="num">6</span><span class="bar"></span><span class="den">3</span></span>
+    </button>
+    <button class="choice-btn" onclick="radioQuestion('q10',this,true)">
+      <span class="fraction small"><span class="num">7</span><span class="bar"></span><span class="den">3</span></span>
+    </button>
+    <button class="choice-btn" onclick="radioQuestion('q10',this,false)">
+      <span class="fraction small"><span class="num">7</span><span class="bar"></span><span class="den">2</span></span>
+    </button>
+  </div>
+  <div class="feedback" id="q10Feedback"></div>
+</section>
+
+<!-- Q11 -->
+
+<section class="question-card">
+  <div class="question-heading">
+    <div class="q-number">11</div>
+    <div class="q-title">
+      <h3>Convert the mixed number</h3>
+      <div class="mixed-number">
+        <span class="whole-zone">3</span>
+        <span class="fraction small"><span class="num">1</span><span class="bar"></span><span class="den">4</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="choice-grid">
+    <button class="choice-btn" onclick="radioQuestion('q11',this,false)">
+      <span class="fraction small"><span class="num">12</span><span class="bar"></span><span class="den">4</span></span>
+    </button>
+    <button class="choice-btn" onclick="radioQuestion('q11',this,true)">
+      <span class="fraction small"><span class="num">13</span><span class="bar"></span><span class="den">4</span></span>
+    </button>
+    <button class="choice-btn" onclick="radioQuestion('q11',this,false)">
+      <span class="fraction small"><span class="num">7</span><span class="bar"></span><span class="den">4</span></span>
+    </button>
+    <button class="choice-btn" onclick="radioQuestion('q11',this,false)">
+      <span class="fraction small"><span class="num">13</span><span class="bar"></span><span class="den">3</span></span>
+    </button>
+  </div>
+  <div class="feedback" id="q11Feedback"></div>
+</section>
+
+<!-- Q12 -->
+
+<section class="question-card">
+  <div class="question-heading">
+    <div class="q-number">12</div>
+    <div class="q-title">
+      <h3>Convert the mixed number</h3>
+      <div class="mixed-number">
+        <span class="whole-zone">2</span>
+        <span class="fraction small"><span class="num">3</span><span class="bar"></span><span class="den">5</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="choice-grid">
+    <button class="choice-btn" onclick="radioQuestion('q12',this,false)">
+      <span class="fraction small"><span class="num">10</span><span class="bar"></span><span class="den">5</span></span>
+    </button>
+    <button class="choice-btn" onclick="radioQuestion('q12',this,false)">
+      <span class="fraction small"><span class="num">11</span><span class="bar"></span><span class="den">5</span></span>
+    </button>
+    <button class="choice-btn" onclick="radioQuestion('q12',this,true)">
+      <span class="fraction small"><span class="num">13</span><span class="bar"></span><span class="den">5</span></span>
+    </button>
+    <button class="choice-btn" onclick="radioQuestion('q12',this,false)">
+      <span class="fraction small"><span class="num">13</span><span class="bar"></span><span class="den">3</span></span>
+    </button>
+  </div>
+  <div class="feedback" id="q12Feedback"></div>
+</section>
+
+<!-- PART F -->
+
+<div class="section-divider">
+  <span class="part-label">PART F</span>
+  <h2>Find the Mistake 🕵️</h2>
+</div>
+
+<!-- Q13 -->
+
+<section class="question-card">
+  <div class="question-heading">
+    <div class="q-number">13</div>
+    <div class="q-title">
+      <h3>Is this correct?</h3>
+      <div class="mixed-number">
+        <span class="whole-zone">2</span>
+        <span class="fraction small"><span class="num">1</span><span class="bar"></span><span class="den">4</span></span>
+        <span>→</span>
+        <span class="fraction small"><span class="num">6</span><span class="bar"></span><span class="den">4</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="choice-grid">
+    <button class="choice-btn" onclick="q13Answer(this,false)">Yes</button>
+    <button class="choice-btn" onclick="q13Answer(this,true)">No</button>
+  </div>
+
+  <div class="feedback" id="q13Feedback"></div>
+
+  <div id="q13Correction" style="display:none;margin-top:18px;">
+    <div class="rule-card">
+      <h3>Step-by-step correction</h3>
+      <div class="math-row">
+        <span>2 × 4 + 1 =</span>
+        <span class="num-zone">9</span>
+      </div>
+      <p>Keep the denominator 4.</p>
+      <span class="fraction">
+        <span class="num">9</span>
+        <span class="bar"></span>
+        <span class="den">4</span>
+      </span>
+    </div>
+  </div>
+</section>
+
+<!-- Q14 -->
+
+<section class="question-card">
+  <div class="question-heading">
+    <div class="q-number">14</div>
+    <div class="q-title">
+      <h3>What did they do wrong?</h3>
+      <div class="mixed-number">
+        <span class="whole-zone">3</span>
+        <span class="fraction small"><span class="num">2</span><span class="bar"></span><span class="den">7</span></span>
+        <span>=</span>
+        <span class="fraction small"><span class="num">23</span><span class="bar"></span><span class="den">5</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="choice-grid">
+    <button class="choice-btn" onclick="q14Answer(this,true)">They changed the denominator.</button>
+    <button class="choice-btn" onclick="q14Answer(this,false)">They forgot to multiply.</button>
+    <button class="choice-btn" onclick="q14Answer(this,false)">They used the wrong numerator.</button>
+  </div>
+
+  <div class="feedback" id="q14Feedback"></div>
+
+  <div class="rule-card">
+    <strong>RULE:</strong>
+    <p>The denominator must stay <strong>7</strong>!</p>
+  </div>
+</section>
+
+<!-- PART G -->
+
+<div class="section-divider">
+  <span class="part-label">PART G</span>
+  <h2>Visual Thinking</h2>
+</div>
+
+<!-- Q15 -->
+
+<section class="question-card">
+  <div class="question-heading">
+    <div class="q-number">15</div>
+    <div class="q-title">
+      <h3>Which improper fraction represents this?</h3>
+      <p>Look at 2 whole groups plus one quarter.</p>
+    </div>
+  </div>
+
+  <div class="center">
+    <div class="whole-blocks">
+      <div class="block">WHOLE</div>
+      <div class="block">WHOLE</div>
+    </div>
+
+```
+<div class="segment-bar four">
+  <div class="segment filled">¼</div>
+  <div class="segment">⬜</div>
+  <div class="segment">⬜</div>
+  <div class="segment">⬜</div>
+</div>
+
+<div class="stacked-input">
+  <input id="q15n" inputmode="numeric" aria-label="Question 15 numerator">
+  <div class="input-bar"></div>
+  <input id="q15d" inputmode="numeric" aria-label="Question 15 denominator">
+</div>
+
+<div class="button-row">
+  <button class="action-btn primary" onclick="checkStacked('q15',15,4,'q15n','q15d','q15Feedback')">Check</button>
+</div>
+<div class="feedback" id="q15Feedback"></div>
+```
+
+  </div>
+</section>
+
+<!-- Q16 -->
+
+<section class="question-card">
+  <div class="question-heading">
+    <div class="q-number">16</div>
+    <div class="q-title">
+      <h3>Count the Fifths</h3>
+      <div class="mixed-number">
+        <span class="whole-zone">3</span>
+        <span class="fraction small"><span class="num">2</span><span class="bar"></span><span class="den">5</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="center">
+    <div class="math-row">
+      <span>3 wholes =</span>
+      <span class="num-zone">5</span>
+      <span>+</span>
+      <span class="num-zone">5</span>
+      <span>+</span>
+      <span class="num-zone">5</span>
+      <span>=</span>
+      <span class="num-zone">15</span>
+      <span>fifths</span>
+    </div>
+
+```
+<div class="math-row">
+  <span>15 + 2 =</span>
+  <input class="answer-input" id="q16n">
+  <span>fifths</span>
+</div>
+
+<p>Final answer:</p>
+<div class="stacked-input">
+  <input id="q16top">
+  <div class="input-bar"></div>
+  <input id="q16bottom">
+</div>
+
+<div class="button-row">
+  <button class="action-btn primary" onclick="checkMultiStep('q16',[
+    ['q16n',17],['q16top',17],['q16bottom',5]
+  ],'q16Feedback','q16Final')">Check</button>
+  <button class="action-btn hint-btn" onclick="toggleHint('q16Hint')">💡 Hint</button>
+</div>
+
+<div class="hint" id="q16Hint">Three wholes give 15 fifths. Then add the extra 2 fifths.</div>
+<div class="feedback" id="q16Feedback"></div>
+<div id="q16Final" style="display:none;margin-top:18px;">
+  <span class="fraction"><span class="num">17</span><span class="bar"></span><span class="den">5</span></span>
+</div>
+```
+
+  </div>
+</section>
+
+<!-- PART H -->
+
+<div class="section-divider">
+  <span class="part-label">PART H</span>
+  <h2>Independent Practice</h2>
+</div>
+
+<div class="question-card">
+  <p class="muted">
+    For each question, enter the numerator on top and denominator underneath.
+  </p>
+</div>
+
+<!-- Q17 -->
+
+<section class="question-card">
+  <div class="question-heading">
+    <div class="q-number">17</div>
+    <div class="q-title">
+      <h3>Convert</h3>
+      <div class="mixed-number">
+        <span class="whole-zone">1</span>
+        <span class="fraction small"><span class="num">1</span><span class="bar"></span><span class="den">2</span></span>
+      </div>
+    </div>
+  </div>
+  <div class="center">
+    <div class="stacked-input">
+      <input id="q17n">
+      <div class="input-bar"></div>
+      <input id="q17d">
+    </div>
+    <div class="button-row">
+      <button class="action-btn primary" onclick="checkStacked('q17',3,2,'q17n','q17d','q17Feedback')">Check</button>
+    </div>
+    <div class="feedback" id="q17Feedback"></div>
+  </div>
+</section>
+
+<!-- Q18 -->
+
+<section class="question-card">
+  <div class="question-heading">
+    <div class="q-number">18</div>
+    <div class="q-title">
+      <h3>Convert</h3>
+      <div class="mixed-number">
+        <span class="whole-zone">2</span>
+        <span class="fraction small"><span class="num">1</span><span class="bar"></span><span class="den">5</span></span>
+      </div>
+    </div>
+  </div>
+  <div class="center">
+    <div class="stacked-input">
+      <input id="q18n">
+      <div class="input-bar"></div>
+      <input id="q18d">
+    </div>
+    <div class="button-row">
+      <button class="action-btn primary" onclick="checkStacked('q18',11,5,'q18n','q18d','q18Feedback')">Check</button>
+    </div>
+    <div class="feedback" id="q18Feedback"></div>
+  </div>
+</section>
+
+<!-- Q19 -->
+
+<section class="question-card">
+  <div class="question-heading">
+    <div class="q-number">19</div>
+    <div class="q-title">
+      <h3>Convert</h3>
+      <div class="mixed-number">
+        <span class="whole-zone">3</span>
+        <span class="fraction small"><span class="num">2</span><span class="bar"></span><span class="den">4</span></span>
+      </div>
+    </div>
+  </div>
+  <div class="center">
+    <div class="stacked-input">
+      <input id="q19n">
+      <div class="input-bar"></div>
+      <input id="q19d">
+    </div>
+    <div class="button-row">
+      <button class="action-btn primary" onclick="checkStacked('q19',14,4,'q19n','q19d','q19Feedback')">Check</button>
+    </div>
+    <div class="feedback" id="q19Feedback"></div>
+  </div>
+</section>
+
+<!-- Q20 -->
+
+<section class="question-card">
+  <div class="question-heading">
+    <div class="q-number">20</div>
+    <div class="q-title">
+      <h3>Convert</h3>
+      <div class="mixed-number">
+        <span class="whole-zone">4</span>
+        <span class="fraction small"><span class="num">1</span><span class="bar"></span><span class="den">3</span></span>
+      </div>
+    </div>
+  </div>
+  <div class="center">
+    <div class="stacked-input">
+      <input id="q20n">
+      <div class="input-bar"></div>
+      <input id="q20d">
+    </div>
+    <div class="button-row">
+      <button class="action-btn primary" onclick="checkStacked('q20',13,3,'q20n','q20d','q20Feedback')">Check</button>
+    </div>
+    <div class="feedback" id="q20Feedback"></div>
+  </div>
+</section>
+
+<!-- Q21 -->
+
+<section class="question-card">
+  <div class="question-heading">
+    <div class="q-number">21</div>
+    <div class="q-title">
+      <h3>Convert</h3>
+      <div class="mixed-number">
+        <span class="whole-zone">3</span>
+        <span class="fraction small"><span class="num">3</span><span class="bar"></span><span class="den">7</span></span>
+      </div>
+    </div>
+  </div>
+  <div class="center">
+    <div class="stacked-input">
+      <input id="q21n">
+      <div class="input-bar"></div>
+      <input id="q21d">
+    </div>
+    <div class="button-row">
+      <button class="action-btn primary" onclick="checkStacked('q21',24,7,'q21n','q21d','q21Feedback')">Check</button>
+    </div>
+    <div class="feedback" id="q21Feedback"></div>
+  </div>
+</section>
+
+<!-- Q22 -->
+
+<section class="question-card">
+  <div class="question-heading">
+    <div class="q-number">22</div>
+    <div class="q-title">
+      <h3>Convert</h3>
+      <div class="mixed-number">
+        <span class="whole-zone">5</span>
+        <span class="fraction small"><span class="num">2</span><span class="bar"></span><span class="den">6</span></span>
+      </div>
+    </div>
+  </div>
+  <div class="center">
+    <div class="stacked-input">
+      <input id="q22n">
+      <div class="input-bar"></div>
+      <input id="q22d">
+    </div>
+    <div class="button-row">
+      <button class="action-btn primary" onclick="checkStacked('q22',32,6,'q22n','q22d','q22Feedback')">Check</button>
+    </div>
+    <div class="feedback" id="q22Feedback"></div>
+  </div>
+</section>
+
+<!-- PART I -->
+
+<div class="section-divider">
+  <span class="part-label">PART I</span>
+  <h2>Challenge ⭐</h2>
+</div>
+
+<!-- Q23 -->
+
+<section class="question-card">
+  <div class="question-heading">
+    <div class="q-number">23</div>
+    <div class="q-title">
+      <h3>Complete the Improper Fraction</h3>
+      <div class="mixed-number">
+        <span class="whole-zone">2</span>
+        <span class="fraction small"><span class="num">3</span><span class="bar"></span><span class="den">5</span></span>
+        <span>=</span>
+        <span class="fraction small"><span class="num">?</span><span class="bar"></span><span class="den">5</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="math-row">
+    <span>2 × 5 + 3 =</span>
+    <input class="answer-input" id="q23">
+  </div>
+
+  <div class="button-row">
+    <button class="action-btn primary" onclick="checkSingle('q23',13,'q23Feedback','q23Final')">Check</button>
+    <button class="action-btn hint-btn" onclick="toggleHint('q23Hint')">💡 Hint</button>
+  </div>
+
+  <div class="hint" id="q23Hint">Multiply 2 by 5 to make 10. Then add 3.</div>
+  <div class="feedback" id="q23Feedback"></div>
+
+  <div id="q23Final" style="display:none;" class="center">
+    <span class="fraction"><span class="num">13</span><span class="bar"></span><span class="den">5</span></span>
+  </div>
+</section>
+
+<!-- Q24 -->
+
+<section class="question-card">
+  <div class="question-heading">
+    <div class="q-number">24</div>
+    <div class="q-title">
+      <h3>Find the Missing Whole Number</h3>
+      <div class="center">
+        <span class="whole-zone">?</span>
+        <span class="fraction small"><span class="num">2</span><span class="bar"></span><span class="den">3</span></span>
+        <span>=</span>
+        <span class="fraction small"><span class="num">11</span><span class="bar"></span><span class="den">3</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="center">
+    <input class="answer-input" id="q24" inputmode="numeric" aria-label="Missing whole number">
+
+```
+<div class="button-row">
+  <button class="action-btn primary" onclick="checkSingle('q24',3,'q24Feedback','q24Final')">Check</button>
+  <button class="action-btn hint-btn" onclick="toggleHint('q24Hint')">💡 Hint</button>
+</div>
+
+<div class="hint" id="q24Hint">
+  Start with 11 − 2 = 9. Then ask: 9 divided into groups of 3 gives what whole number?
+</div>
+
+<div class="feedback" id="q24Feedback"></div>
+
+<div id="q24Final" style="display:none;margin-top:18px;">
+  <p>Excellent! The missing whole number is <strong>3</strong>.</p>
+</div>
+```
+
+  </div>
+</section>
+
+<!-- Q25 -->
+
+<section class="question-card">
+  <div class="question-heading">
+    <div class="q-number">25</div>
+    <div class="q-title">
+      <h3>Which Mixed Number Equals the Improper Fraction?</h3>
+      <div class="center">
+        <span class="fraction">
+          <span class="num">17</span>
+          <span class="bar"></span>
+          <span class="den">5</span>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="choice-grid">
+    <button class="choice-btn" onclick="q25Answer(this,false)">
+      <span class="whole-zone" style="min-width:58px;min-height:58px;font-size:1.8rem;">2</span>
+      <span class="fraction small"><span class="num">2</span><span class="bar"></span><span class="den">5</span></span>
+    </button>
+
+```
+<button class="choice-btn" onclick="q25Answer(this,true)">
+  <span class="whole-zone" style="min-width:58px;min-height:58px;font-size:1.8rem;">3</span>
+  <span class="fraction small"><span class="num">2</span><span class="bar"></span><span class="den">5</span></span>
+</button>
+
+<button class="choice-btn" onclick="q25Answer(this,false)">
+  <span class="whole-zone" style="min-width:58px;min-height:58px;font-size:1.8rem;">3</span>
+  <span class="fraction small"><span class="num">1</span><span class="bar"></span><span class="den">5</span></span>
+</button>
+
+<button class="choice-btn" onclick="q25Answer(this,false)">
+  <span class="whole-zone" style="min-width:58px;min-height:58px;font-size:1.8rem;">4</span>
+  <span class="fraction small"><span class="num">2</span><span class="bar"></span><span class="den">5</span></span>
+</button>
+```
+
+  </div>
+
+  <div class="feedback" id="q25Feedback"></div>
+</section>
+
+<!-- PART J -->
+
+<div class="section-divider">
+  <span class="part-label">PART J</span>
+  <h2>Final Check & Exit Ticket</h2>
+</div>
+
+<!-- Q26 -->
+
+<section class="question-card">
+  <div class="question-heading">
+    <div class="q-number">26</div>
+    <div class="q-title">
+      <h3>Final Guided Conversion</h3>
+      <div class="mixed-number">
+        <span class="whole-zone">5</span>
+        <span class="fraction small"><span class="num">3</span><span class="bar"></span><span class="den">8</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="math-row">
+    <span>5 × 8 =</span>
+    <input class="answer-input" id="q26a">
+  </div>
+
+  <div class="math-row">
+    <input class="answer-input" id="q26b">
+    <span>+ 3 =</span>
+    <input class="answer-input" id="q26c">
+  </div>
+
+  <div class="math-row">
+    <span>Denominator =</span>
+    <input class="answer-input" id="q26d">
+  </div>
+
+  <div class="center">
+    <div class="stacked-input">
+      <input id="q26n">
+      <div class="input-bar"></div>
+      <input id="q26den">
+    </div>
+  </div>
+
+  <div class="button-row">
+    <button class="action-btn primary" onclick="checkMultiStep('q26',[
+      ['q26a',40],['q26b',40],['q26c',43],['q26d',8],['q26n',43],['q26den',8]
+    ],'q26Feedback','q26Final')">Check</button>
+    <button class="action-btn hint-btn" onclick="toggleHint('q26Hint')">💡 Hint</button>
+  </div>
+
+  <div class="hint" id="q26Hint">Multiply 5 × 8. Then add 3. Finally, keep 8 as the denominator.</div>
+  <div class="feedback" id="q26Feedback"></div>
+
+  <div id="q26Final" style="display:none;" class="center">
+    <p>🎉 Final guided conversion complete!</p>
+    <span class="fraction"><span class="num">43</span><span class="bar"></span><span class="den">8</span></span>
+  </div>
+</section>
+
+<!-- EXIT -->
+
+<section class="question-card" id="exitTicket">
+  <div class="question-heading">
+    <div class="q-number">✓</div>
+    <div class="q-title">
+      <h3>Exit Ticket</h3>
+      <p>Five final checks to show what you know.</p>
+    </div>
+  </div>
+
+  <!-- A -->
+
+  <div class="question-card" style="box-shadow:none;margin-bottom:16px;">
+    <h3>A. Convert</h3>
+    <div class="center">
+      <div class="mixed-number">
+        <span class="whole-zone">2</span>
+        <span class="fraction small"><span class="num">2</span><span class="bar"></span><span class="den">3</span></span>
+      </div>
+      <div style="margin-top:16px;">
+        <div class="stacked-input">
+          <input id="exitA_n">
+          <div class="input-bar"></div>
+          <input id="exitA_d">
+        </div>
+      </div>
+      <button class="action-btn primary" onclick="checkStacked('exitA',8,3,'exitA_n','exitA_d','exitAFeedback')">Check</button>
+      <div class="feedback" id="exitAFeedback"></div>
+    </div>
+  </div>
+
+  <!-- B -->
+
+  <div class="question-card" style="box-shadow:none;margin-bottom:16px;">
+    <h3>B. Convert</h3>
+    <div class="center">
+      <div class="mixed-number">
+        <span class="whole-zone">4</span>
+        <span class="fraction small"><span class="num">1</span><span class="bar"></span><span class="den">5</span></span>
+      </div>
+      <div style="margin-top:16px;">
+        <div class="stacked-input">
+          <input id="exitB_n">
+          <div class="input-bar"></div>
+          <input id="exitB_d">
+        </div>
+      </div>
+      <button class="action-btn primary" onclick="checkStacked('exitB',21,5,'exitB_n','exitB_d','exitBFeedback')">Check</button>
+      <div class="feedback" id="exitBFeedback"></div>
+    </div>
+  </div>
+
+  <!-- C -->
+
+  <div class="question-card" style="box-shadow:none;margin-bottom:16px;">
+    <h3>C. What happens to the denominator?</h3>
+    <div class="choice-grid">
+      <button class="choice-btn" onclick="exitChoice('exitC',this,false)">It changes</button>
+      <button class="choice-btn" onclick="exitChoice('exitC',this,true)">It stays the same</button>
+    </div>
+    <div class="feedback" id="exitCFeedback"></div>
+  </div>
+
+  <!-- D -->
+
+  <div class="question-card" style="box-shadow:none;margin-bottom:16px;">
+    <h3>D. Complete the formula</h3>
+    <div class="math-row">
+      <span>Whole × Denominator +</span>
+      <strong>________</strong>
+    </div>
+    <div class="choice-grid">
+      <button class="choice-btn" onclick="exitChoice('exitD',this,false)">Denominator</button>
+      <button class="choice-btn" onclick="exitChoice('exitD',this,true)">Numerator</button>
+      <button class="choice-btn" onclick="exitChoice('exitD',this,false)">Whole number</button>
+    </div>
+    <div class="feedback" id="exitDFeedback"></div>
+  </div>
+
+  <!-- E -->
+
+  <div class="question-card" style="box-shadow:none;">
+    <h3>E. Explain the rule in your own words</h3>
+    <p>How do you convert a mixed number into an improper fraction?</p>
+    <textarea id="exitE" aria-label="Explain how to convert a mixed number"></textarea>
+    <div class="button-row">
+      <button class="action-btn primary" onclick="checkExplanation()">Save Explanation</button>
+      <button class="action-btn hint-btn" onclick="toggleHint('exitEHint')">💡 Hint</button>
+    </div>
+    <div class="hint" id="exitEHint">
+      Try to include these three ideas: multiply the whole by the denominator, add the numerator, and keep the denominator.
+    </div>
+    <div class="feedback" id="exitEFeedback"></div>
+  </div>
+
+  <div class="center" style="margin-top:28px;">
+    <button class="action-btn primary" style="min-width:240px;font-size:1.25rem;" onclick="submitWorksheet()">
+      🎉 Submit Worksheet
+    </button>
+  </div>
+
+  <div class="final-banner" id="finalBanner">
+    <div style="font-size:4rem;">⭐</div>
+    <h2 id="finalTitle">Worksheet Complete!</h2>
+    <p id="finalMessage"></p>
+
+```
+<div class="badge" id="finalBadge">⭐ Fraction Converter</div>
+
+<div class="score-row">
+  <div class="score-chip" id="finalScore">Score: 0</div>
+  <div class="score-chip" id="finalAccuracy">Accuracy: 0%</div>
+  <div class="score-chip" id="finalCompletion">Completion: 0%</div>
+</div>
+```
+
+  </div>
+</section>
+
+</main>
+</div>
+
+<script>
+"use strict";
+
+const state = {
+  attempts: 0,
+  correct: 0,
+  completed: new Set()
+};
+
+/*
+  26 main questions + 5 exit-ticket items = 31 scored tasks.
+  Q1 is a three-part labeling activity but counts as one completed task
+  once all three labels have been identified.
+*/
+const TOTAL_TASKS = 31;
+
+function el(id){
+  return document.getElementById(id);
+}
+
+function getNumber(id){
+  const value = el(id)?.value.trim();
+  return Number(value);
+}
+
+function markTask(taskId, isCorrect){
+  if(isCorrect && !state.completed.has(taskId)){
+    state.completed.add(taskId);
+    state.correct++;
+  }
+
+  state.attempts++;
+  updateProgress();
+}
+
+function updateProgress(){
+  const completion = Math.round((state.completed.size / TOTAL_TASKS) * 100);
+  el("progressFill").style.width = completion + "%";
+  el("progressText").textContent = completion + "% complete";
+}
+
+function feedback(id,message,type){
+  const box = el(id);
+  if(!box) return;
+
+  box.textContent = message;
+  box.className = "feedback show " + type;
+}
+
+function toggleHint(id){
+  el(id)?.classList.toggle("show");
+}
+
+function markInputs(ids, correct){
+  ids.forEach(id=>{
+    const input=el(id);
+    if(!input) return;
+
+    input.classList.remove("correct-input","retry-input");
+    input.classList.add(correct ? "correct-input" : "retry-input");
+  });
+}
+
+/* Q1 */
+const q1Labels = new Set();
+
+function labelQ1(type,button){
+  q1Labels.add(type);
+
+  button.classList.remove("retry");
+  button.classList.add("correct");
+
+  const names={
+    whole:"Whole number",
+    numerator:"Numerator",
+    denominator:"Denominator"
+  };
+
+  feedback(
+    "q1Feedback",
+    "✅ " + names[type] + " identified correctly.",
+    "success"
+  );
+
+  if(q1Labels.size===3 && !state.completed.has("q1")){
+    markTask("q1",true);
+    feedback(
+      "q1Feedback",
+      "🎉 Excellent! You identified all three parts: whole number, numerator, and denominator.",
+      "success"
+    );
+  }
+}
+
+/* Q2 */
+function checkQ2(){
+  const correct =
+    getNumber("q2Whole")===4 &&
+    getNumber("q2Num")===3 &&
+    getNumber("q2Den")===7;
+
+  markInputs(["q2Whole","q2Num","q2Den"],correct);
+
+  if(correct){
+    feedback("q2Feedback","🎉 Perfect! You identified all three parts correctly.","success");
+    markTask("q2",true);
+  }else{
+    feedback("q2Feedback","Almost. Check the outside whole number, then the top and bottom of the fraction.","retry");
+  }
+}
+
+/* Choice questions */
+function checkChoice(taskId,button,isCorrect){
+  const card=button.closest(".question-card");
+
+  card.querySelectorAll(".choice-btn").forEach(b=>{
+    b.classList.remove("correct","retry");
+  });
+
+  if(isCorrect){
+    button.classList.add("correct");
+    feedback(taskId+"Feedback","✅ Correct! A complete whole contains all the equal parts.","success");
+    markTask(taskId,true);
+  }else{
+    button.classList.add("retry");
+    feedback(taskId+"Feedback","Try again. Count every equal part needed to make one complete whole.","retry");
+  }
+}
+
+/* Multi-step questions */
+function checkMultiStep(taskId,checks,feedbackId,finalId){
+  const allCorrect=checks.every(([id,answer])=>getNumber(id)===answer);
+
+  const ids=checks.map(item=>item[0]);
+  markInputs(ids,allCorrect);
+
+  if(allCorrect){
+    feedback(feedbackId,"🎉 Excellent! Every step is correct.","success");
+    if(el(finalId)) el(finalId).style.display="block";
+    markTask(taskId,true);
+  }else{
+    feedback(
+      feedbackId,
+      "Good attempt. Check the multiplication, then the addition, and finally make sure the denominator stays the same.",
+      "retry"
+    );
+  }
+}
+
+/* Single input */
+function checkSingle(taskId,answer,feedbackId,finalId){
+  const inputId=taskId;
+  const correct=getNumber(inputId)===answer;
+
+  markInputs([inputId],correct);
+
+  if(correct){
+    feedback(feedbackId,"🎉 Correct!","success");
+    if(el(finalId)) el(finalId).style.display="block";
+    markTask(taskId,true);
+  }else{
+    feedback(feedbackId,"Try again. Use the highlighted routine and check each step carefully.","retry");
+  }
+}
+
+/* Stacked answers */
+function checkStacked(taskId,correctTop,correctBottom,topId,bottomId,feedbackId){
+  const correct=
+    getNumber(topId)===correctTop &&
+    getNumber(bottomId)===correctBottom;
+
+  markInputs([topId,bottomId],correct);
+
+  if(correct){
+    feedback(feedbackId,"✅ Correct! Your stacked fraction is right.","success");
+    markTask(taskId,true);
+  }else{
+    feedback(feedbackId,"Try again. Remember: multiply the whole by the denominator, then add the numerator. Keep the denominator.","retry");
+  }
+}
+
+/* Radio-style multiple choice */
+function radioQuestion(taskId,button,isCorrect){
+  const card=button.closest(".question-card");
+
+  card.querySelectorAll(".choice-btn").forEach(b=>{
+    b.classList.remove("correct","retry");
+  });
+
+  if(isCorrect){
+    button.classList.add("correct");
+    feedback(taskId+"Feedback","🎉 Correct!","success");
+    markTask(taskId,true);
+  }else{
+    button.classList.add("retry");
+    feedback(taskId+"Feedback","Not quite. Use whole × denominator, then add the numerator.","retry");
+  }
+}
+
+/* Q13 */
+function q13Answer(button,isCorrect){
+  document.querySelectorAll("#q13 .choice-btn").forEach(b=>{
+    b.classList.remove("correct","retry");
+  });
+
+  if(isCorrect){
+    button.classList.add("correct");
+    feedback("q13Feedback","✅ Correct. The student's answer is not correct because the new numerator should be 9.","success");
+    el("q13Correction").style.display="block";
+    markTask("q13",true);
+  }else{
+    button.classList.add("retry");
+    feedback("q13Feedback","Look at the rule: multiply the whole by the denominator before adding the numerator.","retry");
+  }
+}
+
+/* Q14 */
+function q14Answer(button,isCorrect){
+  document.querySelectorAll("#q14 .choice-btn").forEach(b=>{
+    b.classList.remove("correct","retry");
+  });
+
+  if(isCorrect){
+    button.classList.add("correct");
+    feedback("q14Feedback","🎉 Correct! The denominator changed from 7 to 5, which breaks the rule.","success");
+    markTask("q14",true);
+  }else{
+    button.classList.add("retry");
+    feedback("q14Feedback","Check the bottom number. The denominator should remain 7.","retry");
+  }
+}
+
+/* Q25 */
+function q25Answer(button,isCorrect){
+  document.querySelectorAll("#q25 .choice-btn").forEach(b=>{
+    b.classList.remove("correct","retry");
+  });
+
+  if(isCorrect){
+    button.classList.add("correct");
+    feedback("q25Feedback","🎉 Correct! Three wholes make 15 fifths, plus 2 fifths makes 17 fifths.","success");
+    markTask("q25",true);
+  }else{
+    button.classList.add("retry");
+    feedback("q25Feedback","Try converting each option into an improper fraction and compare the numerator.","retry");
+  }
+}
+
+/* Exit choice */
+function exitChoice(taskId,button,isCorrect){
+  const prefix=taskId==="exitC" ? "exitC" : "exitD";
+
+  document.querySelectorAll(".question-card").forEach(card=>{
+    card.querySelectorAll(".choice-btn").forEach(b=>{
+      if(b===button || b.closest(".question-card")===button.closest(".question-card")){
+        b.classList.remove("correct","retry");
+      }
+    });
+  });
+
+  if(isCorrect){
+    button.classList.add("correct");
+    feedback(taskId+"Feedback","✅ Correct!","success");
+    markTask(taskId,true);
+  }else{
+    button.classList.add("retry");
+
+    if(prefix==="exitC"){
+      feedback(taskId+"Feedback","Try again. The denominator stays the same.","retry");
+    }else{
+      feedback(taskId+"Feedback","Look at the top of the original fraction. That is the numerator.","retry");
+    }
+  }
+}
+
+/* Exit explanation */
+function checkExplanation(){
+  const text=el("exitE").value.trim().toLowerCase();
+
+  const hasMultiply =
+    text.includes("multiply") ||
+    text.includes("times") ||
+    text.includes("multiplying");
+
+  const hasAdd =
+    text.includes("add") ||
+    text.includes("plus");
+
+  const hasKeep =
+    text.includes("keep") ||
+    text.includes("same");
+
+  const correct=hasMultiply && hasAdd && hasKeep;
+
+  el("exitE").classList.remove("correct-input","retry-input");
+  el("exitE").classList.add(correct ? "correct-input" : "retry-input");
+
+  if(correct){
+    feedback(
+      "exitEFeedback",
+      "🎉 Excellent explanation! You included multiply, add, and keep.",
+      "success"
+    );
+    markTask("exitE",true);
+  }else{
+    feedback(
+      "exitEFeedback",
+      "Good start. Try to include all three ideas: multiply the whole by the denominator, add the numerator, and keep the denominator.",
+      "retry"
+    );
+  }
+}
+
+/* Submit */
+function submitWorksheet(){
+  const completed=state.completed.size;
+  const completion=Math.round((completed/TOTAL_TASKS)*100);
+  const accuracy=state.attempts
+    ? Math.round((state.correct/state.attempts)*100)
+    : 0;
+
+  const banner=el("finalBanner");
+  banner.classList.add("show");
+
+  el("finalScore").textContent=
+    "Score: " + state.correct + " / " + TOTAL_TASKS;
+
+  el("finalAccuracy").textContent=
+    "Accuracy: " + accuracy + "%";
+
+  el("finalCompletion").textContent=
+    "Completion: " + completion + "%";
+
+  if(completed===TOTAL_TASKS){
+    el("finalTitle").textContent="🎉 Worksheet Complete!";
+    el("finalMessage").textContent=
+      "Amazing work! You completed every activity and practised the conversion routine from beginning to end.";
+    el("finalBadge").textContent="⭐ Mixed Number Master";
+  }else if(completion>=75){
+    el("finalTitle").textContent="🌟 Strong Work!";
+    el("finalMessage").textContent=
+      "You completed " + completed + " of " + TOTAL_TASKS +
+      " tasks. Review the unfinished questions and keep using the same three-step routine.";
+    el("finalBadge").textContent="⭐ Strong Fraction Solver";
+  }else{
+    el("finalTitle").textContent="🌱 Good Start!";
+    el("finalMessage").textContent=
+      "You completed " + completed + " of " + TOTAL_TASKS +
+      " tasks. Keep practising: MULTIPLY → ADD → KEEP.";
+    el("finalBadge").textContent="⭐ Keep Practising";
+  }
+
+  banner.scrollIntoView({behavior:"smooth",block:"center"});
+}
+
+/* Enter key support for inputs */
+document.addEventListener("keydown",event=>{
+  if(event.key!=="Enter") return;
+
+  const active=document.activeElement;
+
+  if(active && active.tagName==="INPUT"){
+    const card=active.closest(".question-card");
+    const button=card?.querySelector(".primary");
+
+    if(button){
+      event.preventDefault();
+      button.click();
+    }
+  }
+});
+
+updateProgress();
+</script>
+
+</body>
+</html>
