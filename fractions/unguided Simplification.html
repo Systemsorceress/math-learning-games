@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simplifying Fractions — Unguided Worksheet</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f5f7fb;
+        color: #172033;
+        font-size: 1.2rem;
+        line-height: 1.5;
+    }
+
+    .container {
+        width: min(1000px, 94%);
+        margin: 30px auto 60px;
+    }
+
+    header {
+        background: white;
+        border: 3px solid #172033;
+        border-radius: 18px;
+        padding: 28px;
+        margin-bottom: 24px;
+        text-align: center;
+    }
+
+    h1 {
+        margin: 0 0 8px;
+        font-size: 2.2rem;
+    }
+
+    .subtitle {
+        margin: 0;
+        color: #4b5563;
+    }
+
+    .progress-area {
+        background: white;
+        border-radius: 16px;
+        padding: 18px 22px;
+        margin-bottom: 24px;
+        border: 2px solid #d5dbe5;
+    }
+
+    .progress-top {
+        display: flex;
+        justify-content: space-between;
+        gap: 15px;
+        flex-wrap: wrap;
+        font-weight: bold;
+    }
+
+    .progress-bar {
+        height: 16px;
+        background: #e4e8ef;
+        border-radius: 20px;
+        margin-top: 12px;
+        overflow: hidden;
+    }
+
+    .progress-fill {
+        height: 100%;
+        width: 0%;
+        background: #3157d5;
+        transition: width 0.3s ease;
+    }
+
+    .section {
+        margin-bottom: 28px;
+    }
+
+    .section-title {
+        background: #172033;
+        color: white;
+        padding: 14px 20px;
+        border-radius: 14px 14px 0 0;
+        font-size: 1.35rem;
+        font-weight: bold;
+    }
+
+    .section-description {
+        background: white;
+        padding: 14px 20px;
+        border-left: 2px solid #d5dbe5;
+        border-right: 2px solid #d5dbe5;
+        color: #4b5563;
+    }
+
+    .questions {
+        display: grid;
+        gap: 14px;
+        background: white;
+        padding: 20px;
+        border: 2px solid #d5dbe5;
+        border-top: none;
+        border-radius: 0 0 14px 14px;
+    }
+
+    .question {
+        display: grid;
+        grid-template-columns: 50px 1fr auto;
+        align-items: center;
+        gap: 15px;
+        padding: 18px;
+        border: 2px solid #dfe4ec;
+        border-radius: 14px;
+        background: #fff;
+    }
+
+    .number {
+        font-weight: bold;
+        font-size: 1.3rem;
+    }
+
+    .fraction {
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        vertical-align: middle;
+        font-weight: bold;
+        font-size: 1.5rem;
+        margin: 0 8px;
+        min-width: 50px;
+    }
+
+    .fraction .top {
+        border-bottom: 3px solid #172033;
+        padding: 0 8px 2px;
+    }
+
+    .fraction .bottom {
+        padding: 2px 8px 0;
+    }
+
+    .equals {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+
+    .answer-fraction {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 75px;
+    }
+
+    .answer-fraction input {
+        width: 70px;
+        height: 48px;
+        border: 3px solid #172033;
+        border-radius: 8px;
+        text-align: center;
+        font-size: 1.3rem;
+        font-weight: bold;
+        background: white;
+    }
+
+    .answer-fraction input:first-child {
+        margin-bottom: 5px;
+    }
+
+    .answer-line {
+        width: 70px;
+        height: 3px;
+        background: #172033;
+        margin: 0;
+    }
+
+    input:focus {
+        outline: 4px solid #b9c9ff;
+    }
+
+    .feedback {
+        grid-column: 2 / -1;
+        min-height: 28px;
+        font-weight: bold;
+        font-size: 1rem;
+    }
+
+    .correct {
+        border-color: #17833b !important;
+        background: #f0fff4 !important;
+    }
+
+    .incorrect {
+        border-color: #c62828 !important;
+        background: #fff5f5 !important;
+    }
+
+    .correct-text {
+        color: #126b31;
+    }
+
+    .incorrect-text {
+        color: #a51f1f;
+    }
+
+    .check-btn {
+        display: block;
+        width: 100%;
+        margin-top: 12px;
+        padding: 17px;
+        border: none;
+        border-radius: 12px;
+        background: #3157d5;
+        color: white;
+        font-size: 1.2rem;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .check-btn:hover {
+        background: #2445b5;
+    }
+
+    .check-btn:focus {
+        outline: 4px solid #b9c9ff;
+    }
+
+    .reset-btn {
+        background: #172033;
+        margin-top: 12px;
+    }
+
+    .result {
+        display: none;
+        background: white;
+        border: 3px solid #172033;
+        border-radius: 18px;
+        padding: 30px;
+        text-align: center;
+        margin-top: 28px;
+    }
+
+    .result h2 {
+        font-size: 2rem;
+        margin-top: 0;
+    }
+
+    .score {
+        font-size: 3rem;
+        font-weight: bold;
+        margin: 15px 0;
+    }
+
+    .message {
+        font-size: 1.25rem;
+        margin-bottom: 20px;
+    }
+
+    @media (max-width: 700px) {
+        body {
+            font-size: 1.05rem;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+        }
+
+        .question {
+            grid-template-columns: 40px 1fr;
+        }
+
+        .answer-fraction {
+            grid-column: 2;
+        }
+
+        .feedback {
+            grid-column: 2;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <header>
+        <h1>✏️ Simplifying Fractions</h1>
+        <p class="subtitle">
+            Simplify each fraction to its simplest form.
+        </p>
+    </header>
+
+    <div class="progress-area">
+        <div class="progress-top">
+            <span id="progressText">0 of 20 completed</span>
+            <span id="scoreText">Score: 0 / 20</span>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </div>
+
+
+    <!-- LEVEL 1 -->
+
+    <div class="section">
+
+        <div class="section-title">
+            Level 1 — Get Started
+        </div>
+
+        <div class="section-description">
+            Simplify each fraction.
+        </div>
+
+        <div class="questions">
+
+            <div class="question" data-num="1" data-numerator="2" data-denominator="4">
+                <div class="number">1.</div>
+                <div>
+                    <span class="fraction">
+                        <span class="top">2</span>
+                        <span class="bottom">4</span>
+                    </span>
+                    <span class="equals">=</span>
+                </div>
+
+                <div class="answer-fraction">
+                    <input type="number" class="num" aria-label="Question 1 numerator">
+                    <div class="answer-line"></div>
+                    <input type="number" class="den" aria-label="Question 1 denominator">
+                </div>
+
+                <div class="feedback"></div>
+            </div>
+
+
+            <div class="question" data-num="2" data-numerator="3" data-denominator="6">
+                <div class="number">2.</div>
+                <div>
+                    <span class="fraction">
+                        <span class="top">3</span>
+                        <span class="bottom">6</span>
+                    </span>
+                    <span class="equals">=</span>
+                </div>
+
+                <div class="answer-fraction">
+                    <input type="number" class="num" aria-label="Question 2 numerator">
+                    <div class="answer-line"></div>
+                    <input type="number" class="den" aria-label="Question 2 denominator">
+                </div>
+
+                <div class="feedback"></div>
+            </div>
+
+
+            <div class="question" data-num="3" data-numerator="4" data-denominator="8">
+                <div class="number">3.</div>
+                <div>
+                    <span class="fraction">
+                        <span class="top">4</span>
+                        <span class="bottom">8</span>
+                    </span>
+                    <span class="equals">=</span>
+                </div>
+
+                <div class="answer-fraction">
+                    <input type="number" class="num" aria-label="Question 3 numerator">
+                    <div class="answer-line"></div>
+                    <input type="number" class="den" aria-label="Question 3 denominator">
+                </div>
+
+                <div class="feedback"></div>
+            </div>
+
+
+            <div class="question" data-num="4" data-numerator="5" data-denominator="10">
+                <div class="number">4.</div>
+                <div>
+                    <span class="fraction">
+                        <span class="top">5</span>
+                        <span class="bottom">10</span>
+                    </span>
+                    <span class="equals">=</span>
+                </div>
+
+                <div class="answer-fraction">
+                    <input type="number" class="num" aria-label="Question 4 numerator">
+                    <div class="answer-line"></div>
+                    <input type="number" class="den" aria-label="Question 4 denominator">
+                </div>
+
+                <div class="feedback"></div>
+            </div>
+
+
+            <div class="question" data-num="5" data-numerator="6" data-denominator="9">
+                <div class="number">5.</div>
+                <div>
+                    <span class="fraction">
+                        <span class="top">6</span>
+                        <span class="bottom">9</span>
+                    </span>
+                    <span class="equals">=</span>
+                </div>
+
+                <div class="answer-fraction">
+                    <input type="number" class="num" aria-label="Question 5 numerator">
+                    <div class="answer-line"></div>
+                    <input type="number" class="den" aria-label="Question 5 denominator">
+                </div>
+
+                <div class="feedback"></div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- LEVEL 2 -->
+
+    <div class="section">
+
+        <div class="section-title">
+            Level 2 — Keep Going
+        </div>
+
+        <div class="section-description">
+            Simplify each fraction completely.
+        </div>
+
+        <div class="questions">
+
+            <div class="question" data-num="6" data-numerator="8" data-denominator="12">
+                <div class="number">6.</div>
+                <div>
+                    <span class="fraction">
+                        <span class="top">8</span>
+                        <span class="bottom">12</span>
+                    </span>
+                    <span class="equals">=</span>
+                </div>
+
+                <div class="answer-fraction">
+                    <input type="number" class="num">
+                    <div class="answer-line"></div>
+                    <input type="number" class="den">
+                </div>
+
+                <div class="feedback"></div>
+            </div>
+
+
+            <div class="question" data-num="7" data-numerator="10" data-denominator="15">
+                <div class="number">7.</div>
+                <div>
+                    <span class="fraction">
+                        <span class="top">10</span>
+                        <span class="bottom">15</span>
+                    </span>
+                    <span class="equals">=</span>
+                </div>
+
+                <div class="answer-fraction">
+                    <input type="number" class="num">
+                    <div class="answer-line"></div>
+                    <input type="number" class="den">
+                </div>
+
+                <div class="feedback"></div>
+            </div>
+
+
+            <div class="question" data-num="8" data-numerator="12" data-denominator="18">
+                <div class="number">8.</div>
+                <div>
+                    <span class="fraction">
+                        <span class="top">12</span>
+                        <span class="bottom">18</span>
+                    </span>
+                    <span class="equals">=</span>
+                </div>
+
+                <div class="answer-fraction">
+                    <input type="number" class="num">
+                    <div class="answer-line"></div>
+                    <input type="number" class="den">
+                </div>
+
+                <div class="feedback"></div>
+            </div>
+
+
+            <div class="question" data-num="9" data-numerator="14" data-denominator="21">
+                <div class="number">9.</div>
+                <div>
+                    <span class="fraction">
+                        <span class="top">14</span>
+                        <span class="bottom">21</span>
+                    </span>
+                    <span class="equals">=</span>
+                </div>
+
+                <div class="answer-fraction">
+                    <input type="number" class="num">
+                    <div class="answer-line"></div>
+                    <input type="number" class="den">
+                </div>
+
+                <div class="feedback"></div>
+            </div>
+
+
+            <div class="question" data-num="10" data-numerator="16" data-denominator="24">
+                <div class="number">10.</div>
+                <div>
+                    <span class="fraction">
+                        <span class="top">16</span>
+                        <span class="bottom">24</span>
+                    </span>
+                    <span class="equals">=</span>
+                </div>
+
+                <div class="answer-fraction">
+                    <input type="number" class="num">
+                    <div class="answer-line"></div>
+                    <input type="number" class="den">
+                </div>
+
+                <div class="feedback"></div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- LEVEL 3 -->
+
+    <div class="section">
+
+        <div class="section-title">
+            Level 3 — Challenge
+        </div>
+
+        <div class="section-description">
+            Simplify each fraction to its lowest possible terms.
+        </div>
+
+        <div class="questions">
+
+            <div class="question" data-num="11" data-numerator="18" data-denominator="24">
+                <div class="number">11.</div>
+                <div>
+                    <span class="fraction">
+                        <span class="top">18</span>
+                        <span class="bottom">24</span>
+                    </span>
+                    <span class="equals">=</span>
+                </div>
+
+                <div class="answer-fraction">
+                    <input type="number" class="num">
+                    <div class="answer-line"></div>
+                    <input type="number" class="den">
+                </div>
+
+                <div class="feedback"></div>
+            </div>
+
+
+            <div class="question" data-num="12" data-numerator="20" data-denominator="30">
+                <div class="number">12.</div>
+                <div>
+                    <span class="fraction">
+                        <span class="top">20</span>
+                        <span class="bottom">30</span>
+                    </span>
+                    <span class="equals">=</span>
+                </div>
+
+                <div class="answer-fraction">
+                    <input type="number" class="num">
+                    <div class="answer-line"></div>
+                    <input type="number" class="den">
+                </div>
+
+                <div class="feedback"></div>
+            </div>
+
+
+            <div class="question" data-num="13" data-numerator="24" data-denominator="36">
+                <div class="number">13.</div>
+                <div>
+                    <span class="fraction">
+                        <span class="top">24</span>
+                        <span class="bottom">36</span>
+                    </span>
+                    <span class="equals">=</span>
+                </div>
+
+                <div class="answer-fraction">
+                    <input type="number" class="num">
+                    <div class="answer-line"></div>
+                    <input type="number" class="den">
+                </div>
+
+                <div class="feedback"></div>
+            </div>
+
+
+            <div class="question" data-num="14" data-numerator="27" data-denominator="45">
+                <div class="number">14.</div>
+                <div>
+                    <span class="fraction">
+                        <span class="top">27</span>
+                        <span class="bottom">45</span>
+                    </span>
+                    <span class="equals">=</span>
+                </div>
+
+                <div class="answer-fraction">
+                    <input type="number" class="num">
+                    <div class="answer-line"></div>
+                    <input type="number" class="den">
+                </div>
+
+                <div class="feedback"></div>
+            </div>
+
+
+            <div class="question" data-num="15" data-numerator="32" data-denominator="48">
+                <div class="number">15.</div>
+                <div>
+                    <span class="fraction">
+                        <span class="top">32</span>
+                        <span class="bottom">48</span>
+                    </span>
+                    <span class="equals">=</span>
+                </div>
+
+                <div class="answer-fraction">
+                    <input type="number" class="num">
+                    <div class="answer-line"></div>
+                    <input type="number" class="den">
+                </div>
+
+                <div class="feedback"></div>
+            </div>
+
+
+            <div class="question" data-num="16" data-numerator="35" data-denominator="49">
+                <div class="number">16.</div>
+                <div>
+                    <span class="fraction">
+                        <span class="top">35</span>
+                        <span class="bottom">49</span>
+                    </span>
+                    <span class="equals">=</span>
+                </div>
+
+                <div class="answer-fraction">
+                    <input type="number" class="num">
+                    <div class="answer-line"></div>
+                    <input type="number" class="den">
+                </div>
+
+                <div class="feedback"></div>
+            </div>
+
+
+            <div class="question" data-num="17" data-numerator="42" data-denominator="56">
+                <div class="number">17.</div>
+                <div>
+                    <span class="fraction">
+                        <span class="top">42</span>
+                        <span class="bottom">56</span>
+                    </span>
+                    <span class="equals">=</span>
+                </div>
+
+                <div class="answer-fraction">
+                    <input type="number" class="num">
+                    <div class="answer-line"></div>
+                    <input type="number" class="den">
+                </div>
+
+                <div class="feedback"></div>
+            </div>
+
+
+            <div class="question" data-num="18" data-numerator="45" data-denominator="60">
+                <div class="number">18.</div>
+                <div>
+                    <span class="fraction">
+                        <span class="top">45</span>
+                        <span class="bottom">60</span>
+                    </span>
+                    <span class="equals">=</span>
+                </div>
+
+                <div class="answer-fraction">
+                    <input type="number" class="num">
+                    <div class="answer-line"></div>
+                    <input type="number" class="den">
+                </div>
+
+                <div class="feedback"></div>
+            </div>
+
+
+            <div class="question" data-num="19" data-numerator="48" data-denominator="72">
+                <div class="number">19.</div>
+                <div>
+                    <span class="fraction">
+                        <span class="top">48</span>
+                        <span class="bottom">72</span>
+                    </span>
+                    <span class="equals">=</span>
+                </div>
+
+                <div class="answer-fraction">
+                    <input type="number" class="num">
+                    <div class="answer-line"></div>
+                    <input type="number" class="den">
+                </div>
+
+                <div class="feedback"></div>
+            </div>
+
+
+            <div class="question" data-num="20" data-numerator="54" data-denominator="81">
+                <div class="number">20.</div>
+                <div>
+                    <span class="fraction">
+                        <span class="top">54</span>
+                        <span class="bottom">81</span>
+                    </span>
+                    <span class="equals">=</span>
+                </div>
+
+                <div class="answer-fraction">
+                    <input type="number" class="num">
+                    <div class="answer-line"></div>
+                    <input type="number" class="den">
+                </div>
+
+                <div class="feedback"></div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <button class="check-btn" onclick="checkAnswers()">
+        ✓ Check My Answers
+    </button>
+
+    <div class="result" id="result">
+        <h2>Worksheet Complete!</h2>
+        <div class="score" id="finalScore"></div>
+        <div class="message" id="finalMessage"></div>
+
+        <button class="check-btn reset-btn" onclick="resetWorksheet()">
+            ↻ Try Again
+        </button>
+    </div>
+
+</div>
+
+
+<script>
+
+function gcd(a, b) {
+    a = Math.abs(a);
+    b = Math.abs(b);
+
+    while (b !== 0) {
+        let temp = b;
+        b = a % b;
+        a = temp;
+    }
+
+    return a;
+}
+
+
+function simplify(numerator, denominator) {
+
+    const divisor = gcd(numerator, denominator);
+
+    return {
+        numerator: numerator / divisor,
+        denominator: denominator / divisor
+    };
+}
+
+
+function checkAnswers() {
+
+    const questions = document.querySelectorAll(".question");
+
+    let score = 0;
+    let completed = 0;
+
+    questions.forEach(question => {
+
+        const originalNumerator =
+            Number(question.dataset.numerator);
+
+        const originalDenominator =
+            Number(question.dataset.denominator);
+
+        const correct = simplify(
+            originalNumerator,
+            originalDenominator
+        );
+
+        const numInput =
+            question.querySelector(".num");
+
+        const denInput =
+            question.querySelector(".den");
+
+        const feedback =
+            question.querySelector(".feedback");
+
+        const studentNumerator =
+            Number(numInput.value);
+
+        const studentDenominator =
+            Number(denInput.value);
+
+        question.classList.remove("correct", "incorrect");
+        feedback.className = "feedback";
+
+        if (
+            numInput.value === "" ||
+            denInput.value === ""
+        ) {
+            feedback.textContent = "Please complete this question.";
+            feedback.classList.add("incorrect-text");
+            question.classList.add("incorrect");
+            return;
+        }
+
+        completed++;
+
+        if (
+            studentNumerator === correct.numerator &&
+            studentDenominator === correct.denominator
+        ) {
+
+            score++;
+
+            question.classList.add("correct");
+
+            feedback.textContent = "✓ Correct!";
+            feedback.classList.add("correct-text");
+
+        } else {
+
+            question.classList.add("incorrect");
+
+            feedback.textContent = "✗ Check your answer.";
+            feedback.classList.add("incorrect-text");
+        }
+    });
+
+
+    document.getElementById("scoreText").textContent =
+        `Score: ${score} / 20`;
+
+    document.getElementById("progressText").textContent =
+        `${completed} of 20 completed`;
+
+    document.getElementById("progressFill").style.width =
+        `${(completed / 20) * 100}%`;
+
+
+    const result = document.getElementById("result");
+
+    result.style.display = "block";
+
+    document.getElementById("finalScore").textContent =
+        `${score} / 20`;
+
+    let message = "";
+
+    if (score === 20) {
+        message = "Excellent work! Every fraction is simplified correctly.";
+    }
+    else if (score >= 16) {
+        message = "Great work! You have a strong understanding of simplifying fractions.";
+    }
+    else if (score >= 11) {
+        message = "Good effort! Keep practising simplifying fractions.";
+    }
+    else {
+        message = "Keep practising. Have another go and check each fraction carefully.";
+    }
+
+    document.getElementById("finalMessage").textContent = message;
+
+    result.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+    });
+}
+
+
+function resetWorksheet() {
+
+    document.querySelectorAll(".question").forEach(question => {
+
+        question.querySelector(".num").value = "";
+        question.querySelector(".den").value = "";
+
+        question.querySelector(".feedback").textContent = "";
+
+        question.classList.remove(
+            "correct",
+            "incorrect"
+        );
+
+    });
+
+    document.getElementById("scoreText").textContent =
+        "Score: 0 / 20";
+
+    document.getElementById("progressText").textContent =
+        "0 of 20 completed";
+
+    document.getElementById("progressFill").style.width =
+        "0%";
+
+    document.getElementById("result").style.display =
+        "none";
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+</script>
+
+</body>
+</html>
