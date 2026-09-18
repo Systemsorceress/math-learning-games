@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interactive Worksheet — Simplifying Fractions</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f7f7f2;
+    color: #172033;
+    font-size: 1.2rem;
+    line-height: 1.55;
+  }
+  button, input { font: inherit; }
+  .wrap { max-width: 1050px; margin: auto; padding: 24px; }
+  header {
+    background: #172033;
+    color: white;
+    border-radius: 18px;
+    padding: 28px;
+    margin-bottom: 22px;
+  }
+  h1, h2, h3 { line-height: 1.2; }
+  h1 { margin: 0 0 8px; font-size: 2.1rem; }
+  h2 { font-size: 1.55rem; margin-top: 0; }
+  .subtitle { margin: 0; color: #e8edf7; }
+  .progress {
+    margin-top: 18px;
+    background: #39445a;
+    height: 14px;
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  #progressBar { height: 100%; width: 0%; background: #f4c95d; transition: .3s; }
+  .card {
+    background: white;
+    border: 2px solid #d9dde5;
+    border-radius: 18px;
+    padding: 25px;
+    margin: 20px 0;
+    box-shadow: 0 3px 10px rgba(0,0,0,.04);
+  }
+  .tip {
+    border-left: 7px solid #3b6ea8;
+    background: #eef5fc;
+    padding: 14px 17px;
+    border-radius: 10px;
+  }
+  .warning {
+    border-left: 7px solid #b35c00;
+    background: #fff5e8;
+    padding: 14px 17px;
+    border-radius: 10px;
+  }
+  .fraction {
+    display: inline-flex;
+    flex-direction: column;
+    vertical-align: middle;
+    text-align: center;
+    line-height: 1;
+    min-width: 55px;
+    margin: 0 7px;
+  }
+  .fraction .top { border-bottom: 3px solid currentColor; padding: 3px 8px 6px; }
+  .fraction .bottom { padding: 6px 8px 3px; }
+  .big { font-size: 2rem; }
+  .step {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin: 15px 0;
+    padding: 14px;
+    background: #fafafa;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+  }
+  .choice-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  button {
+    cursor: pointer;
+    border: 2px solid #172033;
+    background: white;
+    color: #172033;
+    padding: 12px 18px;
+    border-radius: 12px;
+    font-weight: bold;
+    min-height: 50px;
+  }
+  button:hover { background: #eef2f7; }
+  button.primary { background: #172033; color: white; }
+  button.primary:hover { background: #2d3a52; }
+  button.correct { background: #e6f5e9; border-color: #2e7d32; }
+  button.wrong { background: #fff0f0; border-color: #b3261e; }
+  input.answer {
+    width: 95px;
+    padding: 10px;
+    border: 3px solid #9aa3b2;
+    border-radius: 10px;
+    text-align: center;
+    background: white;
+  }
+  input:focus, button:focus {
+    outline: 4px solid #f4c95d;
+    outline-offset: 2px;
+  }
+  .feedback {
+    margin-top: 12px;
+    padding: 11px 14px;
+    border-radius: 10px;
+    display: none;
+    font-weight: bold;
+  }
+  .feedback.show { display: block; }
+  .feedback.good { background: #e6f5e9; color: #205c25; }
+  .feedback.bad { background: #fff0f0; color: #8b1e1e; }
+  .q {
+    padding: 18px;
+    margin: 15px 0;
+    border: 2px solid #e0e3e8;
+    border-radius: 14px;
+    background: #fcfcfc;
+  }
+  .q-title { font-weight: bold; margin-bottom: 12px; }
+  .hint {
+    color: #39445a;
+    font-size: 1rem;
+    margin-top: 8px;
+  }
+  .hidden { display: none; }
+  .score {
+    text-align: center;
+    font-size: 1.45rem;
+    font-weight: bold;
+    padding: 20px;
+    background: #fff8df;
+    border: 2px solid #e6c44c;
+    border-radius: 14px;
+  }
+  .checklist label { display:block; margin: 10px 0; }
+  @media(max-width:700px) {
+    .choice-grid { grid-template-columns: 1fr; }
+    body { font-size: 1.1rem; }
+    .wrap { padding: 12px; }
+  }
+</style>
+</head>
+
+<body>
+<div class="wrap">
+<header>
+  <h1>Interactive Worksheet: Simplifying Fractions</h1>
+  <p class="subtitle">Find a common factor, divide the top and bottom, and stop when no common factor remains.</p>
+  <div class="progress" aria-label="Worksheet progress"><div id="progressBar"></div></div>
+  <p id="progressText">0% complete</p>
+</header>
+
+<section class="card">
+  <h2>1. Warm-Up: What is a Factor?</h2>
+  <p>A <strong>factor</strong> divides a number exactly, with no remainder.</p>
+  <div class="step">
+    <strong>Example:</strong>
+    Factors of 12 are:
+    <strong>1, 2, 3, 4, 6, 12</strong>
+  </div>
+  <div class="step">
+    <strong>Question:</strong> Which number is a factor of 18?
+    <div class="choice-grid" style="width:100%">
+      <button onclick="choice(this, true)">3</button>
+      <button onclick="choice(this, false)">5</button>
+      <button onclick="choice(this, false)">7</button>
+    </div>
+    <div id="warmFeedback" class="feedback"></div>
+  </div>
+</section>
+
+<section class="card">
+  <h2>2. What Does “Simplify” Mean?</h2>
+  <p>To simplify a fraction, we make an <strong>equivalent fraction</strong> with smaller numbers.</p>
+
+  <div class="step">
+    <span class="big">
+      <span class="fraction"><span class="top">6</span><span class="bottom">8</span></span>
+      =
+      <span class="fraction"><span class="top">3</span><span class="bottom">4</span></span>
+    </span>
+  </div>
+
+  <div class="tip">
+    <strong>Remember:</strong> Whatever you divide the numerator by, divide the denominator by the <strong>same number</strong>.
+  </div>
+
+  <h3>Example: Simplify 8/12</h3>
+  <div class="step">
+    <span>Find a common factor:</span>
+    <strong>4</strong>
+  </div>
+  <div class="step">
+    <span>Divide both:</span>
+    <span class="fraction"><span class="top">8 ÷ 4</span><span class="bottom">12 ÷ 4</span></span>
+    =
+    <span class="fraction"><span class="top">2</span><span class="bottom">3</span></span>
+  </div>
+  <div class="warning">
+    <strong>Do not do this:</strong> 8 ÷ 4 and 12 ÷ 2. The same divisor must be used for both.
+  </div>
+</section>
+
+<section class="card">
+  <h2>3. Guided Practice</h2>
+  <p>Choose the number that can divide both the numerator and denominator.</p>
+
+  <div class="q" data-points="1">
+    <div class="q-title">A. Simplify <span class="fraction"><span class="top">6</span><span class="bottom">10</span></span></div>
+    <p>Which common factor can we use?</p>
+    <div class="choice-grid">
+      <button onclick="guided(this, 2, 'g1')">2</button>
+      <button onclick="guided(this, 3, 'g1')">3</button>
+      <button onclick="guided(this, 5, 'g1')">5</button>
+    </div>
+    <div id="g1" class="feedback"></div>
+  </div>
+
+  <div class="q" data-points="1">
+    <div class="q-title">B. Simplify <span class="fraction"><span class="top">9</span><span class="bottom">12</span></span></div>
+    <p>Which common factor can we use?</p>
+    <div class="choice-grid">
+      <button onclick="guided(this, 3, 'g2')">3</button>
+      <button onclick="guided(this, 5, 'g2')">5</button>
+      <button onclick="guided(this, 7, 'g2')">7</button>
+    </div>
+    <div id="g2" class="feedback"></div>
+  </div>
+</section>
+
+<section class="card">
+  <h2>4. You Try: Simplify Each Fraction</h2>
+  <p>Type the final numerator and denominator. Use the smallest possible whole numbers.</p>
+
+  <div class="q">
+    <div class="q-title">1. <span class="fraction"><span class="top">4</span><span class="bottom">8</span></span></div>
+    <input class="answer" id="q1a" type="number" aria-label="Question 1 numerator" placeholder="top">
+    /
+    <input class="answer" id="q1b" type="number" aria-label="Question 1 denominator" placeholder="bottom">
+    <button class="primary" onclick="checkFraction('q1a','q1b',1,2,'f1')">Check</button>
+    <div id="f1" class="feedback"></div>
+    <div class="hint">Hint: Both numbers can be divided by 4.</div>
+  </div>
+
+  <div class="q">
+    <div class="q-title">2. <span class="fraction"><span class="top">6</span><span class="bottom">9</span></span></div>
+    <input class="answer" id="q2a" type="number" aria-label="Question 2 numerator" placeholder="top">
+    /
+    <input class="answer" id="q2b" type="number" aria-label="Question 2 denominator" placeholder="bottom">
+    <button class="primary" onclick="checkFraction('q2a','q2b',2,3,'f2')">Check</button>
+    <div id="f2" class="feedback"></div>
+    <div class="hint">Hint: Try dividing both numbers by 3.</div>
+  </div>
+
+  <div class="q">
+    <div class="q-title">3. <span class="fraction"><span class="top">10</span><span class="bottom">15</span></span></div>
+    <input class="answer" id="q3a" type="number" aria-label="Question 3 numerator" placeholder="top">
+    /
+    <input class="answer" id="q3b" type="number" aria-label="Question 3 denominator" placeholder="bottom">
+    <button class="primary" onclick="checkFraction('q3a','q3b',2,3,'f3')">Check</button>
+    <div id="f3" class="feedback"></div>
+    <div class="hint">Hint: A common factor is 5.</div>
+  </div>
+
+  <div class="q">
+    <div class="q-title">4. <span class="fraction"><span class="top">12</span><span class="bottom">18</span></span></div>
+    <input class="answer" id="q4a" type="number" aria-label="Question 4 numerator" placeholder="top">
+    /
+    <input class="answer" id="q4b" type="number" aria-label="Question 4 denominator" placeholder="bottom">
+    <button class="primary" onclick="checkFraction('q4a','q4b',2,3,'f4')">Check</button>
+    <div id="f4" class="feedback"></div>
+    <div class="hint">Hint: Both numbers are divisible by 6.</div>
+  </div>
+
+  <div class="q">
+    <div class="q-title">5. <span class="fraction"><span class="top">14</span><span class="bottom">21</span></span></div>
+    <input class="answer" id="q5a" type="number" aria-label="Question 5 numerator" placeholder="top">
+    /
+    <input class="answer" id="q5b" type="number" aria-label="Question 5 denominator" placeholder="bottom">
+    <button class="primary" onclick="checkFraction('q5a','q5b',2,3,'f5')">Check</button>
+    <div id="f5" class="feedback"></div>
+    <div class="hint">Hint: Both numbers are divisible by 7.</div>
+  </div>
+</section>
+
+<section class="card">
+  <h2>5. Challenge: Can You Spot the Mistake?</h2>
+  <p>A student simplifies <span class="fraction"><span class="top">8</span><span class="bottom">12</span></span> like this:</p>
+  <div class="step">
+    <span class="fraction"><span class="top">8</span><span class="bottom">12</span></span>
+    → 
+    <span class="fraction"><span class="top">8 ÷ 2</span><span class="bottom">12 ÷ 3</span></span>
+    =
+    <span class="fraction"><span class="top">4</span><span class="bottom">4</span></span>
+  </div>
+  <p><strong>Is the student's method correct?</strong></p>
+  <div class="choice-grid">
+    <button onclick="choiceChallenge(this, false)">Yes</button>
+    <button onclick="choiceChallenge(this, true)">No</button>
+  </div>
+  <div id="challengeFeedback" class="feedback"></div>
+</section>
+
+<section class="card">
+  <h2>6. My Simplifying Fractions Checklist</h2>
+  <div class="checklist">
+    <label><input type="checkbox" onchange="updateProgress()"> I look for a common factor.</label>
+    <label><input type="checkbox" onchange="updateProgress()"> I divide the numerator and denominator by the same number.</label>
+    <label><input type="checkbox" onchange="updateProgress()"> I check that the fraction cannot be simplified again.</label>
+  </div>
+</section>
+
+<section class="card">
+  <div id="score" class="score">Complete the questions to see your score.</div>
+  <button class="primary" onclick="resetWorksheet()">Reset Worksheet</button>
+</section>
+</div>
+
+<script>
+let points = 0;
+const answered = new Set();
+const totalTasks = 12;
+
+function showFeedback(id, good, message) {
+  const el = document.getElementById(id);
+  el.className = 'feedback show ' + (good ? 'good' : 'bad');
+  el.textContent = message;
+}
+
+function choice(btn, correct) {
+  [...btn.parentElement.children].forEach(b => b.classList.remove('correct','wrong'));
+  btn.classList.add(correct ? 'correct' : 'wrong');
+  showFeedback('warmFeedback', correct, correct ? 'Correct! 3 divides 18 exactly.' : 'Not this one. Try a number that divides 18 with no remainder.');
+  if (correct && !answered.has('warm')) { points++; answered.add('warm'); }
+  updateProgress();
+}
+
+function guided(btn, correctAnswer, feedbackId) {
+  [...btn.parentElement.children].forEach(b => b.classList.remove('correct','wrong'));
+  const value = Number(btn.textContent);
+  const correct = value === correctAnswer;
+  btn.classList.add(correct ? 'correct' : 'wrong');
+  showFeedback(feedbackId, correct,
+    correct ? 'Correct! That number divides both parts of the fraction.' :
+    'Try again. Check whether the number divides both the numerator and denominator exactly.');
+  if (correct && !answered.has(feedbackId)) { points++; answered.add(feedbackId); }
+  updateProgress();
+}
+
+function checkFraction(aId,bId,ca,cb,feedbackId) {
+  const a = Number(document.getElementById(aId).value);
+  const b = Number(document.getElementById(bId).value);
+  const correct = a === ca && b === cb;
+  showFeedback(feedbackId, correct,
+    correct ? 'Correct! 🎉 The fraction is fully simplified.' :
+    'Not quite. Remember: divide both numerator and denominator by the same common factor.');
+  if (correct && !answered.has(feedbackId)) { points++; answered.add(feedbackId); }
+  updateProgress();
+}
+
+function choiceChallenge(btn, correct) {
+  [...btn.parentElement.children].forEach(b => b.classList.remove('correct','wrong'));
+  btn.classList.add(correct ? 'correct' : 'wrong');
+  showFeedback('challengeFeedback', correct,
+    correct ? 'Correct! You must divide both parts by the SAME number. 8/12 ÷ 4/4 = 2/3.' :
+    'Look carefully: the student divided by 2 on top but 3 on the bottom.');
+  if (correct && !answered.has('challenge')) { points++; answered.add('challenge'); }
+  updateProgress();
+}
+
+function updateProgress() {
+  const checks = document.querySelectorAll('.checklist input:checked').length;
+  const completed = Math.min(answered.size + checks, totalTasks);
+  const pct = Math.round((completed / totalTasks) * 100);
+  document.getElementById('progressBar').style.width = pct + '%';
+  document.getElementById('progressText').textContent = pct + '% complete';
+  document.getElementById('score').textContent =
+    `Score: ${points} correct answer${points === 1 ? '' : 's'} | Keep going!`;
+}
+
+function resetWorksheet() {
+  points = 0;
+  answered.clear();
+  document.querySelectorAll('input[type=number]').forEach(i => i.value = '');
+  document.querySelectorAll('input[type=checkbox]').forEach(i => i.checked = false);
+  document.querySelectorAll('button').forEach(b => b.classList.remove('correct','wrong'));
+  document.querySelectorAll('.feedback').forEach(f => {
+    f.className = 'feedback';
+    f.textContent = '';
+  });
+  updateProgress();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+updateProgress();
+</script>
+</body>
+</html>
