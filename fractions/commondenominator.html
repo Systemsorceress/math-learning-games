@@ -1,0 +1,2877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Identify Common Denominators</title>
+
+<style>
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+:root {
+    --bg: #f7f9fc;
+    --card: #ffffff;
+    --text: #172033;
+    --muted: #536174;
+
+    --blue: #2563eb;
+    --blue-light: #dbeafe;
+
+    --green: #15803d;
+    --green-light: #dcfce7;
+
+    --red: #dc2626;
+    --red-light: #fee2e2;
+
+    --yellow: #ca8a04;
+    --yellow-light: #fef3c7;
+
+    --purple: #7c3aed;
+    --purple-light: #ede9fe;
+
+    --border: #d7dee9;
+
+    --radius: 20px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+
+    font-family:
+        Arial,
+        "Open Sans",
+        sans-serif;
+
+    background: var(--bg);
+    color: var(--text);
+
+    min-height: 100vh;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.header {
+
+    height: 72px;
+
+    background: white;
+
+    border-bottom:
+        2px solid var(--border);
+
+    padding:
+        12px 24px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    position: fixed;
+
+    top: 0;
+    left: 0;
+    right: 0;
+
+    z-index: 1000;
+
+    box-shadow:
+        0 2px 10px rgba(0,0,0,0.05);
+}
+
+.lesson-name {
+
+    font-size: 20px;
+
+    font-weight: 800;
+}
+
+.progress-wrap {
+
+    width: 250px;
+}
+
+.progress-label {
+
+    font-size: 13px;
+
+    color: var(--muted);
+
+    margin-bottom: 5px;
+
+    text-align: right;
+}
+
+.progress {
+
+    height: 10px;
+
+    background: #e5e7eb;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+}
+
+.progress-bar {
+
+    height: 100%;
+
+    width: 0%;
+
+    background: var(--blue);
+
+    border-radius: 20px;
+
+    transition:
+        width 0.3s ease;
+}
+
+
+/* =========================================================
+   SLIDES
+========================================================= */
+
+.slide {
+
+    display: none;
+
+    min-height: 100vh;
+
+    padding:
+        110px 20px 125px;
+}
+
+.slide.active {
+
+    display: block;
+}
+
+.container {
+
+    width:
+        min(1050px, 100%);
+
+    margin:
+        0 auto;
+}
+
+
+/* =========================================================
+   TYPOGRAPHY
+========================================================= */
+
+h1 {
+
+    font-size:
+        clamp(36px, 5vw, 60px);
+
+    line-height:
+        1.05;
+
+    margin:
+        0 0 20px;
+}
+
+h2 {
+
+    font-size:
+        clamp(30px, 4vw, 45px);
+
+    line-height:
+        1.1;
+
+    margin:
+        0 0 25px;
+}
+
+h3 {
+
+    font-size:
+        25px;
+
+    margin:
+        15px 0;
+}
+
+.subtitle {
+
+    font-size:
+        21px;
+
+    color:
+        var(--muted);
+
+    line-height:
+        1.6;
+
+    max-width:
+        800px;
+}
+
+
+/* =========================================================
+   CARDS
+========================================================= */
+
+.card {
+
+    background:
+        var(--card);
+
+    border:
+        2px solid var(--border);
+
+    border-radius:
+        var(--radius);
+
+    padding:
+        30px;
+
+    margin-top:
+        22px;
+
+    box-shadow:
+        0 5px 20px rgba(0,0,0,0.04);
+}
+
+.big-card {
+
+    padding:
+        45px;
+}
+
+.instruction {
+
+    font-size:
+        25px;
+
+    font-weight:
+        800;
+
+    line-height:
+        1.4;
+
+    margin-bottom:
+        25px;
+}
+
+
+/* =========================================================
+   FRACTIONS
+========================================================= */
+
+.fraction {
+
+    display:
+        inline-flex;
+
+    flex-direction:
+        column;
+
+    align-items:
+        center;
+
+    font-size:
+        48px;
+
+    font-weight:
+        900;
+
+    min-width:
+        80px;
+
+    line-height:
+        1.05;
+
+    vertical-align:
+        middle;
+}
+
+.fraction .top {
+
+    border-bottom:
+        4px solid var(--text);
+
+    padding:
+        0 12px 6px;
+}
+
+.fraction .bottom {
+
+    padding:
+        6px 12px 0;
+}
+
+
+/* =========================================================
+   EQUATION
+========================================================= */
+
+.visual-equation {
+
+    display:
+        flex;
+
+    justify-content:
+        center;
+
+    align-items:
+        center;
+
+    gap:
+        28px;
+
+    flex-wrap:
+        wrap;
+
+    margin:
+        30px 0;
+}
+
+.operator {
+
+    font-size:
+        32px;
+
+    font-weight:
+        900;
+}
+
+
+/* =========================================================
+   DENOMINATOR BOX
+========================================================= */
+
+.denominator-label {
+
+    font-size:
+        15px;
+
+    color:
+        var(--blue);
+
+    font-weight:
+        900;
+
+    margin:
+        18px 0 6px;
+}
+
+.denominator-box {
+
+    background:
+        var(--blue-light);
+
+    border:
+        3px solid var(--blue);
+
+    border-radius:
+        16px;
+
+    padding:
+        12px 25px;
+
+    display:
+        inline-block;
+
+    font-size:
+        30px;
+
+    font-weight:
+        900;
+}
+
+
+/* =========================================================
+   FRACTION BARS
+========================================================= */
+
+.bar-area {
+
+    margin:
+        25px 0 35px;
+}
+
+.fraction-bar {
+
+    display:
+        flex;
+
+    width:
+        100%;
+
+    max-width:
+        600px;
+
+    height:
+        70px;
+
+    margin:
+        auto;
+
+    border:
+        3px solid var(--text);
+
+    border-radius:
+        12px;
+
+    overflow:
+        hidden;
+
+    background:
+        white;
+}
+
+.part {
+
+    flex:
+        1;
+
+    border-right:
+        2px solid var(--text);
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    font-weight:
+        900;
+
+    font-size:
+        20px;
+}
+
+.part:last-child {
+
+    border-right:
+        none;
+}
+
+.part.filled {
+
+    background:
+        var(--blue);
+
+    color:
+        white;
+}
+
+.part.empty {
+
+    background:
+        white;
+}
+
+
+/* =========================================================
+   STEPS
+========================================================= */
+
+.steps {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(210px, 1fr)
+        );
+
+    gap:
+        18px;
+
+    margin-top:
+        25px;
+}
+
+.step {
+
+    background:
+        white;
+
+    border:
+        2px solid var(--border);
+
+    border-radius:
+        18px;
+
+    padding:
+        22px;
+}
+
+.step-number {
+
+    width:
+        44px;
+
+    height:
+        44px;
+
+    border-radius:
+        50%;
+
+    background:
+        var(--blue);
+
+    color:
+        white;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    font-weight:
+        900;
+
+    font-size:
+        20px;
+
+    margin-bottom:
+        12px;
+}
+
+.step-title {
+
+    font-size:
+        20px;
+
+    font-weight:
+        900;
+
+    margin-bottom:
+        8px;
+}
+
+.step-text {
+
+    color:
+        var(--muted);
+
+    font-size:
+        17px;
+
+    line-height:
+        1.5;
+}
+
+
+/* =========================================================
+   MULTIPLES
+========================================================= */
+
+.multiple-row {
+
+    display:
+        flex;
+
+    flex-wrap:
+        wrap;
+
+    justify-content:
+        center;
+
+    gap:
+        12px;
+
+    margin:
+        20px 0;
+}
+
+.multiple {
+
+    min-width:
+        70px;
+
+    padding:
+        14px 18px;
+
+    border-radius:
+        14px;
+
+    background:
+        #f3f4f6;
+
+    border:
+        2px solid #d1d5db;
+
+    font-size:
+        24px;
+
+    font-weight:
+        900;
+
+    text-align:
+        center;
+}
+
+.multiple.highlight {
+
+    background:
+        var(--green-light);
+
+    border-color:
+        var(--green);
+
+    color:
+        var(--green);
+}
+
+
+/* =========================================================
+   CHOICES
+========================================================= */
+
+.choices {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(180px, 1fr)
+        );
+
+    gap:
+        16px;
+
+    max-width:
+        700px;
+
+    margin:
+        25px auto;
+}
+
+.choice {
+
+    background:
+        white;
+
+    border:
+        3px solid var(--border);
+
+    border-radius:
+        16px;
+
+    padding:
+        20px;
+
+    min-height:
+        70px;
+
+    font-size:
+        25px;
+
+    font-weight:
+        900;
+
+    cursor:
+        pointer;
+
+    transition:
+        transform .15s ease,
+        border-color .15s ease;
+}
+
+.choice:hover {
+
+    transform:
+        translateY(-2px);
+
+    border-color:
+        var(--blue);
+}
+
+.choice.correct {
+
+    border-color:
+        var(--green);
+
+    background:
+        var(--green-light);
+
+    color:
+        var(--green);
+}
+
+.choice.wrong {
+
+    border-color:
+        var(--red);
+
+    background:
+        var(--red-light);
+
+    color:
+        var(--red);
+}
+
+
+/* =========================================================
+   FEEDBACK
+========================================================= */
+
+.feedback {
+
+    min-height:
+        48px;
+
+    margin-top:
+        20px;
+
+    text-align:
+        center;
+
+    font-size:
+        21px;
+
+    font-weight:
+        900;
+
+    line-height:
+        1.4;
+}
+
+.feedback.correct {
+
+    color:
+        var(--green);
+}
+
+.feedback.wrong {
+
+    color:
+        var(--red);
+}
+
+
+/* =========================================================
+   MATCHING
+========================================================= */
+
+.match-grid {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:
+        20px;
+
+    max-width:
+        750px;
+
+    margin:
+        30px auto;
+}
+
+.match-column {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        12px;
+}
+
+.match-item {
+
+    background:
+        white;
+
+    border:
+        3px solid var(--border);
+
+    border-radius:
+        15px;
+
+    padding:
+        18px;
+
+    font-size:
+        24px;
+
+    font-weight:
+        900;
+
+    cursor:
+        pointer;
+
+    text-align:
+        center;
+}
+
+.match-item.selected {
+
+    border-color:
+        var(--blue);
+
+    background:
+        var(--blue-light);
+}
+
+.match-item.matched {
+
+    border-color:
+        var(--green);
+
+    background:
+        var(--green-light);
+
+    color:
+        var(--green);
+
+    cursor:
+        default;
+}
+
+
+/* =========================================================
+   INPUT
+========================================================= */
+
+.answer-area {
+
+    display:
+        flex;
+
+    justify-content:
+        center;
+
+    align-items:
+        center;
+
+    gap:
+        12px;
+
+    flex-wrap:
+        wrap;
+
+    margin:
+        25px 0;
+}
+
+.answer-input {
+
+    width:
+        150px;
+
+    padding:
+        14px;
+
+    border:
+        3px solid var(--border);
+
+    border-radius:
+        14px;
+
+    font-size:
+        30px;
+
+    font-weight:
+        900;
+
+    text-align:
+        center;
+}
+
+.answer-input:focus {
+
+    outline:
+        none;
+
+    border-color:
+        var(--blue);
+}
+
+
+/* =========================================================
+   TIP
+========================================================= */
+
+.tip {
+
+    background:
+        var(--yellow-light);
+
+    border:
+        2px solid #facc15;
+
+    border-radius:
+        16px;
+
+    padding:
+        18px 22px;
+
+    margin-top:
+        22px;
+
+    font-size:
+        19px;
+
+    line-height:
+        1.55;
+}
+
+.tip strong {
+
+    color:
+        var(--yellow);
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+.navigation {
+
+    position:
+        fixed;
+
+    bottom:
+        0;
+
+    left:
+        0;
+
+    right:
+        0;
+
+    height:
+        82px;
+
+    background:
+        white;
+
+    border-top:
+        2px solid var(--border);
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    padding:
+        12px 28px;
+
+    z-index:
+        9999;
+
+    box-shadow:
+        0 -4px 15px rgba(0,0,0,0.08);
+}
+
+.nav-btn {
+
+    border:
+        none;
+
+    border-radius:
+        16px;
+
+    min-width:
+        150px;
+
+    padding:
+        16px 30px;
+
+    font-size:
+        20px;
+
+    font-weight:
+        900;
+
+    cursor:
+        pointer;
+
+    transition:
+        transform .15s ease,
+        opacity .15s ease;
+}
+
+.nav-btn:hover {
+
+    transform:
+        translateY(-2px);
+}
+
+.prev {
+
+    background:
+        #e5e7eb;
+
+    color:
+        #111827;
+}
+
+.next {
+
+    background:
+        var(--blue);
+
+    color:
+        white;
+}
+
+.nav-btn:disabled {
+
+    opacity:
+        .35;
+
+    cursor:
+        not-allowed;
+
+    transform:
+        none;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 650px) {
+
+    .header {
+
+        height:
+            64px;
+
+        padding:
+            10px 12px;
+    }
+
+    .lesson-name {
+
+        font-size:
+            14px;
+    }
+
+    .progress-wrap {
+
+        width:
+            130px;
+    }
+
+    .slide {
+
+        padding:
+            90px 14px 115px;
+    }
+
+    .card {
+
+        padding:
+            22px;
+    }
+
+    .big-card {
+
+        padding:
+            28px;
+    }
+
+    .choices {
+
+        grid-template-columns:
+            1fr;
+    }
+
+    .match-grid {
+
+        grid-template-columns:
+            1fr;
+    }
+
+    .fraction {
+
+        font-size:
+            40px;
+    }
+
+    .navigation {
+
+        height:
+            76px;
+
+        padding:
+            10px 14px;
+    }
+
+    .nav-btn {
+
+        min-width:
+            120px;
+
+        padding:
+            14px 18px;
+
+        font-size:
+            17px;
+    }
+
+}
+
+
+/* =========================================================
+   ACCESSIBILITY
+========================================================= */
+
+button:focus,
+input:focus {
+
+    outline:
+        4px solid #93c5fd;
+
+    outline-offset:
+        2px;
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+HEADER
+===================================================== -->
+
+<header class="header">
+
+    <div class="lesson-name">
+        Fractions: Common Denominators
+    </div>
+
+    <div class="progress-wrap">
+
+        <div class="progress-label">
+
+            Slide
+            <span id="slideNumber">1</span>
+            of
+            <span id="totalSlides">14</span>
+
+        </div>
+
+        <div class="progress">
+
+            <div
+                class="progress-bar"
+                id="progressBar">
+            </div>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+
+<!-- =====================================================
+SLIDE 1 — TITLE
+===================================================== -->
+
+<section class="slide active">
+
+<div class="container">
+
+    <div class="card big-card">
+
+        <h1>
+            Identify<br>
+            Common Denominators
+        </h1>
+
+        <p class="subtitle">
+
+            Today we will learn how to spot when
+            fractions have the same denominator
+            and how to find a denominator they
+            can both use.
+
+        </p>
+
+        <div class="visual-equation">
+
+            <div class="fraction">
+
+                <div class="top">1</div>
+
+                <div class="bottom">4</div>
+
+            </div>
+
+            <div class="operator">
+                +
+            </div>
+
+            <div class="fraction">
+
+                <div class="top">2</div>
+
+                <div class="bottom">4</div>
+
+            </div>
+
+        </div>
+
+        <div class="tip">
+
+            <strong>Big idea:</strong>
+
+            The denominator tells us how many
+            equal parts the whole is divided into.
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+SLIDE 2 — DENOMINATOR
+===================================================== -->
+
+<section class="slide">
+
+<div class="container">
+
+    <h2>
+        First: Find the denominator
+    </h2>
+
+    <div class="card">
+
+        <div class="visual-equation">
+
+            <div class="fraction">
+
+                <div class="top">3</div>
+
+                <div class="bottom">5</div>
+
+            </div>
+
+        </div>
+
+        <div class="instruction">
+
+            Which number is the denominator?
+
+        </div>
+
+        <div class="choices">
+
+            <button
+                class="choice"
+                onclick="checkChoice(this, false)">
+
+                3
+
+            </button>
+
+            <button
+                class="choice"
+                onclick="checkChoice(this, true)">
+
+                5
+
+            </button>
+
+        </div>
+
+        <div class="feedback"></div>
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+SLIDE 3 — SAME DENOMINATOR
+===================================================== -->
+
+<section class="slide">
+
+<div class="container">
+
+    <h2>
+        Think: Bottom = Denominator
+    </h2>
+
+    <div class="card">
+
+        <div class="visual-equation">
+
+            <div class="fraction">
+
+                <div class="top">2</div>
+
+                <div class="bottom">3</div>
+
+            </div>
+
+            <div class="operator">
+                and
+            </div>
+
+            <div class="fraction">
+
+                <div class="top">1</div>
+
+                <div class="bottom">3</div>
+
+            </div>
+
+        </div>
+
+        <div class="instruction">
+
+            Look only at the bottom numbers.
+
+        </div>
+
+        <div class="choices">
+
+            <button
+                class="choice"
+                onclick="checkChoice(this, true)">
+
+                Both are 3
+
+            </button>
+
+            <button
+                class="choice"
+                onclick="checkChoice(this, false)">
+
+                They are different
+
+            </button>
+
+        </div>
+
+        <div class="feedback"></div>
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+SLIDE 4 — DEFINITION
+===================================================== -->
+
+<section class="slide">
+
+<div class="container">
+
+    <h2>
+        What is a common denominator?
+    </h2>
+
+    <div class="card">
+
+        <div class="instruction">
+
+            A common denominator is a denominator
+            that two or more fractions can share.
+
+        </div>
+
+        <div class="visual-equation">
+
+            <div class="fraction">
+
+                <div class="top">1</div>
+
+                <div class="bottom">4</div>
+
+            </div>
+
+            <div class="operator">
+                and
+            </div>
+
+            <div class="fraction">
+
+                <div class="top">2</div>
+
+                <div class="bottom">4</div>
+
+            </div>
+
+        </div>
+
+        <div class="denominator-label">
+
+            COMMON DENOMINATOR
+
+        </div>
+
+        <div class="denominator-box">
+
+            4
+
+        </div>
+
+        <div class="tip">
+
+            <strong>Notice:</strong>
+
+            Both fractions have 4 at the bottom.
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+SLIDE 5 — FRACTION BARS
+===================================================== -->
+
+<section class="slide">
+
+<div class="container">
+
+    <h2>
+        See it with fraction bars
+    </h2>
+
+    <div class="card">
+
+        <h3>
+            1/4
+        </h3>
+
+        <div class="bar-area">
+
+            <div class="fraction-bar">
+
+                <div class="part filled">
+                    1
+                </div>
+
+                <div class="part"></div>
+
+                <div class="part"></div>
+
+                <div class="part"></div>
+
+            </div>
+
+        </div>
+
+
+        <h3>
+            2/4
+        </h3>
+
+        <div class="bar-area">
+
+            <div class="fraction-bar">
+
+                <div class="part filled">
+                    1
+                </div>
+
+                <div class="part filled">
+                    2
+                </div>
+
+                <div class="part"></div>
+
+                <div class="part"></div>
+
+            </div>
+
+        </div>
+
+        <div class="tip">
+
+            Both wholes are split into
+            <strong>4 equal parts</strong>.
+
+            That is why 4 is the common denominator.
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+SLIDE 6 — YES / NO
+===================================================== -->
+
+<section class="slide">
+
+<div class="container">
+
+    <h2>
+        Do the denominators match?
+    </h2>
+
+    <div class="card">
+
+        <div class="visual-equation">
+
+            <div class="fraction">
+
+                <div class="top">3</div>
+
+                <div class="bottom">5</div>
+
+            </div>
+
+            <div class="operator">
+                and
+            </div>
+
+            <div class="fraction">
+
+                <div class="top">1</div>
+
+                <div class="bottom">5</div>
+
+            </div>
+
+        </div>
+
+        <div class="instruction">
+
+            Are the denominators the same?
+
+        </div>
+
+        <div class="choices">
+
+            <button
+                class="choice"
+                onclick="checkChoice(this, true)">
+
+                YES ✓
+
+            </button>
+
+            <button
+                class="choice"
+                onclick="checkChoice(this, false)">
+
+                NO ✗
+
+            </button>
+
+        </div>
+
+        <div class="feedback"></div>
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+SLIDE 7 — DIFFERENT DENOMINATORS
+===================================================== -->
+
+<section class="slide">
+
+<div class="container">
+
+    <h2>
+        What if they are different?
+    </h2>
+
+    <div class="card">
+
+        <div class="visual-equation">
+
+            <div class="fraction">
+
+                <div class="top">1</div>
+
+                <div class="bottom">2</div>
+
+            </div>
+
+            <div class="operator">
+                and
+            </div>
+
+            <div class="fraction">
+
+                <div class="top">1</div>
+
+                <div class="bottom">3</div>
+
+            </div>
+
+        </div>
+
+        <div class="instruction">
+
+            The denominators are different.
+
+        </div>
+
+        <div class="tip">
+
+            We need a number that appears in
+            the multiples of <strong>2</strong>
+            and <strong>3</strong>.
+
+        </div>
+
+        <div class="steps">
+
+            <div class="step">
+
+                <div class="step-number">
+                    1
+                </div>
+
+                <div class="step-title">
+                    Multiples of 2
+                </div>
+
+                <div class="multiple-row">
+
+                    <div class="multiple">
+                        2
+                    </div>
+
+                    <div class="multiple">
+                        4
+                    </div>
+
+                    <div class="multiple highlight">
+                        6
+                    </div>
+
+                    <div class="multiple">
+                        8
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="step">
+
+                <div class="step-number">
+                    2
+                </div>
+
+                <div class="step-title">
+                    Multiples of 3
+                </div>
+
+                <div class="multiple-row">
+
+                    <div class="multiple">
+                        3
+                    </div>
+
+                    <div class="multiple highlight">
+                        6
+                    </div>
+
+                    <div class="multiple">
+                        9
+                    </div>
+
+                    <div class="multiple">
+                        12
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="denominator-label">
+
+            COMMON MULTIPLE
+
+        </div>
+
+        <div class="denominator-box">
+
+            6
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+SLIDE 8 — CHOOSE COMMON DENOMINATOR
+===================================================== -->
+
+<section class="slide">
+
+<div class="container">
+
+    <h2>
+        Find the common denominator
+    </h2>
+
+    <div class="card">
+
+        <div class="visual-equation">
+
+            <div class="fraction">
+
+                <div class="top">1</div>
+
+                <div class="bottom">2</div>
+
+            </div>
+
+            <div class="operator">
+                and
+            </div>
+
+            <div class="fraction">
+
+                <div class="top">1</div>
+
+                <div class="bottom">3</div>
+
+            </div>
+
+        </div>
+
+        <div class="instruction">
+
+            Which number can both 2 and 3
+            divide into?
+
+        </div>
+
+        <div class="choices">
+
+            <button
+                class="choice"
+                onclick="checkChoice(this, false)">
+                4
+            </button>
+
+            <button
+                class="choice"
+                onclick="checkChoice(this, true)">
+                6
+            </button>
+
+            <button
+                class="choice"
+                onclick="checkChoice(this, false)">
+                8
+            </button>
+
+            <button
+                class="choice"
+                onclick="checkChoice(this, false)">
+                10
+            </button>
+
+        </div>
+
+        <div class="feedback"></div>
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+SLIDE 9 — MATCHING
+===================================================== -->
+
+<section class="slide">
+
+<div class="container">
+
+    <h2>
+        Match the fractions
+    </h2>
+
+    <div class="card">
+
+        <div class="instruction">
+
+            Click a fraction, then click another
+            fraction with the same denominator.
+
+        </div>
+
+        <div class="match-grid">
+
+            <div class="match-column">
+
+                <button
+                    class="match-item"
+                    data-match="4"
+                    onclick="selectMatch(this)">
+
+                    1/4
+
+                </button>
+
+                <button
+                    class="match-item"
+                    data-match="3"
+                    onclick="selectMatch(this)">
+
+                    2/3
+
+                </button>
+
+                <button
+                    class="match-item"
+                    data-match="5"
+                    onclick="selectMatch(this)">
+
+                    3/5
+
+                </button>
+
+            </div>
+
+
+            <div class="match-column">
+
+                <button
+                    class="match-item"
+                    data-match="5"
+                    onclick="selectMatch(this)">
+
+                    1/5
+
+                </button>
+
+                <button
+                    class="match-item"
+                    data-match="4"
+                    onclick="selectMatch(this)">
+
+                    3/4
+
+                </button>
+
+                <button
+                    class="match-item"
+                    data-match="3"
+                    onclick="selectMatch(this)">
+
+                    1/3
+
+                </button>
+
+            </div>
+
+        </div>
+
+        <div
+            class="feedback"
+            id="matchFeedback">
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+SLIDE 10
+===================================================== -->
+
+<section class="slide">
+
+<div class="container">
+
+    <h2>
+        Choose the common denominator
+    </h2>
+
+    <div class="card">
+
+        <div class="visual-equation">
+
+            <div class="fraction">
+
+                <div class="top">2</div>
+
+                <div class="bottom">4</div>
+
+            </div>
+
+            <div class="operator">
+                and
+            </div>
+
+            <div class="fraction">
+
+                <div class="top">1</div>
+
+                <div class="bottom">2</div>
+
+            </div>
+
+        </div>
+
+        <div class="instruction">
+
+            Which denominator can both fractions use?
+
+        </div>
+
+        <div class="choices">
+
+            <button
+                class="choice"
+                onclick="checkChoice(this, true)">
+                4
+            </button>
+
+            <button
+                class="choice"
+                onclick="checkChoice(this, false)">
+                3
+            </button>
+
+            <button
+                class="choice"
+                onclick="checkChoice(this, false)">
+                5
+            </button>
+
+            <button
+                class="choice"
+                onclick="checkChoice(this, false)">
+                7
+            </button>
+
+        </div>
+
+        <div class="feedback"></div>
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+SLIDE 11 — INPUT
+===================================================== -->
+
+<section class="slide">
+
+<div class="container">
+
+    <h2>
+        Complete the denominator
+    </h2>
+
+    <div class="card">
+
+        <div class="instruction">
+
+            Write a common denominator.
+
+        </div>
+
+        <div class="visual-equation">
+
+            <div class="fraction">
+
+                <div class="top">1</div>
+
+                <div class="bottom">3</div>
+
+            </div>
+
+            <div class="operator">
+                and
+            </div>
+
+            <div class="fraction">
+
+                <div class="top">2</div>
+
+                <div class="bottom">6</div>
+
+            </div>
+
+        </div>
+
+        <p>
+            Try the smallest common denominator.
+        </p>
+
+        <div class="answer-area">
+
+            <input
+                id="denomAnswer"
+                class="answer-input"
+                type="number"
+                inputmode="numeric"
+                aria-label="Common denominator"
+            >
+
+            <button
+                class="nav-btn next"
+                onclick="checkInput()">
+
+                Check
+
+            </button>
+
+        </div>
+
+        <div
+            class="feedback"
+            id="inputFeedback">
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+SLIDE 12 — DETECTIVE
+===================================================== -->
+
+<section class="slide">
+
+<div class="container">
+
+    <h2>
+        Common denominator detective
+    </h2>
+
+    <div class="card">
+
+        <div class="instruction">
+
+            Which pair already has a
+            common denominator?
+
+        </div>
+
+        <div class="choices">
+
+            <button
+                class="choice"
+                onclick="checkChoice(this, false)">
+
+                1/2 and 1/3
+
+            </button>
+
+            <button
+                class="choice"
+                onclick="checkChoice(this, true)">
+
+                2/5 and 4/5
+
+            </button>
+
+            <button
+                class="choice"
+                onclick="checkChoice(this, false)">
+
+                1/4 and 1/6
+
+            </button>
+
+            <button
+                class="choice"
+                onclick="checkChoice(this, false)">
+
+                2/3 and 1/5
+
+            </button>
+
+        </div>
+
+        <div class="feedback"></div>
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+SLIDE 13 — MEMORY ROUTINE
+===================================================== -->
+
+<section class="slide">
+
+<div class="container">
+
+    <h2>
+        Remember the 3-step routine
+    </h2>
+
+    <div class="steps">
+
+        <div class="step">
+
+            <div class="step-number">
+                1
+            </div>
+
+            <div class="step-title">
+                LOOK
+            </div>
+
+            <div class="step-text">
+
+                Look at the bottom numbers.
+
+                They are the denominators.
+
+            </div>
+
+        </div>
+
+
+        <div class="step">
+
+            <div class="step-number">
+                2
+            </div>
+
+            <div class="step-title">
+                COMPARE
+            </div>
+
+            <div class="step-text">
+
+                Are the denominators
+                the same?
+
+            </div>
+
+        </div>
+
+
+        <div class="step">
+
+            <div class="step-number">
+                3
+            </div>
+
+            <div class="step-title">
+                FIND
+            </div>
+
+            <div class="step-text">
+
+                If they are different,
+                find a number that is a
+                multiple of both.
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="tip">
+
+        <strong>Memory trick:</strong>
+
+        <br><br>
+
+        BOTTOM → COMPARE → COMMON
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+SLIDE 14 — FINISH
+===================================================== -->
+
+<section class="slide">
+
+<div class="container">
+
+    <div class="card big-card">
+
+        <h1>
+            🎉 Great work!
+        </h1>
+
+        <h2>
+            You can identify common denominators.
+        </h2>
+
+        <div class="steps">
+
+            <div class="step">
+
+                <div class="step-number">
+                    ✓
+                </div>
+
+                <div class="step-title">
+                    DENOMINATOR
+                </div>
+
+                <div class="step-text">
+
+                    The bottom number
+                    of a fraction.
+
+                </div>
+
+            </div>
+
+
+            <div class="step">
+
+                <div class="step-number">
+                    ✓
+                </div>
+
+                <div class="step-title">
+                    COMMON
+                </div>
+
+                <div class="step-text">
+
+                    A denominator shared
+                    by two or more fractions.
+
+                </div>
+
+            </div>
+
+
+            <div class="step">
+
+                <div class="step-number">
+                    ✓
+                </div>
+
+                <div class="step-title">
+                    DIFFERENT?
+                </div>
+
+                <div class="step-text">
+
+                    Find a common multiple.
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="tip">
+
+            <strong>Next skill:</strong>
+
+            Using the common denominator
+            to make equivalent fractions.
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+FIXED NAVIGATION
+===================================================== -->
+
+<div class="navigation">
+
+    <button
+        id="prevBtn"
+        class="nav-btn prev"
+        onclick="previousSlide()">
+
+        ← Back
+
+    </button>
+
+
+    <button
+        id="nextBtn"
+        class="nav-btn next"
+        onclick="nextSlide()">
+
+        Next →
+
+    </button>
+
+</div>
+
+
+
+<script>
+
+/* =========================================================
+SLIDE ENGINE
+========================================================= */
+
+let currentSlide = 0;
+
+const slides =
+    document.querySelectorAll(".slide");
+
+const totalSlides =
+    slides.length;
+
+
+document.getElementById(
+    "totalSlides"
+).textContent =
+    totalSlides;
+
+
+
+function updateSlide() {
+
+    /* Hide all slides */
+
+    slides.forEach(
+        function(slide, index) {
+
+            slide.classList.toggle(
+                "active",
+                index === currentSlide
+            );
+
+        }
+    );
+
+
+    /* Update slide number */
+
+    document.getElementById(
+        "slideNumber"
+    ).textContent =
+        currentSlide + 1;
+
+
+    /* Update progress */
+
+    const progress =
+        ((currentSlide + 1) /
+        totalSlides) * 100;
+
+    document.getElementById(
+        "progressBar"
+    ).style.width =
+        progress + "%";
+
+
+    /* Back button */
+
+    const prevBtn =
+        document.getElementById(
+            "prevBtn"
+        );
+
+    prevBtn.disabled =
+        currentSlide === 0;
+
+
+    /* Next button */
+
+    const nextBtn =
+        document.getElementById(
+            "nextBtn"
+        );
+
+
+    if (
+        currentSlide ===
+        totalSlides - 1
+    ) {
+
+        nextBtn.textContent =
+            "Finish ✓";
+
+    } else {
+
+        nextBtn.textContent =
+            "Next →";
+
+    }
+
+
+    /* Return to top */
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+}
+
+
+
+/* =========================================================
+NEXT
+========================================================= */
+
+function nextSlide() {
+
+    if (
+        currentSlide <
+        totalSlides - 1
+    ) {
+
+        currentSlide++;
+
+        updateSlide();
+
+    } else {
+
+        alert(
+            "🎉 Excellent work! You completed the lesson!"
+        );
+
+    }
+
+}
+
+
+
+/* =========================================================
+BACK
+========================================================= */
+
+function previousSlide() {
+
+    if (
+        currentSlide > 0
+    ) {
+
+        currentSlide--;
+
+        updateSlide();
+
+    }
+
+}
+
+
+
+/* =========================================================
+MULTIPLE CHOICE
+========================================================= */
+
+function checkChoice(
+    button,
+    correct
+) {
+
+    const card =
+        button.closest(".card");
+
+    const feedback =
+        card.querySelector(
+            ".feedback"
+        );
+
+    const buttons =
+        card.querySelectorAll(
+            ".choice"
+        );
+
+
+    /* Remove previous states */
+
+    buttons.forEach(
+        function(btn) {
+
+            btn.classList.remove(
+                "correct",
+                "wrong"
+            );
+
+        }
+    );
+
+
+    /* Correct */
+
+    if (correct) {
+
+        button.classList.add(
+            "correct"
+        );
+
+        feedback.textContent =
+            "✓ Correct! Great thinking.";
+
+        feedback.className =
+            "feedback correct";
+
+
+    } else {
+
+        /* Wrong */
+
+        button.classList.add(
+            "wrong"
+        );
+
+        feedback.textContent =
+            "✗ Not quite. Look at the bottom numbers again.";
+
+        feedback.className =
+            "feedback wrong";
+
+    }
+
+}
+
+
+
+/* =========================================================
+MATCHING GAME
+========================================================= */
+
+let selectedMatch = null;
+
+
+function selectMatch(item) {
+
+    if (
+        item.classList.contains(
+            "matched"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    /* First selection */
+
+    if (
+        !selectedMatch
+    ) {
+
+        selectedMatch =
+            item;
+
+        item.classList.add(
+            "selected"
+        );
+
+        return;
+
+    }
+
+
+    /* Same item */
+
+    if (
+        selectedMatch === item
+    ) {
+
+        return;
+
+    }
+
+
+    const feedback =
+        document.getElementById(
+            "matchFeedback"
+        );
+
+
+    /* Correct match */
+
+    if (
+        selectedMatch.dataset.match ===
+        item.dataset.match
+    ) {
+
+        selectedMatch.classList.remove(
+            "selected"
+        );
+
+        selectedMatch.classList.add(
+            "matched"
+        );
+
+        item.classList.add(
+            "matched"
+        );
+
+        feedback.textContent =
+            "✓ Match! The denominators are the same.";
+
+        feedback.className =
+            "feedback correct";
+
+        selectedMatch =
+            null;
+
+
+    } else {
+
+        /* Incorrect match */
+
+        feedback.textContent =
+            "Look again. The bottom numbers must match.";
+
+        feedback.className =
+            "feedback wrong";
+
+        selectedMatch.classList.remove(
+            "selected"
+        );
+
+        selectedMatch =
+            null;
+
+    }
+
+}
+
+
+
+/* =========================================================
+NUMBER INPUT
+========================================================= */
+
+function checkInput() {
+
+    const input =
+        document.getElementById(
+            "denomAnswer"
+        );
+
+    const feedback =
+        document.getElementById(
+            "inputFeedback"
+        );
+
+    const answer =
+        Number(input.value);
+
+
+    if (
+        answer === 6
+    ) {
+
+        feedback.textContent =
+            "✓ Correct! 6 is the smallest common denominator.";
+
+        feedback.className =
+            "feedback correct";
+
+
+    } else if (
+        answer === 12 ||
+        answer === 18 ||
+        answer === 24
+    ) {
+
+        feedback.textContent =
+            "✓ Yes! That is also a common denominator. 6 is the smallest.";
+
+        feedback.className =
+            "feedback correct";
+
+
+    } else {
+
+        feedback.textContent =
+            "✗ Try again. Think about multiples of 3 and 6.";
+
+        feedback.className =
+            "feedback wrong";
+
+    }
+
+}
+
+
+
+/* =========================================================
+ENTER KEY FOR INPUT
+========================================================= */
+
+document
+    .getElementById("denomAnswer")
+    .addEventListener(
+        "keydown",
+        function(event) {
+
+            if (
+                event.key === "Enter"
+            ) {
+
+                checkInput();
+
+            }
+
+        }
+    );
+
+
+
+/* =========================================================
+KEYBOARD NAVIGATION
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        /* Don't change slides while typing */
+
+        if (
+            event.target.tagName ===
+            "INPUT"
+        ) {
+
+            return;
+
+        }
+
+
+        if (
+            event.key ===
+            "ArrowRight"
+        ) {
+
+            nextSlide();
+
+        }
+
+
+        if (
+            event.key ===
+            "ArrowLeft"
+        ) {
+
+            previousSlide();
+
+        }
+
+    }
+);
+
+
+
+/* =========================================================
+INITIALISE
+========================================================= */
+
+updateSlide();
+
+</script>
+
+</body>
+</html>
