@@ -1,0 +1,1888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Tom & Jerry — Grand Quiz on Fractions</title>
+
+<style>
+:root{
+    --blue:#1877c9;
+    --dark-blue:#0c477d;
+    --sky:#dff4ff;
+    --yellow:#ffd447;
+    --cheese:#ffbf22;
+    --orange:#ff8b2c;
+    --red:#ef5350;
+    --green:#28a745;
+    --cream:#fffaf0;
+    --ink:#18324a;
+    --white:#ffffff;
+    --shadow:0 8px 0 rgba(12,71,125,.18),0 14px 28px rgba(12,71,125,.13);
+}
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    font-family:"Trebuchet MS","Arial Rounded MT Bold",Arial,sans-serif;
+    color:var(--ink);
+    background:
+        radial-gradient(circle at 10% 10%,rgba(255,212,71,.35) 0 50px,transparent 51px),
+        radial-gradient(circle at 90% 20%,rgba(24,119,201,.12) 0 80px,transparent 81px),
+        linear-gradient(135deg,#eefaff 0%,#fffaf0 55%,#e9f6ff 100%);
+    overflow-x:hidden;
+}
+
+/* ================= HEADER ================= */
+
+header{
+    position:relative;
+    overflow:hidden;
+    background:linear-gradient(135deg,#0c477d,#1877c9 60%,#35a9ec);
+    color:white;
+    padding:28px 18px 36px;
+    box-shadow:0 8px 0 rgba(12,71,125,.25);
+}
+
+.header-inner{
+    max-width:1200px;
+    margin:auto;
+    display:grid;
+    grid-template-columns:1.25fr .75fr;
+    gap:24px;
+    align-items:center;
+}
+
+.logo{
+    display:inline-block;
+    background:var(--yellow);
+    color:var(--dark-blue);
+    padding:8px 18px;
+    border-radius:999px;
+    font-weight:900;
+    font-size:.9rem;
+    box-shadow:0 5px 0 #d99d00;
+    transform:rotate(-2deg);
+}
+
+h1{
+    font-size:clamp(2.1rem,5vw,4.5rem);
+    line-height:.95;
+    margin:15px 0 10px;
+    text-shadow:4px 5px 0 #08385f;
+    letter-spacing:-2px;
+}
+
+.subtitle{
+    font-size:1.05rem;
+    max-width:650px;
+    opacity:.95;
+}
+
+.banner-frame{
+    background:#fff;
+    padding:10px;
+    border-radius:24px;
+    transform:rotate(2deg);
+    box-shadow:0 10px 0 rgba(0,0,0,.2);
+    border:5px solid var(--yellow);
+}
+
+.banner-frame img{
+    width:100%;
+    height:180px;
+    object-fit:cover;
+    display:block;
+    border-radius:16px;
+}
+
+/* ================= STATS ================= */
+
+.quiz-shell{
+    max-width:1200px;
+    margin:-22px auto 50px;
+    position:relative;
+    z-index:2;
+    padding:0 16px;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+    margin-bottom:25px;
+}
+
+.stat{
+    background:white;
+    border:3px solid #cfe8f8;
+    border-radius:18px;
+    padding:14px;
+    box-shadow:0 5px 0 rgba(12,71,125,.1);
+    text-align:center;
+}
+
+.stat-label{
+    display:block;
+    font-size:.78rem;
+    text-transform:uppercase;
+    font-weight:900;
+    color:#66829a;
+}
+
+.stat-value{
+    display:block;
+    font-size:1.65rem;
+    font-weight:900;
+    color:var(--dark-blue);
+}
+
+.progress-wrap{
+    background:#c8e6f7;
+    height:14px;
+    border-radius:20px;
+    overflow:hidden;
+    margin:10px 0 28px;
+    border:2px solid white;
+    box-shadow:inset 0 2px 4px rgba(0,0,0,.1);
+}
+
+.progress{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,var(--yellow),var(--orange));
+    border-radius:20px;
+    transition:width .5s ease;
+}
+
+/* ================= SECTIONS ================= */
+
+.section{
+    margin:30px 0;
+}
+
+.section-title{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:15px;
+}
+
+.section-number{
+    width:52px;
+    height:52px;
+    display:grid;
+    place-items:center;
+    border-radius:50%;
+    background:var(--yellow);
+    color:var(--dark-blue);
+    font-size:1.3rem;
+    font-weight:900;
+    box-shadow:0 5px 0 #d79e00;
+}
+
+.section-title h2{
+    margin:0;
+    color:var(--dark-blue);
+    font-size:1.55rem;
+}
+
+.section-title p{
+    margin:3px 0 0;
+    color:#66829a;
+    font-size:.9rem;
+}
+
+/* ================= QUESTION CARD ================= */
+
+.question-card{
+    position:relative;
+    background:rgba(255,255,255,.96);
+    border:3px solid #d8ebf7;
+    border-radius:24px;
+    padding:25px;
+    margin:16px 0;
+    box-shadow:var(--shadow);
+    overflow:hidden;
+    transition:.25s ease;
+}
+
+.question-card:hover{
+    transform:translateY(-3px);
+}
+
+.question-card.correct{
+    border-color:#51bd6b;
+    background:#f4fff6;
+}
+
+.question-card.incorrect{
+    border-color:#ef7774;
+    background:#fff7f7;
+}
+
+.question-number{
+    display:inline-flex;
+    background:var(--blue);
+    color:white;
+    padding:5px 11px;
+    border-radius:999px;
+    font-size:.78rem;
+    font-weight:900;
+    margin-bottom:12px;
+}
+
+.question-text{
+    font-size:1.25rem;
+    font-weight:800;
+    margin:8px 0 20px;
+}
+
+.answer-row{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    flex-wrap:wrap;
+}
+
+.answer-input{
+    width:180px;
+    border:3px solid #bdd9e9;
+    border-radius:14px;
+    padding:12px 15px;
+    font-size:1.1rem;
+    font-weight:800;
+    color:var(--ink);
+    outline:none;
+    background:#fff;
+    transition:.2s;
+}
+
+.answer-input:focus{
+    border-color:var(--blue);
+    box-shadow:0 0 0 4px rgba(24,119,201,.12);
+}
+
+button{
+    border:0;
+    cursor:pointer;
+    font-family:inherit;
+    font-weight:900;
+}
+
+.check-btn{
+    background:var(--blue);
+    color:white;
+    padding:12px 18px;
+    border-radius:13px;
+    box-shadow:0 5px 0 var(--dark-blue);
+    transition:.15s;
+}
+
+.check-btn:hover{
+    transform:translateY(-2px);
+}
+
+.check-btn:active{
+    transform:translateY(3px);
+    box-shadow:0 2px 0 var(--dark-blue);
+}
+
+.scratch-btn{
+    background:var(--yellow);
+    color:var(--dark-blue);
+    padding:12px 15px;
+    border-radius:13px;
+    box-shadow:0 5px 0 #d39d00;
+}
+
+.feedback{
+    display:none;
+    margin-top:15px;
+    padding:11px 14px;
+    border-radius:13px;
+    font-weight:800;
+}
+
+.feedback.show{
+    display:block;
+}
+
+.feedback.good{
+    background:#dcf7e2;
+    color:#17652a;
+}
+
+.feedback.bad{
+    background:#ffe1df;
+    color:#9e2623;
+}
+
+/* ================= FRACTION DISPLAY ================= */
+
+.fraction{
+    display:inline-flex;
+    flex-direction:column;
+    vertical-align:middle;
+    align-items:center;
+    justify-content:center;
+    line-height:1;
+    min-width:42px;
+    margin:0 4px;
+}
+
+.fraction .top{
+    padding:0 7px 4px;
+    border-bottom:3px solid currentColor;
+}
+
+.fraction .bottom{
+    padding:4px 7px 0;
+}
+
+.mixed{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    vertical-align:middle;
+}
+
+.big-fraction{
+    font-size:1.45em;
+}
+
+/* ================= DECORATIONS ================= */
+
+.cheese{
+    position:absolute;
+    right:-35px;
+    bottom:-45px;
+    width:130px;
+    height:130px;
+    border-radius:35% 65% 50% 50%;
+    background:var(--yellow);
+    transform:rotate(25deg);
+    opacity:.5;
+}
+
+.cheese::before,
+.cheese::after{
+    content:"";
+    position:absolute;
+    border-radius:50%;
+    background:#e3a800;
+}
+
+.cheese::before{
+    width:22px;
+    height:22px;
+    left:30px;
+    top:35px;
+}
+
+.cheese::after{
+    width:15px;
+    height:15px;
+    right:22px;
+    bottom:25px;
+}
+
+/* ================= MASTER CONTROLS ================= */
+
+.master-panel{
+    background:linear-gradient(135deg,#0c477d,#1877c9);
+    color:white;
+    border-radius:26px;
+    padding:25px;
+    margin-top:35px;
+    box-shadow:0 9px 0 #07375e,0 18px 35px rgba(12,71,125,.2);
+    text-align:center;
+}
+
+.master-panel h2{
+    margin:0 0 7px;
+    font-size:1.7rem;
+}
+
+.master-panel p{
+    margin:0 0 18px;
+    opacity:.9;
+}
+
+.submit-btn{
+    background:var(--yellow);
+    color:var(--dark-blue);
+    padding:16px 30px;
+    border-radius:16px;
+    font-size:1.1rem;
+    box-shadow:0 6px 0 #c79500;
+}
+
+.submit-btn:hover{
+    transform:translateY(-2px);
+}
+
+.reset-btn{
+    margin-left:8px;
+    background:white;
+    color:var(--dark-blue);
+    padding:16px 22px;
+    border-radius:16px;
+}
+
+/* ================= MODAL ================= */
+
+.modal{
+    position:fixed;
+    inset:0;
+    z-index:1000;
+    background:rgba(4,27,47,.75);
+    backdrop-filter:blur(7px);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+.modal.show{
+    display:flex;
+    animation:fadeIn .2s ease;
+}
+
+.modal-box{
+    width:min(550px,100%);
+    max-height:90vh;
+    overflow:auto;
+    background:var(--cream);
+    border:6px solid var(--yellow);
+    border-radius:28px;
+    padding:25px;
+    text-align:center;
+    box-shadow:0 12px 0 rgba(0,0,0,.25);
+    animation:pop .35s cubic-bezier(.2,1.5,.5,1);
+}
+
+.modal-box h2{
+    margin:8px 0;
+    font-size:2rem;
+    color:var(--dark-blue);
+}
+
+.modal-box img{
+    display:block;
+    width:min(390px,100%);
+    height:230px;
+    object-fit:contain;
+    background:#eef8ff;
+    border-radius:18px;
+    margin:15px auto;
+    border:4px solid #d8ebf7;
+}
+
+.modal-message{
+    font-size:1.05rem;
+    font-weight:800;
+    margin:12px 0 18px;
+}
+
+.close-btn{
+    background:var(--blue);
+    color:white;
+    padding:12px 25px;
+    border-radius:13px;
+    box-shadow:0 5px 0 var(--dark-blue);
+}
+
+/* ================= SCRATCHPAD ================= */
+
+.scratch-modal .modal-box{
+    width:min(950px,100%);
+}
+
+.canvas-wrap{
+    background:#fff;
+    border:4px solid #c8dce8;
+    border-radius:18px;
+    overflow:hidden;
+    touch-action:none;
+}
+
+#scratchCanvas{
+    display:block;
+    width:100%;
+    height:430px;
+    background:
+        linear-gradient(#f8fbfd 1px,transparent 1px),
+        linear-gradient(90deg,#f8fbfd 1px,transparent 1px);
+    background-size:25px 25px;
+    cursor:crosshair;
+    touch-action:none;
+}
+
+.tools{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-bottom:13px;
+    justify-content:center;
+}
+
+.tool{
+    padding:9px 13px;
+    border-radius:11px;
+    background:white;
+    border:2px solid #c8dce8;
+    color:var(--ink);
+}
+
+.tool.active{
+    background:var(--blue);
+    color:white;
+    border-color:var(--blue);
+}
+
+.color-dot{
+    width:18px;
+    height:18px;
+    display:inline-block;
+    border-radius:50%;
+    vertical-align:middle;
+    margin-right:5px;
+    border:2px solid rgba(0,0,0,.15);
+}
+
+.black{background:#111}
+.blue{background:#1877c9}
+.red{background:#ef3d3d}
+
+/* ================= RESULT ================= */
+
+.result-score{
+    font-size:3.5rem;
+    font-weight:900;
+    color:var(--blue);
+    margin:5px;
+}
+
+.result-stars{
+    font-size:2.3rem;
+    letter-spacing:4px;
+}
+
+.review-list{
+    text-align:left;
+    background:white;
+    border-radius:16px;
+    padding:15px;
+    margin:15px 0;
+    max-height:180px;
+    overflow:auto;
+}
+
+.review-item{
+    padding:8px;
+    border-bottom:1px solid #e6eef3;
+}
+
+.review-item:last-child{
+    border-bottom:0;
+}
+
+/* ================= ANIMATIONS ================= */
+
+@keyframes pop{
+    from{transform:scale(.65) rotate(-5deg);opacity:0}
+    to{transform:scale(1) rotate(0);opacity:1}
+}
+
+@keyframes fadeIn{
+    from{opacity:0}
+    to{opacity:1}
+}
+
+@keyframes shake{
+    0%,100%{transform:translateX(0)}
+    20%{transform:translateX(-8px)}
+    40%{transform:translateX(8px)}
+    60%{transform:translateX(-6px)}
+    80%{transform:translateX(6px)}
+}
+
+.shake{
+    animation:shake .45s ease;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:850px){
+    .header-inner{
+        grid-template-columns:1fr;
+    }
+
+    .banner-frame{
+        max-width:600px;
+        margin:auto;
+    }
+
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+@media(max-width:550px){
+    h1{
+        font-size:2.5rem;
+    }
+
+    .question-card{
+        padding:18px;
+        border-radius:19px;
+    }
+
+    .question-text{
+        font-size:1.08rem;
+    }
+
+    .answer-row{
+        align-items:stretch;
+        flex-direction:column;
+    }
+
+    .answer-input,
+    .check-btn,
+    .scratch-btn{
+        width:100%;
+    }
+
+    .stats{
+        gap:8px;
+    }
+
+    .stat{
+        padding:10px 5px;
+    }
+
+    .stat-value{
+        font-size:1.35rem;
+    }
+
+    #scratchCanvas{
+        height:330px;
+    }
+
+    .submit-btn,
+    .reset-btn{
+        width:100%;
+        margin:5px 0;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-inner">
+
+        <div>
+            <span class="logo">🐭 JERRY'S FRACTION HQ</span>
+
+            <h1>Grand Quiz<br>on Fractions!</h1>
+
+            <div class="subtitle">
+                12 challenges. 6 missions. One giant fraction showdown.
+                Help Jerry beat Tom by showing what you know!
+            </div>
+        </div>
+
+        <div class="banner-frame">
+            <img id="idleBanner" alt="Tom and Jerry">
+        </div>
+
+    </div>
+</header>
+
+
+<main class="quiz-shell">
+
+    <div class="stats">
+        <div class="stat">
+            <span class="stat-label">Score</span>
+            <span class="stat-value" id="score">0</span>
+        </div>
+
+        <div class="stat">
+            <span class="stat-label">Answered</span>
+            <span class="stat-value" id="answered">0 / 12</span>
+        </div>
+
+        <div class="stat">
+            <span class="stat-label">Streak</span>
+            <span class="stat-value" id="streak">🔥 0</span>
+        </div>
+
+        <div class="stat">
+            <span class="stat-label">Accuracy</span>
+            <span class="stat-value" id="accuracy">0%</span>
+        </div>
+    </div>
+
+    <div class="progress-wrap">
+        <div class="progress" id="progress"></div>
+    </div>
+
+
+    <!-- SECTION 1 -->
+
+    <section class="section">
+
+        <div class="section-title">
+            <div class="section-number">1</div>
+            <div>
+                <h2>🧀 Simplifying Fractions</h2>
+                <p>Find the greatest common factor and reduce.</p>
+            </div>
+        </div>
+
+        <div class="question-card" data-answer="3/4" data-id="1">
+
+            <span class="question-number">QUESTION 1</span>
+
+            <div class="question-text">
+                Simplify
+                <span class="fraction big-fraction">
+                    <span class="top">18</span>
+                    <span class="bottom">24</span>
+                </span>
+                to its lowest terms.
+            </div>
+
+            <div class="answer-row">
+                <input class="answer-input" placeholder="e.g. 3/4">
+                <button class="check-btn" onclick="checkQuestion(this)">Check Answer ✓</button>
+                <button class="scratch-btn" onclick="openScratch()">✏️ Scratchpad</button>
+            </div>
+
+            <div class="feedback"></div>
+            <div class="cheese"></div>
+        </div>
+
+
+        <div class="question-card" data-answer="7/10" data-id="2">
+
+            <span class="question-number">QUESTION 2</span>
+
+            <div class="question-text">
+                Simplify
+                <span class="fraction big-fraction">
+                    <span class="top">35</span>
+                    <span class="bottom">50</span>
+                </span>
+                to its lowest terms.
+            </div>
+
+            <div class="answer-row">
+                <input class="answer-input" placeholder="e.g. 7/10">
+                <button class="check-btn" onclick="checkQuestion(this)">Check Answer ✓</button>
+                <button class="scratch-btn" onclick="openScratch()">✏️ Scratchpad</button>
+            </div>
+
+            <div class="feedback"></div>
+            <div class="cheese"></div>
+        </div>
+
+    </section>
+
+
+    <!-- SECTION 2 -->
+
+    <section class="section">
+
+        <div class="section-title">
+            <div class="section-number">2</div>
+            <div>
+                <h2>🔄 Improper Fractions & Mixed Numbers</h2>
+                <p>Convert between the two forms.</p>
+            </div>
+        </div>
+
+        <div class="question-card" data-answer="4 3/4" data-id="3">
+
+            <span class="question-number">QUESTION 3</span>
+
+            <div class="question-text">
+                Convert
+                <span class="fraction big-fraction">
+                    <span class="top">19</span>
+                    <span class="bottom">4</span>
+                </span>
+                into a mixed number.
+            </div>
+
+            <div class="answer-row">
+                <input class="answer-input" placeholder="e.g. 4 3/4">
+                <button class="check-btn" onclick="checkQuestion(this)">Check Answer ✓</button>
+                <button class="scratch-btn" onclick="openScratch()">✏️ Scratchpad</button>
+            </div>
+
+            <div class="feedback"></div>
+            <div class="cheese"></div>
+        </div>
+
+
+        <div class="question-card" data-answer="17/5" data-id="4">
+
+            <span class="question-number">QUESTION 4</span>
+
+            <div class="question-text">
+                Convert the mixed number
+                <span class="mixed">
+                    <strong>3</strong>
+                    <span class="fraction">
+                        <span class="top">2</span>
+                        <span class="bottom">5</span>
+                    </span>
+                </span>
+                into an improper fraction.
+            </div>
+
+            <div class="answer-row">
+                <input class="answer-input" placeholder="e.g. 17/5">
+                <button class="check-btn" onclick="checkQuestion(this)">Check Answer ✓</button>
+                <button class="scratch-btn" onclick="openScratch()">✏️ Scratchpad</button>
+            </div>
+
+            <div class="feedback"></div>
+            <div class="cheese"></div>
+        </div>
+
+    </section>
+
+
+    <!-- SECTION 3 -->
+
+    <section class="section">
+
+        <div class="section-title">
+            <div class="section-number">3</div>
+            <div>
+                <h2>➕➖ Addition & Subtraction</h2>
+                <p>Find common denominators and calculate.</p>
+            </div>
+        </div>
+
+        <div class="question-card" data-answer="11/15" data-id="5">
+
+            <span class="question-number">QUESTION 5</span>
+
+            <div class="question-text">
+                Calculate:
+                <span class="fraction big-fraction">
+                    <span class="top">2</span>
+                    <span class="bottom">5</span>
+                </span>
+                +
+                <span class="fraction big-fraction">
+                    <span class="top">1</span>
+                    <span class="bottom">3</span>
+                </span>
+            </div>
+
+            <div class="answer-row">
+                <input class="answer-input" placeholder="e.g. 11/15">
+                <button class="check-btn" onclick="checkQuestion(this)">Check Answer ✓</button>
+                <button class="scratch-btn" onclick="openScratch()">✏️ Scratchpad</button>
+            </div>
+
+            <div class="feedback"></div>
+            <div class="cheese"></div>
+        </div>
+
+
+        <div class="question-card" data-answer="7/12" data-id="6">
+
+            <span class="question-number">QUESTION 6</span>
+
+            <div class="question-text">
+                Calculate:
+                <span class="mixed">
+                    <strong>2</strong>
+                    <span class="fraction">
+                        <span class="top">1</span>
+                        <span class="bottom">4</span>
+                    </span>
+                </span>
+                −
+                <span class="mixed">
+                    <strong>1</strong>
+                    <span class="fraction">
+                        <span class="top">2</span>
+                        <span class="bottom">3</span>
+                    </span>
+                </span>
+            </div>
+
+            <div class="answer-row">
+                <input class="answer-input" placeholder="e.g. 7/12">
+                <button class="check-btn" onclick="checkQuestion(this)">Check Answer ✓</button>
+                <button class="scratch-btn" onclick="openScratch()">✏️ Scratchpad</button>
+            </div>
+
+            <div class="feedback"></div>
+            <div class="cheese"></div>
+        </div>
+
+    </section>
+
+
+    <!-- SECTION 4 -->
+
+    <section class="section">
+
+        <div class="section-title">
+            <div class="section-number">4</div>
+            <div>
+                <h2>✖️ Multiplication of Fractions</h2>
+                <p>Multiply numerators and denominators. Simplify!</p>
+            </div>
+        </div>
+
+        <div class="question-card" data-answer="2/3" data-id="7">
+
+            <span class="question-number">QUESTION 7</span>
+
+            <div class="question-text">
+                Calculate in simplest form:
+                <span class="fraction big-fraction">
+                    <span class="top">3</span>
+                    <span class="bottom">4</span>
+                </span>
+                ×
+                <span class="fraction big-fraction">
+                    <span class="top">8</span>
+                    <span class="bottom">9</span>
+                </span>
+            </div>
+
+            <div class="answer-row">
+                <input class="answer-input" placeholder="e.g. 2/3">
+                <button class="check-btn" onclick="checkQuestion(this)">Check Answer ✓</button>
+                <button class="scratch-btn" onclick="openScratch()">✏️ Scratchpad</button>
+            </div>
+
+            <div class="feedback"></div>
+            <div class="cheese"></div>
+        </div>
+
+
+        <div class="question-card" data-answer="7" data-id="8">
+
+            <span class="question-number">QUESTION 8</span>
+
+            <div class="question-text">
+                Find the missing numerator:
+                <br><br>
+
+                <span class="fraction big-fraction">
+                    <span class="top">?</span>
+                    <span class="bottom">6</span>
+                </span>
+                ×
+                <span class="fraction big-fraction">
+                    <span class="top">3</span>
+                    <span class="bottom">5</span>
+                </span>
+                =
+                <span class="fraction big-fraction">
+                    <span class="top">21</span>
+                    <span class="bottom">30</span>
+                </span>
+            </div>
+
+            <div class="answer-row">
+                <input class="answer-input" placeholder="missing numerator">
+                <button class="check-btn" onclick="checkQuestion(this)">Check Answer ✓</button>
+                <button class="scratch-btn" onclick="openScratch()">✏️ Scratchpad</button>
+            </div>
+
+            <div class="feedback"></div>
+            <div class="cheese"></div>
+        </div>
+
+    </section>
+
+
+    <!-- SECTION 5 -->
+
+    <section class="section">
+
+        <div class="section-title">
+            <div class="section-number">5</div>
+            <div>
+                <h2>➗ Division of Fractions</h2>
+                <p>Remember: keep, change, flip!</p>
+            </div>
+        </div>
+
+        <div class="question-card" data-answer="2/11" data-id="9">
+
+            <span class="question-number">QUESTION 9</span>
+
+            <div class="question-text">
+                Calculate:
+                <span class="fraction big-fraction">
+                    <span class="top">6</span>
+                    <span class="bottom">11</span>
+                </span>
+                ÷ 3
+            </div>
+
+            <div class="answer-row">
+                <input class="answer-input" placeholder="e.g. 2/11">
+                <button class="check-btn" onclick="checkQuestion(this)">Check Answer ✓</button>
+                <button class="scratch-btn" onclick="openScratch()">✏️ Scratchpad</button>
+            </div>
+
+            <div class="feedback"></div>
+            <div class="cheese"></div>
+        </div>
+
+
+        <div class="question-card" data-answer="4/5" data-id="10">
+
+            <span class="question-number">QUESTION 10</span>
+
+            <div class="question-text">
+                Calculate using improper fractions:
+                <span class="mixed">
+                    <strong>1</strong>
+                    <span class="fraction">
+                        <span class="top">3</span>
+                        <span class="bottom">5</span>
+                    </span>
+                </span>
+                ÷ 2
+            </div>
+
+            <div class="answer-row">
+                <input class="answer-input" placeholder="e.g. 4/5">
+                <button class="check-btn" onclick="checkQuestion(this)">Check Answer ✓</button>
+                <button class="scratch-btn" onclick="openScratch()">✏️ Scratchpad</button>
+            </div>
+
+            <div class="feedback"></div>
+            <div class="cheese"></div>
+        </div>
+
+    </section>
+
+
+    <!-- SECTION 6 -->
+
+    <section class="section">
+
+        <div class="section-title">
+            <div class="section-number">6</div>
+            <div>
+                <h2>🍫 Fractions of Amounts & Word Problems</h2>
+                <p>Use fractions to solve real-life problems.</p>
+            </div>
+        </div>
+
+        <div class="question-card" data-answer="250" data-id="11">
+
+            <span class="question-number">QUESTION 11</span>
+
+            <div class="question-text">
+                Find
+                <span class="fraction">
+                    <span class="top">5</span>
+                    <span class="bottom">6</span>
+                </span>
+                of £300.
+            </div>
+
+            <div class="answer-row">
+                <input class="answer-input" placeholder="e.g. 250">
+                <button class="check-btn" onclick="checkQuestion(this)">Check Answer ✓</button>
+                <button class="scratch-btn" onclick="openScratch()">✏️ Scratchpad</button>
+            </div>
+
+            <div class="feedback"></div>
+            <div class="cheese"></div>
+        </div>
+
+
+        <div class="question-card" data-answer="1/5" data-id="12">
+
+            <span class="question-number">QUESTION 12</span>
+
+            <div class="question-text">
+                Filip has
+                <span class="fraction">
+                    <span class="top">2</span>
+                    <span class="bottom">5</span>
+                </span>
+                of a chocolate bar and shares it equally with a friend.
+                What fraction of the whole bar does each person get?
+            </div>
+
+            <div class="answer-row">
+                <input class="answer-input" placeholder="e.g. 1/5">
+                <button class="check-btn" onclick="checkQuestion(this)">Check Answer ✓</button>
+                <button class="scratch-btn" onclick="openScratch()">✏️ Scratchpad</button>
+            </div>
+
+            <div class="feedback"></div>
+            <div class="cheese"></div>
+        </div>
+
+    </section>
+
+
+    <!-- MASTER PANEL -->
+
+    <div class="master-panel">
+        <h2>🏆 Ready for the Final Showdown?</h2>
+        <p>Check every answer or submit the whole quiz to reveal your final score.</p>
+
+        <button class="submit-btn" onclick="submitQuiz()">
+            🏆 SUBMIT GRAND QUIZ
+        </button>
+
+        <button class="reset-btn" onclick="resetQuiz()">
+            ↻ Start Again
+        </button>
+    </div>
+
+</main>
+
+
+<!-- FEEDBACK MODAL -->
+
+<div class="modal" id="feedbackModal">
+
+    <div class="modal-box">
+
+        <div id="modalEmoji" style="font-size:3rem;">🎉</div>
+
+        <h2 id="modalTitle">Great Job!</h2>
+
+        <img id="feedbackGif" alt="Tom and Jerry feedback">
+
+        <div class="modal-message" id="modalMessage"></div>
+
+        <button class="close-btn" onclick="closeModal()">
+            Continue Quiz →
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- RESULT MODAL -->
+
+<div class="modal" id="resultModal">
+
+    <div class="modal-box">
+
+        <div style="font-size:3rem;">🏆</div>
+
+        <h2>Grand Quiz Complete!</h2>
+
+        <div class="result-score" id="finalScore">0 / 12</div>
+
+        <div class="result-stars" id="finalStars">☆☆☆☆☆</div>
+
+        <p id="finalMessage" class="modal-message"></p>
+
+        <div class="review-list" id="reviewList"></div>
+
+        <button class="close-btn" onclick="closeResult()">
+            🎬 Back to Quiz
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- SCRATCHPAD -->
+
+<div class="modal scratch-modal" id="scratchModal">
+
+    <div class="modal-box">
+
+        <h2>✏️ Jerry's Scratchpad</h2>
+
+        <p>
+            Work out the problem here. Your calculations stay on screen
+            until you clear them.
+        </p>
+
+        <div class="tools">
+
+            <button class="tool active" id="penTool" onclick="setTool('pen')">
+                ✏️ Pen
+            </button>
+
+            <button class="tool" id="eraserTool" onclick="setTool('eraser')">
+                🧽 Eraser
+            </button>
+
+            <button class="tool" onclick="setColor('#111111')">
+                <span class="color-dot black"></span>Black
+            </button>
+
+            <button class="tool" onclick="setColor('#1877c9')">
+                <span class="color-dot blue"></span>Blue
+            </button>
+
+            <button class="tool" onclick="setColor('#ef3d3d')">
+                <span class="color-dot red"></span>Red
+            </button>
+
+            <button class="tool" onclick="clearCanvas()">
+                🗑️ Clear
+            </button>
+
+        </div>
+
+        <div class="canvas-wrap">
+            <canvas id="scratchCanvas"></canvas>
+        </div>
+
+        <br>
+
+        <button class="close-btn" onclick="closeScratch()">
+            ✓ Done Working
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   IMAGE URL DECODER
+   URLs are stored encoded so the HTML remains self-contained.
+========================================================= */
+
+function fromHex(hex){
+    let out = "";
+    for(let i=0;i<hex.length;i+=2){
+        out += String.fromCharCode(parseInt(hex.substr(i,2),16));
+    }
+    return out;
+}
+
+const idleURL = fromHex(
+"68747470733a2f2f747365312e6d6d2e62696e672e6e65742f74682f69642f4f49502e31342d68764a50763432497441713379744e7a5875774861454b3f723d302672733d31267069643d496d674465744d61696e266f3d3726726d3d33"
+);
+
+const incorrectGIFs = [
+
+fromHex(
+"68747470733a2f2f7777772e62696e672e636f6d2f74682f69642f4f47432e37633531376534656563366565613234663832393663373766616662353164363f723d30266f3d37267069643d312e3726726d3d33267275726c3d687474707325336125326625326667696664622e636f6d253266696d6167657325326668696768253266746f6d2d616e642d6a657272792d626c6f77696e672d64796e616d6974652d6661696c2d76346b67637a7a7776787431633476772e6769662665686b3d443169425335766d6d79316a41536825326268627266585538694f6c4b53686d25326246704e557233684579306363253364"
+),
+
+fromHex(
+"68747470733a2f2f7777772e62696e672e636f6d2f74682f69642f4f47432e66383239313739626630323565323766396436346333613466313864376635613f723d30266f3d37267069643d312e3726726d3d33267275726c3d687474707325336125326625326667696664622e636f6d253266696d616765732532667468756d626e61696c253266746f6d2d68696c6172696f75732d6c617567682d666667357931716f3972783661646c782e6769662665686b3d666a334c50375a6c6678776674384834364a5332744238647a39774c4d59666b6d6b465576253262447742514d253364"
+),
+
+fromHex(
+"68747470733a2f2f7777772e62696e672e636f6d2f74682f69642f4f47432e39386164653165333836646235636366326661376530316365653537373934333f723d30266f3d37267069643d312e3726726d3d33267275726c3d687474707325336125326625326667696664622e636f6d253266696d61676573253266686967682532666d61642d616e6772792d746f6d2d326a7976356f736c797934397a3764712e6769662665686b3d3433794e4e25326263447a6162665368626c63434c253262477a774f6f4d7059637272757130796c31743545757330253364"
+)
+
+];
+
+const correctGIFs = [
+
+fromHex(
+"68747470733a2f2f7777772e62696e672e636f6d2f74682f69642f4f47432e61383763323030333030353064303330656236313663333434383537393964313f723d30266f3d37267069643d312e3726726d3d33267275726c3d687474707325336125326625326667696664622e636f6d253266696d616765732532667468756d626e61696c2532666a657272792d616e642d7477656574792d66726f6d2d7468652d636172746f6f6e2d746f6d2d616e642d6a657272792d6172652d64616e63696e672d746f6765746865722d36396b396839743874397a30616430622e6769662665686b3d4d444f4a4e7566466d556e7a4c4e6e735566616c65347325326276354c552532625473684a53387251447345414273253364"
+),
+
+fromHex(
+"68747470733a2f2f7777772e62696e672e636f6d2f74682f69642f4f47432e30376437636532333066366433386531336330613139373238353134316666363f723d30266f3d37267069643d312e3726726d3d33267275726c3d687474707325336125326625326667696672696669632e636f6d25326677702d636f6e74656e7425326675706c6f616473253266323031352532663031253266546f6d2d44616e63696e672d576974682d50686f6e652e6769662665686b3d6b7576653944524f6373634525326675394b454f2532626d324a38627067584e6e724271784e74796167417a756630253364"
+),
+
+fromHex(
+"68747470733a2f2f7777772e62696e672e636f6d2f74682f69642f4f47432e39316464623837383331386166663261653139666139323631613838616161353f723d30266f3d37267069643d312e3726726d3d33267275726c3d687474707325336125326625326667696664622e636f6d253266696d616765732532667468756d626e61696c253266746f6d2d616e642d6a657272792d7468726f77696e672d666c6f776572732d63656c6562726174696f6e2d64616e63652d37726a6b6675346a7a39343566707a692e6769662665686b3d47637764514d2532624c4f707830755a357946523874495425326243693947674d56616258684c4d556a786c34253364"
+)
+
+];
+
+
+/* =========================================================
+   INITIAL STATE
+========================================================= */
+
+document.getElementById("idleBanner").src = idleURL;
+
+let score = 0;
+let answered = 0;
+let correctCount = 0;
+let streak = 0;
+
+const cards = [...document.querySelectorAll(".question-card")];
+
+
+/* =========================================================
+   ANSWER NORMALISATION
+========================================================= */
+
+function normaliseAnswer(value){
+
+    return value
+        .trim()
+        .toLowerCase()
+        .replace(/£/g,"")
+        .replace(/,/g,"")
+        .replace(/\s+/g," ");
+
+}
+
+
+/* =========================================================
+   CHECK INDIVIDUAL QUESTION
+========================================================= */
+
+function checkQuestion(button){
+
+    const card = button.closest(".question-card");
+    const input = card.querySelector(".answer-input");
+    const feedback = card.querySelector(".feedback");
+
+    if(!input.value.trim()){
+
+        feedback.textContent = "🤔 Jerry says: You need to enter an answer first!";
+        feedback.className = "feedback show bad";
+
+        card.classList.add("shake");
+
+        setTimeout(()=>{
+            card.classList.remove("shake");
+        },500);
+
+        return;
+    }
+
+    if(card.dataset.checked === "true"){
+        return;
+    }
+
+    const userAnswer = normaliseAnswer(input.value);
+    const correctAnswer = normaliseAnswer(card.dataset.answer);
+
+    if(userAnswer === correctAnswer){
+
+        card.dataset.checked = "true";
+        card.dataset.correct = "true";
+
+        score++;
+        correctCount++;
+        answered++;
+        streak++;
+
+        card.classList.add("correct");
+
+        feedback.textContent =
+            "🎉 CORRECT! Jerry is doing a victory dance!";
+        feedback.className = "feedback show good";
+
+        button.textContent = "✓ Correct!";
+
+        updateStats();
+
+        showFeedback(true);
+
+    }else{
+
+        card.dataset.checked = "true";
+        card.dataset.correct = "false";
+
+        answered++;
+        streak = 0;
+
+        card.classList.add("incorrect");
+
+        feedback.innerHTML =
+            `💥 Not quite! The correct answer is <strong>${card.dataset.answer}</strong>. Check your working and learn from the mistake!`;
+
+        feedback.className = "feedback show bad";
+
+        button.textContent = "✗ Checked";
+
+        updateStats();
+
+        showFeedback(false);
+    }
+
+}
+
+
+/* =========================================================
+   FEEDBACK MODAL
+========================================================= */
+
+function randomItem(arr){
+    return arr[Math.floor(Math.random()*arr.length)];
+}
+
+function showFeedback(isCorrect){
+
+    const modal = document.getElementById("feedbackModal");
+    const img = document.getElementById("feedbackGif");
+    const title = document.getElementById("modalTitle");
+    const message = document.getElementById("modalMessage");
+    const emoji = document.getElementById("modalEmoji");
+
+    if(isCorrect){
+
+        img.src = randomItem(correctGIFs);
+
+        title.textContent = "BOOM! Correct! 🎉";
+        emoji.textContent = "🏆";
+
+        const messages = [
+            "Jerry approves! That fraction was absolutely smashed.",
+            "Tom didn't see that one coming!",
+            "Excellent work! Keep the streak alive!",
+            "Cheese-powered mathematics! 🧀",
+            "Another fraction defeated!"
+        ];
+
+        message.textContent = randomItem(messages);
+
+    }else{
+
+        img.src = randomItem(incorrectGIFs);
+
+        title.textContent = "SPLAT! Not Quite! 💥";
+        emoji.textContent = "😵";
+
+        const messages = [
+            "Oops! Even Jerry makes mistakes. Check your working.",
+            "Tom got lucky this time. Try the next one!",
+            "Don't panic — mistakes help your brain learn.",
+            "That fraction escaped! Slow down and try the next challenge.",
+            "Use the Scratchpad and show your working."
+        ];
+
+        message.textContent = randomItem(messages);
+    }
+
+    modal.classList.add("show");
+}
+
+function closeModal(){
+    document.getElementById("feedbackModal").classList.remove("show");
+}
+
+
+/* =========================================================
+   STATISTICS
+========================================================= */
+
+function updateStats(){
+
+    document.getElementById("score").textContent = score;
+
+    document.getElementById("answered").textContent =
+        `${answered} / ${cards.length}`;
+
+    document.getElementById("streak").textContent =
+        `🔥 ${streak}`;
+
+    const accuracy =
+        answered === 0
+        ? 0
+        : Math.round((correctCount / answered) * 100);
+
+    document.getElementById("accuracy").textContent =
+        `${accuracy}%`;
+
+    document.getElementById("progress").style.width =
+        `${(answered/cards.length)*100}%`;
+}
+
+
+/* =========================================================
+   MASTER SUBMIT
+========================================================= */
+
+function submitQuiz(){
+
+    cards.forEach(card => {
+
+        if(card.dataset.checked !== "true"){
+
+            const button = card.querySelector(".check-btn");
+            const input = card.querySelector(".answer-input");
+
+            if(input.value.trim()){
+                checkQuestion(button);
+            }
+
+        }
+
+    });
+
+    setTimeout(()=>{
+
+        const totalChecked =
+            cards.filter(c => c.dataset.checked === "true").length;
+
+        if(totalChecked < cards.length){
+
+            alert(
+                "🧀 Jerry says: Answer every question before submitting the Grand Quiz!"
+            );
+
+            const firstUnanswered =
+                cards.find(c => c.dataset.checked !== "true");
+
+            if(firstUnanswered){
+                firstUnanswered.scrollIntoView({
+                    behavior:"smooth",
+                    block:"center"
+                });
+            }
+
+            return;
+        }
+
+        showResults();
+
+    },300);
+
+}
+
+
+/* =========================================================
+   FINAL RESULTS
+========================================================= */
+
+function showResults(){
+
+    const modal = document.getElementById("resultModal");
+
+    document.getElementById("finalScore").textContent =
+        `${score} / ${cards.length}`;
+
+    let stars = "";
+
+    const percentage =
+        Math.round((score/cards.length)*100);
+
+    if(percentage >= 90) stars = "★★★★★";
+    else if(percentage >= 75) stars = "★★★★☆";
+    else if(percentage >= 60) stars = "★★★☆☆";
+    else if(percentage >= 40) stars = "★★☆☆☆";
+    else stars = "★☆☆☆☆";
+
+    document.getElementById("finalStars").textContent = stars;
+
+    let message;
+
+    if(percentage === 100){
+        message = "🏆 PERFECT SCORE! Jerry has officially defeated Tom!";
+    }else if(percentage >= 80){
+        message = "🎉 Fantastic fraction skills! You're a fraction superstar!";
+    }else if(percentage >= 60){
+        message = "👏 Great job! A little more practice and you'll master fractions!";
+    }else if(percentage >= 40){
+        message = "💪 Good effort! Review the tricky areas and try again.";
+    }else{
+        message = "🧀 Every great mathematician starts somewhere. Let's practise!";
+    }
+
+    document.getElementById("finalMessage").textContent = message;
+
+    const reviewList = document.getElementById("reviewList");
+
+    reviewList.innerHTML = "";
+
+    cards.forEach((card,index)=>{
+
+        const item = document.createElement("div");
+
+        item.className = "review-item";
+
+        const correct = card.dataset.correct === "true";
+
+        item.innerHTML =
+            `${correct ? "✅" : "❌"}
+             <strong>Question ${index+1}</strong> —
+             ${correct ? "Correct" : `Correct answer: ${card.dataset.answer}`}`;
+
+        reviewList.appendChild(item);
+
+    });
+
+    modal.classList.add("show");
+}
+
+function closeResult(){
+    document.getElementById("resultModal").classList.remove("show");
+}
+
+
+/* =========================================================
+   RESET QUIZ
+========================================================= */
+
+function resetQuiz(){
+
+    score = 0;
+    answered = 0;
+    correctCount = 0;
+    streak = 0;
+
+    cards.forEach(card=>{
+
+        delete card.dataset.checked;
+        delete card.dataset.correct;
+
+        card.classList.remove("correct","incorrect");
+
+        const input = card.querySelector(".answer-input");
+        const button = card.querySelector(".check-btn");
+        const feedback = card.querySelector(".feedback");
+
+        input.value = "";
+
+        button.textContent = "Check Answer ✓";
+
+        feedback.className = "feedback";
+        feedback.textContent = "";
+
+    });
+
+    closeResult();
+    updateStats();
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+}
+
+
+/* =========================================================
+   JERRY'S SCRATCHPAD
+========================================================= */
+
+const canvas = document.getElementById("scratchCanvas");
+const ctx = canvas.getContext("2d");
+
+let drawing = false;
+let tool = "pen";
+let currentColor = "#111111";
+let lineWidth = 4;
+
+function resizeCanvas(){
+
+    const rect = canvas.getBoundingClientRect();
+
+    const oldCanvas = document.createElement("canvas");
+
+    if(canvas.width && canvas.height){
+        oldCanvas.width = canvas.width;
+        oldCanvas.height = canvas.height;
+        oldCanvas.getContext("2d").drawImage(canvas,0,0);
+    }
+
+    const dpr = window.devicePixelRatio || 1;
+
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+
+    if(oldCanvas.width){
+        ctx.drawImage(
+            oldCanvas,
+            0,
+            0,
+            oldCanvas.width,
+            oldCanvas.height,
+            0,
+            0,
+            rect.width,
+            rect.height
+        );
+    }
+}
+
+function openScratch(){
+
+    document.getElementById("scratchModal").classList.add("show");
+
+    setTimeout(()=>{
+        resizeCanvas();
+    },50);
+}
+
+function closeScratch(){
+    document.getElementById("scratchModal").classList.remove("show");
+}
+
+window.addEventListener("resize",()=>{
+
+    if(document.getElementById("scratchModal").classList.contains("show")){
+        resizeCanvas();
+    }
+
+});
+
+
+function getPointerPosition(e){
+
+    const rect = canvas.getBoundingClientRect();
+
+    if(e.touches){
+
+        return {
+            x:e.touches[0].clientX - rect.left,
+            y:e.touches[0].clientY - rect.top
+        };
+
+    }
+
+    return {
+        x:e.clientX - rect.left,
+        y:e.clientY - rect.top
+    };
+}
+
+
+function startDrawing(e){
+
+    e.preventDefault();
+
+    drawing = true;
+
+    const pos = getPointerPosition(e);
+
+    ctx.beginPath();
+    ctx.moveTo(pos.x,pos.y);
+}
+
+
+function draw(e){
+
+    if(!drawing) return;
+
+    e.preventDefault();
+
+    const pos = getPointerPosition(e);
+
+    ctx.lineWidth =
+        tool === "eraser" ? 22 : lineWidth;
+
+    ctx.strokeStyle =
+        tool === "eraser" ? "#ffffff" : currentColor;
+
+    ctx.lineTo(pos.x,pos.y);
+    ctx.stroke();
+}
+
+
+function stopDrawing(e){
+
+    if(!drawing) return;
+
+    e.preventDefault();
+
+    drawing = false;
+
+    ctx.closePath();
+}
+
+
+canvas.addEventListener("mousedown",startDrawing);
+canvas.addEventListener("mousemove",draw);
+canvas.addEventListener("mouseup",stopDrawing);
+canvas.addEventListener("mouseleave",stopDrawing);
+
+canvas.addEventListener("touchstart",startDrawing,{passive:false});
+canvas.addEventListener("touchmove",draw,{passive:false});
+canvas.addEventListener("touchend",stopDrawing,{passive:false});
+
+
+function setTool(newTool){
+
+    tool = newTool;
+
+    document.getElementById("penTool").classList.toggle(
+        "active",
+        tool === "pen"
+    );
+
+    document.getElementById("eraserTool").classList.toggle(
+        "active",
+        tool === "eraser"
+    );
+}
+
+
+function setColor(color){
+
+    currentColor = color;
+
+    setTool("pen");
+}
+
+
+function clearCanvas(){
+
+    const rect = canvas.getBoundingClientRect();
+
+    ctx.clearRect(
+        0,
+        0,
+        rect.width,
+        rect.height
+    );
+}
+
+
+/* =========================================================
+   KEYBOARD SUPPORT
+========================================================= */
+
+document.addEventListener("keydown",e=>{
+
+    if(e.key === "Escape"){
+
+        closeModal();
+        closeScratch();
+        closeResult();
+
+    }
+
+});
+
+
+/* =========================================================
+   INITIALISE
+========================================================= */
+
+updateStats();
+
+</script>
+
+</body>
+</html>

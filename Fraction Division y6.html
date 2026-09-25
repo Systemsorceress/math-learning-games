@@ -1,0 +1,3372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Tom & Jerry Fraction Division Detective</title>
+
+<style>
+
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@600;700;800;900&display=swap');
+
+:root {
+    --bg: #fff8df;
+    --card: #ffffff;
+
+    --tom-blue: #4d83c6;
+    --tom-dark: #315d91;
+    --blue-light: #edf5ff;
+
+    --cheese: #ffd84d;
+    --cheese-dark: #e4b72e;
+
+    --red: #e64d4d;
+    --red-dark: #b93636;
+
+    --green: #35a66d;
+    --green-light: #e9f8ef;
+
+    --purple: #6756d8;
+    --purple-dark: #4e3db1;
+    --purple-light: #efecff;
+
+    --text: #26344c;
+    --muted: #7c8799;
+
+    --border: #e8dfcf;
+
+    --shadow:
+        0 14px 35px rgba(47, 53, 75, .11),
+        0 5px 12px rgba(47, 53, 75, .06);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+
+    font-family: "Nunito", sans-serif;
+
+    color: var(--text);
+
+    background:
+        radial-gradient(
+            circle at 5% 5%,
+            #fff0a5 0,
+            transparent 25%
+        ),
+        radial-gradient(
+            circle at 95% 90%,
+            #dfeaff 0,
+            transparent 28%
+        ),
+        var(--bg);
+}
+
+button,
+input {
+    font-family: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+.app {
+    width: min(1150px, calc(100% - 28px));
+
+    margin: auto;
+
+    padding: 24px 0 50px;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 20px;
+
+    margin-bottom: 18px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+}
+
+.logo {
+    width: 64px;
+    height: 64px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 20px;
+
+    background: var(--cheese);
+
+    font-size: 34px;
+
+    box-shadow:
+        0 6px 0 var(--cheese-dark);
+}
+
+.title {
+    margin: 0;
+
+    font-family: "Baloo 2", sans-serif;
+
+    font-size: 34px;
+
+    line-height: 1;
+}
+
+.subtitle {
+    margin-top: 6px;
+
+    color: var(--muted);
+
+    font-size: 14px;
+
+    font-weight: 800;
+}
+
+.stats {
+    display: flex;
+
+    gap: 8px;
+}
+
+.stat {
+    padding: 9px 13px;
+
+    background: white;
+
+    border: 2px solid var(--border);
+
+    border-radius: 14px;
+
+    font-size: 12px;
+
+    font-weight: 900;
+
+    box-shadow:
+        0 4px 10px rgba(0,0,0,.04);
+}
+
+.stat span {
+    color: var(--tom-dark);
+
+    font-size: 17px;
+}
+
+
+/* =========================================
+   PROGRESS
+========================================= */
+
+.progress-card {
+    padding: 13px;
+
+    margin-bottom: 18px;
+
+    background: white;
+
+    border: 2px solid var(--border);
+
+    border-radius: 20px;
+
+    box-shadow: var(--shadow);
+}
+
+.progress {
+    display: grid;
+
+    grid-template-columns:
+        repeat(6, 1fr);
+
+    gap: 7px;
+}
+
+.progress-step {
+    padding: 11px 4px;
+
+    text-align: center;
+
+    border-radius: 13px;
+
+    background: #f2f0eb;
+
+    color: #a3a7b0;
+
+    font-size: 11px;
+
+    font-weight: 900;
+}
+
+.progress-step.active {
+    background: var(--blue-light);
+
+    color: var(--tom-dark);
+}
+
+.progress-step.complete {
+    background: var(--green-light);
+
+    color: var(--green);
+}
+
+.progress-step.locked {
+    opacity: .45;
+}
+
+
+/* =========================================
+   MAIN LAYOUT
+========================================= */
+
+.layout {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1.5fr)
+        minmax(280px, .75fr);
+
+    gap: 18px;
+}
+
+.card {
+    background: var(--card);
+
+    border: 2px solid var(--border);
+
+    border-radius: 25px;
+
+    padding: 24px;
+
+    box-shadow: var(--shadow);
+}
+
+.practice {
+    min-height: 650px;
+}
+
+
+/* =========================================
+   CHARACTER IMAGE
+========================================= */
+
+.character-panel {
+    width: 100%;
+
+    min-height: 350px;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    padding: 16px;
+
+    margin-bottom: 20px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #fff8d6,
+            #eef6ff
+        );
+
+    border: 3px solid var(--cheese);
+
+    border-radius: 23px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 7px 0 rgba(228,183,46,.32),
+        0 12px 25px rgba(50,43,88,.09);
+}
+
+.character-panel img {
+    display: block;
+
+    width: 100%;
+
+    height: 350px;
+
+    max-width: 100%;
+
+    object-fit: contain;
+
+    object-position: center;
+
+    border-radius: 17px;
+}
+
+
+/* =========================================
+   STEP TAG
+========================================= */
+
+.step-tag {
+    display: inline-block;
+
+    padding: 7px 12px;
+
+    background: var(--tom-blue);
+
+    color: white;
+
+    border-radius: 11px;
+
+    font-size: 12px;
+
+    font-weight: 900;
+
+    text-transform: uppercase;
+
+    box-shadow:
+        0 4px 0 var(--tom-dark);
+}
+
+.practice-title {
+    margin: 12px 0 0;
+
+    font-family: "Baloo 2";
+
+    font-size: 25px;
+}
+
+
+/* =========================================
+   QUESTION
+========================================= */
+
+.question {
+    min-height: 110px;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 13px;
+
+    margin: 4px 0 10px;
+
+    font-family: "Baloo 2";
+
+    font-size: 45px;
+
+    font-weight: 800;
+}
+
+
+/* =========================================
+   FRACTIONS
+========================================= */
+
+.fraction {
+    display: inline-flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    vertical-align: middle;
+
+    min-width: 60px;
+
+    line-height: 1;
+}
+
+.fraction-top {
+    padding: 0 9px 5px;
+
+    border-bottom: 3px solid currentColor;
+}
+
+.fraction-bottom {
+    padding-top: 5px;
+}
+
+
+/* =========================================
+   PROMPTS
+========================================= */
+
+.prompt {
+    text-align: center;
+
+    margin: 10px 0 18px;
+
+    font-size: 19px;
+
+    font-weight: 900;
+}
+
+.explanation {
+    max-width: 680px;
+
+    margin: 0 auto 18px;
+
+    padding: 14px 17px;
+
+    background: var(--blue-light);
+
+    color: #385d8f;
+
+    border-radius: 15px;
+
+    text-align: center;
+
+    font-size: 14px;
+
+    line-height: 1.55;
+
+    border: 1px solid #d5e5fa;
+}
+
+
+/* =========================================
+   TYPING AREA
+========================================= */
+
+.typing-area {
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 12px;
+
+    flex-wrap: wrap;
+
+    margin: 20px 0;
+}
+
+.big-input {
+    width: 105px;
+
+    height: 59px;
+
+    border: 3px solid #ddd7ca;
+
+    border-radius: 15px;
+
+    background: white;
+
+    color: var(--text);
+
+    text-align: center;
+
+    font-size: 25px;
+
+    font-weight: 900;
+
+    outline: none;
+
+    transition: .15s;
+}
+
+.big-input:focus {
+    border-color: var(--tom-blue);
+
+    box-shadow:
+        0 0 0 4px #e4efff;
+}
+
+.small-input {
+    width: 78px;
+
+    height: 50px;
+
+    border: 3px solid #ddd7ca;
+
+    border-radius: 12px;
+
+    text-align: center;
+
+    font-size: 22px;
+
+    font-weight: 900;
+
+    outline: none;
+}
+
+.small-input:focus {
+    border-color: var(--tom-blue);
+
+    box-shadow:
+        0 0 0 4px #e4efff;
+}
+
+.input-fraction {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+}
+
+.input-bar {
+    width: 78px;
+
+    border-top: 3px solid var(--text);
+
+    margin: 4px 0;
+}
+
+
+/* =========================================
+   EQUATION
+========================================= */
+
+.equation {
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 13px;
+
+    flex-wrap: wrap;
+
+    margin: 20px 0;
+
+    font-family: "Baloo 2";
+
+    font-size: 29px;
+}
+
+
+/* =========================================
+   BUTTON
+========================================= */
+
+.check-button {
+    display: block;
+
+    margin: 20px auto 0;
+
+    padding: 14px 25px;
+
+    border: none;
+
+    border-radius: 14px;
+
+    background: var(--red);
+
+    color: white;
+
+    font-size: 15px;
+
+    font-weight: 900;
+
+    box-shadow:
+        0 5px 0 var(--red-dark);
+
+    transition: .15s;
+}
+
+.check-button:hover {
+    transform: translateY(-2px);
+}
+
+.check-button:active {
+    transform: translateY(3px);
+
+    box-shadow:
+        0 2px 0 var(--red-dark);
+}
+
+
+/* =========================================
+   FEEDBACK
+========================================= */
+
+.feedback {
+    min-height: 35px;
+
+    margin-top: 17px;
+
+    text-align: center;
+
+    font-size: 15px;
+
+    font-weight: 900;
+}
+
+.feedback.good {
+    color: var(--green);
+}
+
+.feedback.bad {
+    color: var(--red);
+}
+
+
+/* =========================================
+   HINT
+========================================= */
+
+.hint {
+    margin-top: 17px;
+
+    padding: 13px 15px;
+
+    background: #fff8d6;
+
+    border: 2px solid #f0dda0;
+
+    border-radius: 14px;
+
+    color: #705b17;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+
+    text-align: center;
+}
+
+
+/* =========================================
+   SIDE PANEL
+========================================= */
+
+.side h2 {
+    margin: 0 0 14px;
+
+    font-family: "Baloo 2";
+
+    font-size: 25px;
+}
+
+.rule-card {
+    padding: 18px;
+
+    background: #f7f5f0;
+
+    border-radius: 17px;
+
+    margin-bottom: 15px;
+}
+
+.rule-title {
+    color: var(--tom-dark);
+
+    text-align: center;
+
+    font-size: 17px;
+
+    font-weight: 900;
+
+    margin-bottom: 10px;
+}
+
+.rule-item {
+    display: flex;
+
+    gap: 9px;
+
+    align-items: center;
+
+    margin: 10px 0;
+
+    font-weight: 800;
+}
+
+.rule-number {
+    width: 29px;
+
+    height: 29px;
+
+    flex-shrink: 0;
+
+    display: grid;
+
+    place-items: center;
+
+    border-radius: 50%;
+
+    background: var(--tom-blue);
+
+    color: white;
+
+    font-size: 13px;
+}
+
+.tip {
+    padding: 16px;
+
+    background: var(--blue-light);
+
+    color: #3d5d8c;
+
+    border-radius: 17px;
+
+    font-size: 14px;
+
+    line-height: 1.55;
+
+    margin-bottom: 15px;
+}
+
+.example {
+    padding: 16px;
+
+    background: #fff8d8;
+
+    border-radius: 17px;
+
+    font-weight: 800;
+
+    line-height: 2;
+}
+
+
+/* =========================================
+   FINAL
+========================================= */
+
+.final-box {
+    padding: 22px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #fff4b7,
+            #ffffff
+        );
+
+    border: 3px solid var(--cheese);
+
+    border-radius: 20px;
+
+    text-align: center;
+}
+
+.final-label {
+    font-weight: 900;
+}
+
+.final-answer {
+    margin: 12px 0;
+
+    font-family: "Baloo 2";
+
+    font-size: 45px;
+
+    color: var(--tom-dark);
+}
+
+
+/* =========================================
+   RESULT
+========================================= */
+
+.result {
+    margin-top: 20px;
+
+    padding: 45px;
+
+    text-align: center;
+}
+
+.result-icon {
+    font-size: 65px;
+}
+
+.result h2 {
+    margin: 5px 0;
+
+    font-family: "Baloo 2";
+
+    font-size: 40px;
+}
+
+
+/* =========================================
+   MEDIA MODAL
+========================================= */
+
+.media-modal {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 1000;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    padding: 20px;
+
+    background: rgba(24,31,46,.72);
+
+    backdrop-filter: blur(5px);
+}
+
+.media-box {
+    width: min(480px, 100%);
+
+    padding: 20px;
+
+    background: white;
+
+    border-radius: 25px;
+
+    text-align: center;
+
+    box-shadow:
+        0 25px 70px rgba(0,0,0,.35);
+
+    animation: modalPop .3s ease;
+}
+
+.media-title {
+    margin-bottom: 12px;
+
+    font-family: "Baloo 2";
+
+    font-size: 27px;
+
+    font-weight: 900;
+}
+
+.media-box img {
+    display: block;
+
+    width: 100%;
+
+    max-width: 390px;
+
+    height: 270px;
+
+    object-fit: contain;
+
+    margin: auto;
+
+    border-radius: 17px;
+
+    background: #f7f7f7;
+}
+
+.close-modal {
+    margin-top: 15px;
+
+    padding: 11px 23px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background: var(--tom-blue);
+
+    color: white;
+
+    font-weight: 900;
+
+    box-shadow:
+        0 4px 0 var(--tom-dark);
+}
+
+
+/* =========================================
+   ANIMATIONS
+========================================= */
+
+.shake {
+    animation: shake .3s;
+}
+
+.pop {
+    animation: pop .35s;
+}
+
+@keyframes shake {
+
+    25% {
+        transform: translateX(-7px);
+    }
+
+    50% {
+        transform: translateX(7px);
+    }
+
+    75% {
+        transform: translateX(-4px);
+    }
+
+}
+
+@keyframes pop {
+
+    50% {
+        transform: scale(1.04);
+    }
+
+}
+
+@keyframes modalPop {
+
+    from {
+        transform: scale(.8);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+}
+
+
+/* =========================================
+   HIDDEN
+========================================= */
+
+.hidden {
+    display: none !important;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media(max-width: 850px) {
+
+    .layout {
+        grid-template-columns: 1fr;
+    }
+
+    .side {
+        order: 2;
+    }
+
+    .stats {
+        display: none;
+    }
+
+}
+
+@media(max-width: 560px) {
+
+    .app {
+        width: min(100% - 14px, 1150px);
+    }
+
+    .card {
+        padding: 17px;
+    }
+
+    .title {
+        font-size: 27px;
+    }
+
+    .question {
+        font-size: 36px;
+    }
+
+    .character-panel {
+        min-height: 280px;
+
+        padding: 9px;
+    }
+
+    .character-panel img {
+        height: 270px;
+
+        min-height: 230px;
+    }
+
+    .progress-step {
+        font-size: 8px;
+
+        padding: 9px 2px;
+    }
+
+    .big-input {
+        width: 84px;
+    }
+
+    .result {
+        padding: 25px;
+    }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+<div class="app">
+
+
+<!-- =========================================
+     HEADER
+========================================= -->
+
+<header class="header">
+
+    <div class="brand">
+
+        <div class="logo">
+            🧀
+        </div>
+
+        <div>
+
+            <h1 class="title">
+                Fraction Division Detective
+            </h1>
+
+            <div class="subtitle">
+                Type every step — don't let Tom solve it for you!
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="stats">
+
+        <div class="stat">
+            ⭐ Streak
+            <span id="streak">0</span>
+        </div>
+
+        <div class="stat">
+            🎯
+            <span id="accuracy">0%</span>
+        </div>
+
+        <div class="stat">
+            🧩
+            <span id="questionNumber">1</span>/10
+        </div>
+
+    </div>
+
+</header>
+
+
+<!-- =========================================
+     PROGRESS
+========================================= -->
+
+<div class="progress-card">
+
+    <div class="progress">
+
+        <div id="p1" class="progress-step active">
+            ① Keep
+        </div>
+
+        <div id="p2" class="progress-step locked">
+            ② Change
+        </div>
+
+        <div id="p3" class="progress-step locked">
+            ③ Flip
+        </div>
+
+        <div id="p4" class="progress-step locked">
+            ④ Multiply
+        </div>
+
+        <div id="p5" class="progress-step locked">
+            ⑤ GCF
+        </div>
+
+        <div id="p6" class="progress-step locked">
+            ⭐ Final
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================
+     MAIN
+========================================= -->
+
+<div class="layout">
+
+
+<main class="card practice">
+
+
+<!-- =========================================
+     CHARACTER
+========================================= -->
+
+<div class="character-panel">
+
+    <img
+        src="https://tse1.mm.bing.net/th/id/OIP.14-hvJPv42ItAq3ytNzXuwHaEK?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
+        alt="Tom and Jerry thinking"
+    >
+
+</div>
+
+
+<div
+    id="stepLabel"
+    class="step-tag">
+
+    STEP 1
+
+</div>
+
+
+<div class="practice-title">
+    Solve the problem step by step
+</div>
+
+
+<div
+    id="question"
+    class="question">
+</div>
+
+
+<div id="stage">
+</div>
+
+
+<div
+    id="feedback"
+    class="feedback">
+</div>
+
+
+</main>
+
+
+<!-- =========================================
+     TEACHING PANEL
+========================================= -->
+
+<aside class="card side">
+
+    <h2>
+        🧠 Your Detective Rules
+    </h2>
+
+
+    <div class="rule-card">
+
+        <div class="rule-title">
+            KEEP → CHANGE → FLIP
+        </div>
+
+
+        <div class="rule-item">
+
+            <div class="rule-number">1</div>
+
+            Keep the first fraction.
+
+        </div>
+
+
+        <div class="rule-item">
+
+            <div class="rule-number">2</div>
+
+            Change ÷ into ×.
+
+        </div>
+
+
+        <div class="rule-item">
+
+            <div class="rule-number">3</div>
+
+            Flip the second fraction.
+
+        </div>
+
+
+        <div class="rule-item">
+
+            <div class="rule-number">4</div>
+
+            Multiply top × top and bottom × bottom.
+
+        </div>
+
+
+        <div class="rule-item">
+
+            <div class="rule-number">5</div>
+
+            Find the GCF and simplify.
+
+        </div>
+
+    </div>
+
+
+    <div class="tip">
+
+        🔄 <b>Reciprocal</b> means switching
+        the numerator and denominator.
+
+        <br><br>
+
+        ⚠️ Never flip the first fraction.
+
+        <br><br>
+
+        Only flip the
+        <b>second fraction</b>.
+
+    </div>
+
+
+    <div class="example">
+
+        <b>Worked Example</b>
+
+        <br>
+
+        2/3 ÷ 2/4
+
+        <br>
+
+        ↓
+
+        <br>
+
+        2/3 × 4/2
+
+        <br>
+
+        ↓
+
+        <br>
+
+        8/6
+
+        <br>
+
+        ↓
+
+        <br>
+
+        4/3
+
+    </div>
+
+</aside>
+
+</div>
+
+
+<!-- =========================================
+     RESULTS
+========================================= -->
+
+<div
+    id="result"
+    class="card result hidden">
+</div>
+
+</div>
+
+
+<!-- =========================================
+     MEDIA MODAL
+========================================= -->
+
+<div
+    id="mediaModal"
+    class="media-modal hidden">
+
+    <div class="media-box">
+
+        <div
+            id="mediaTitle"
+            class="media-title">
+        </div>
+
+        <img
+            id="mediaImage"
+            src=""
+            alt="Tom and Jerry reaction">
+
+        <div
+            id="mediaMessage">
+        </div>
+
+        <button
+            class="close-modal"
+            onclick="closeMediaModal()">
+
+            Continue →
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+
+/* =====================================================
+   QUESTIONS
+===================================================== */
+
+const questions = [
+
+    {a:2,b:3,c:2,d:4},
+    {a:1,b:2,c:2,d:3},
+    {a:2,b:3,c:1,d:4},
+
+    {a:3,b:4,c:2,d:5},
+    {a:2,b:5,c:3,d:7},
+    {a:4,b:5,c:2,d:3},
+    {a:3,b:8,c:1,d:2},
+    {a:5,b:6,c:2,d:3},
+    {a:2,b:7,c:4,d:5},
+    {a:3,b:5,c:6,d:7}
+
+];
+
+
+/* =====================================================
+   FEEDBACK GIFS
+===================================================== */
+
+const incorrectGifs = [
+
+  "https://www.bing.com/th/id/OGC.7c517e4eec6eea24f8296c77fafb51d6?r=0&o=7&pid=1.7&rm=3&rurl=https%3a%2f%2fgifdb.com%2fimages%2fhigh%2ftom-and-jerry-blowing-dynamite-fail-v4kgczzwvxt1c4vw.gif&ehk=D1iBS5vmmy1jASh%2bhbrfXU8iOlKShm%2bFpNUr3hEy0cc%3d",
+
+  "https://www.bing.com/th/id/OGC.f829179bf025e27f9d64c3a4f18d7f5a?r=0&o=7&pid=1.7&rm=3&rurl=https%3a%2f%2fgifdb.com%2fimages%2fthumbnail%2ftom-hilarious-laugh-ffg5y1qo9rx6adlx.gif&ehk=fj3LP7Zlfxwft8H46JS2tB8dz9wLMYfkmkFUv%2bDwBQM%3d",
+
+  "https://www.bing.com/th/id/OGC.98ade1e386db5ccf2fa7e01cee577943?r=0&o=7&pid=1.7&rm=3&rurl=https%3a%2f%2fgifdb.com%2fimages%2fhigh%2fmad-angry-tom-2jyv5oslyy49z7dq.gif&ehk=43yNN%2bcDzabfShblcCL%2bGzwOoMpYcrruq0yl1t5Eus0%3d"
+
+];
+
+const correctGifs = [
+
+  "https://www.bing.com/th/id/OGC.4ac9da7f26d2ff9ef95748aa45eafb97?r=0&o=7&pid=1.7&rm=3&rurl=https%3a%2f%2fi.pinimg.com%2foriginals%2ff7%2f57%2f5f%2ff7575feb9c7f7afb4430bcead1cfa7d8.gif&ehk=ofUK1lx%2fd%2bTrJTbw2tga%2frhzB6QXgfdYd96dbTQWXfY%3d",
+
+  /* Corrected the malformed %u in the supplied URL */
+  "https://www.bing.com/th/id/OGC.a87c20030050d030eb616c34485799d1?r=0&o=7&pid=1.7&rm=3&rurl=https%3a%2f%2fgifdb.com%2fimages%2fthumbnail%2fjerry-and-tweety-from-the-cartoon-tom-and-jerry-are-dancing-together-69k9h9t8t9z0ad0b.gif&ehk=MDOJNufFmUnzLNnsUfale4s%2bv5LU%2bTshJS8rQDsEABs%3d",
+
+  "https://www.bing.com/th/id/OGC.2d6e43ce3eddb36bbe4b98fa42582a9b?r=0&o=7&pid=1.7&rm=3&rurl=https%3a%2f%2fi.pinimg.com%2foriginals%2f7e%2fa6%2f5a%2f7ea65a079d7ea7c325b705641906be2c.gif&ehk=0uiQ5OyXcK4nhhE530%2bpLu6ZBR0GXlsVHuOMgto8k88%3d"
+
+];
+
+/* =====================================================
+   GAME STATE
+===================================================== */
+
+let game = {
+
+    questionIndex: 0,
+
+    step: 1,
+
+    attempts: 0,
+
+    correctSteps: 0,
+
+    streak: 0,
+
+    bestStreak: 0,
+
+    totalQuestions: 10
+
+};
+
+
+/* =====================================================
+   HELPERS
+===================================================== */
+
+function $(id) {
+    return document.getElementById(id);
+}
+
+
+function currentQuestion() {
+
+    return questions[
+        game.questionIndex
+    ];
+
+}
+
+
+function gcd(a,b) {
+
+    a = Math.abs(a);
+    b = Math.abs(b);
+
+    while(b !== 0) {
+
+        let temp = b;
+
+        b = a % b;
+
+        a = temp;
+
+    }
+
+    return a || 1;
+
+}
+
+
+function simplified(n,d) {
+
+    const divisor = gcd(n,d);
+
+    return {
+
+        n:n/divisor,
+        d:d/divisor
+
+    };
+
+}
+
+
+function fraction(n,d) {
+
+    return `
+
+        <span class="fraction">
+
+            <span class="fraction-top">
+                ${n}
+            </span>
+
+            <span class="fraction-bottom">
+                ${d}
+            </span>
+
+        </span>
+
+    `;
+
+}
+
+
+/* =====================================================
+   RANDOM GIF
+===================================================== */
+
+function randomGif(array) {
+
+    return array[
+        Math.floor(
+            Math.random() * array.length
+        )
+    ];
+
+}
+
+
+/* =====================================================
+   MEDIA MODAL
+===================================================== */
+
+function showMedia(type) {
+
+    const isCorrect =
+        type === "correct";
+
+    const gif =
+        isCorrect
+        ? randomGif(correctGifs)
+        : randomGif(incorrectGifs);
+
+
+    $("mediaImage").src = gif;
+
+
+    if(isCorrect) {
+
+        $("mediaTitle").textContent =
+            "🎉 BOOM! Correct!";
+
+        $("mediaMessage").innerHTML =
+            "Great detective work! Keep going!";
+
+    }
+
+    else {
+
+        $("mediaTitle").textContent =
+            "💥 OOPS!";
+
+        $("mediaMessage").innerHTML =
+            "Don't give up! Read the clue and try again.";
+
+    }
+
+
+    $("mediaModal").classList.remove(
+        "hidden"
+    );
+
+}
+
+
+function closeMediaModal() {
+
+    $("mediaModal").classList.add(
+        "hidden"
+    );
+
+}
+
+
+/* =====================================================
+   STATS
+===================================================== */
+
+function updateStats() {
+
+    $("streak").textContent =
+        game.streak;
+
+
+    $("questionNumber").textContent =
+        Math.min(
+            game.questionIndex + 1,
+            game.totalQuestions
+        );
+
+
+    const accuracy =
+        game.attempts === 0
+        ? 0
+        : Math.round(
+            game.correctSteps /
+            game.attempts *
+            100
+        );
+
+
+    $("accuracy").textContent =
+        accuracy + "%";
+
+}
+
+
+/* =====================================================
+   PROGRESS
+===================================================== */
+
+function updateProgress() {
+
+    for(let i=1;i<=6;i++) {
+
+        const item =
+            $("p" + i);
+
+        item.className =
+            "progress-step";
+
+
+        if(i < game.step) {
+
+            item.classList.add(
+                "complete"
+            );
+
+        }
+
+        else if(i === game.step) {
+
+            item.classList.add(
+                "active"
+            );
+
+        }
+
+        else {
+
+            item.classList.add(
+                "locked"
+            );
+
+        }
+
+    }
+
+}
+
+
+/* =====================================================
+   FEEDBACK TEXT
+===================================================== */
+
+function showFeedback(message,type) {
+
+    $("feedback").textContent =
+        message;
+
+    $("feedback").className =
+        "feedback " + type;
+
+}
+
+
+/* =====================================================
+   RENDER
+===================================================== */
+
+function render() {
+
+    updateStats();
+
+    updateProgress();
+
+
+    const q =
+        currentQuestion();
+
+
+    $("question").innerHTML = `
+
+        ${fraction(q.a,q.b)}
+
+        <span>÷</span>
+
+        ${fraction(q.c,q.d)}
+
+    `;
+
+
+    $("feedback").textContent = "";
+
+    $("feedback").className =
+        "feedback";
+
+
+    if(game.step === 1)
+        renderStep1();
+
+    else if(game.step === 2)
+        renderStep2();
+
+    else if(game.step === 3)
+        renderStep3();
+
+    else if(game.step === 4)
+        renderStep4();
+
+    else if(game.step === 5)
+        renderStep5();
+
+    else
+        renderFinal();
+
+}
+
+
+/* =====================================================
+   STEP 1
+   KEEP + CHANGE
+===================================================== */
+
+function renderStep1() {
+
+    const q =
+        currentQuestion();
+
+
+    $("stepLabel").textContent =
+        "STEP 1 — CHANGE ÷ INTO ×";
+
+
+    let instruction;
+
+
+    if(game.questionIndex < 3) {
+
+        instruction = `
+
+            <div class="explanation">
+
+                <b>Guided Practice</b>
+
+                <br><br>
+
+                We are going to use:
+
+                <b>KEEP → CHANGE → FLIP</b>
+
+                <br><br>
+
+                Keep both fractions the same.
+
+                <br>
+
+                Only change the division sign
+                into multiplication.
+
+            </div>
+
+        `;
+
+    }
+
+    else {
+
+        instruction = `
+
+            <div class="explanation">
+
+                Remember:
+
+                <b>KEEP</b> the first fraction.
+
+                Then <b>CHANGE</b> ÷ into ×.
+
+            </div>
+
+        `;
+
+    }
+
+
+    $("stage").innerHTML = `
+
+        <div class="prompt">
+
+            What symbol replaces ÷?
+
+        </div>
+
+        ${instruction}
+
+
+        <div class="typing-area">
+
+            ${fraction(q.a,q.b)}
+
+            <input
+                id="operatorInput"
+                class="big-input"
+                maxlength="1"
+                placeholder="?">
+
+            ${fraction(q.c,q.d)}
+
+        </div>
+
+
+        <div class="hint">
+
+            💡 Type <b>×</b>.
+
+            You can also type
+            <b>x</b> or <b>*</b>.
+
+        </div>
+
+
+        <button
+            class="check-button"
+            onclick="checkStep1()">
+
+            Check Step 1
+
+        </button>
+
+    `;
+
+
+    focusInput("operatorInput");
+
+}
+
+
+function checkStep1() {
+
+    const answer =
+        $("operatorInput").value.trim();
+
+
+    game.attempts++;
+
+
+    if(
+        answer === "×" ||
+        answer === "x" ||
+        answer === "*"
+    ) {
+
+        game.correctSteps++;
+
+        game.step = 2;
+
+        game.streak++;
+
+        game.bestStreak =
+            Math.max(
+                game.bestStreak,
+                game.streak
+            );
+
+        updateStats();
+
+        showMedia("correct");
+
+
+        setTimeout(() => {
+
+            closeMediaModal();
+
+            render();
+
+        },900);
+
+    }
+
+    else {
+
+        game.streak = 0;
+
+        $("operatorInput")
+            .classList.add("shake");
+
+        showFeedback(
+            "🤔 Remember: change ÷ into ×.",
+            "bad"
+        );
+
+        updateStats();
+
+        showMedia("incorrect");
+
+    }
+
+}
+
+
+/* =====================================================
+   STEP 2
+   RECIPROCAL
+===================================================== */
+
+function renderStep2() {
+
+    const q =
+        currentQuestion();
+
+
+    $("stepLabel").textContent =
+        "STEP 2 — TAKE THE RECIPROCAL";
+
+
+    let explanation;
+
+
+    if(game.questionIndex < 3) {
+
+        explanation = `
+
+            <div class="explanation">
+
+                <b>Guided Practice</b>
+
+                <br><br>
+
+                The second fraction is:
+
+                <br><br>
+
+                ${fraction(q.c,q.d)}
+
+                <br><br>
+
+                To find its reciprocal,
+
+                <b>FLIP the fraction.</b>
+
+                <br>
+
+                The numerator becomes
+                the denominator.
+
+                <br>
+
+                The denominator becomes
+                the numerator.
+
+            </div>
+
+        `;
+
+    }
+
+    else {
+
+        explanation = `
+
+            <div class="explanation">
+
+                Find the reciprocal of the
+                <b>second fraction</b>.
+
+            </div>
+
+        `;
+
+    }
+
+
+    $("stage").innerHTML = `
+
+        <div class="prompt">
+
+            Type the reciprocal of
+            the second fraction.
+
+        </div>
+
+
+        ${explanation}
+
+
+        <div class="equation">
+
+            ${fraction(q.a,q.b)}
+
+            ×
+
+            <div class="input-fraction">
+
+                <input
+                    id="reciprocalTop"
+                    class="small-input"
+                    type="number"
+                    placeholder="?">
+
+                <div class="input-bar"></div>
+
+                <input
+                    id="reciprocalBottom"
+                    class="small-input"
+                    type="number"
+                    placeholder="?">
+
+            </div>
+
+        </div>
+
+
+        <div class="hint">
+
+            🔄 Flip:
+
+            <b>${q.c}/${q.d}</b>
+
+            →
+
+            <b>${q.d}/${q.c}</b>
+
+        </div>
+
+
+        <button
+            class="check-button"
+            onclick="checkStep2()">
+
+            Check Reciprocal
+
+        </button>
+
+    `;
+
+
+    focusInput("reciprocalTop");
+
+}
+
+
+function checkStep2() {
+
+    const q =
+        currentQuestion();
+
+
+    const top =
+        Number(
+            $("reciprocalTop").value
+        );
+
+    const bottom =
+        Number(
+            $("reciprocalBottom").value
+        );
+
+
+    game.attempts++;
+
+
+    if(
+        top === q.d &&
+        bottom === q.c
+    ) {
+
+        game.correctSteps++;
+
+        game.step = 3;
+
+        game.streak++;
+
+        game.bestStreak =
+            Math.max(
+                game.bestStreak,
+                game.streak
+            );
+
+        updateStats();
+
+        showMedia("correct");
+
+
+        setTimeout(() => {
+
+            closeMediaModal();
+
+            render();
+
+        },900);
+
+    }
+
+    else {
+
+        game.streak = 0;
+
+        updateStats();
+
+        showFeedback(
+            "🔄 Flip ONLY the second fraction.",
+            "bad"
+        );
+
+        showMedia("incorrect");
+
+    }
+
+}
+
+
+/* =====================================================
+   STEP 3
+   MULTIPLY
+===================================================== */
+
+function renderStep3() {
+
+    const q =
+        currentQuestion();
+
+
+    $("stepLabel").textContent =
+        "STEP 3 — MULTIPLY";
+
+
+    let explanation;
+
+
+    if(game.questionIndex < 3) {
+
+        explanation = `
+
+            <div class="explanation">
+
+                <b>Guided Practice</b>
+
+                <br><br>
+
+                Now multiply:
+
+                <br>
+
+                numerator × numerator
+
+                <br>
+
+                denominator × denominator
+
+            </div>
+
+        `;
+
+    }
+
+    else {
+
+        explanation = `
+
+            <div class="explanation">
+
+                Multiply the numerators
+                and denominators.
+
+            </div>
+
+        `;
+
+    }
+
+
+    $("stage").innerHTML = `
+
+        <div class="prompt">
+
+            Multiply the top numbers.
+
+        </div>
+
+
+        ${explanation}
+
+
+        <div class="equation">
+
+            ${q.a}
+
+            ×
+
+            ${q.d}
+
+            =
+
+            <input
+                id="multiplyNumerator"
+                class="big-input"
+                type="number"
+                placeholder="?">
+
+        </div>
+
+
+        <div class="prompt">
+
+            Multiply the bottom numbers.
+
+        </div>
+
+
+        <div class="equation">
+
+            ${q.b}
+
+            ×
+
+            ${q.c}
+
+            =
+
+            <input
+                id="multiplyDenominator"
+                class="big-input"
+                type="number"
+                placeholder="?">
+
+        </div>
+
+
+        <div class="hint">
+
+            🧀 Remember:
+
+            <b>top × top</b>
+
+            <br>
+
+            <b>bottom × bottom</b>
+
+        </div>
+
+
+        <button
+            class="check-button"
+            onclick="checkStep3()">
+
+            Check Multiplication
+
+        </button>
+
+    `;
+
+
+    focusInput(
+        "multiplyNumerator"
+    );
+
+}
+
+
+function checkStep3() {
+
+    const q =
+        currentQuestion();
+
+
+    const correctTop =
+        q.a * q.d;
+
+    const correctBottom =
+        q.b * q.c;
+
+
+    const top =
+        Number(
+            $("multiplyNumerator").value
+        );
+
+    const bottom =
+        Number(
+            $("multiplyDenominator").value
+        );
+
+
+    game.attempts++;
+
+
+    if(
+        top === correctTop &&
+        bottom === correctBottom
+    ) {
+
+        game.correctSteps++;
+
+        game.step = 4;
+
+        game.streak++;
+
+        game.bestStreak =
+            Math.max(
+                game.bestStreak,
+                game.streak
+            );
+
+        updateStats();
+
+        showMedia("correct");
+
+
+        setTimeout(() => {
+
+            closeMediaModal();
+
+            render();
+
+        },900);
+
+    }
+
+    else {
+
+        game.streak = 0;
+
+        updateStats();
+
+        showFeedback(
+            "🤔 Check: top × top and bottom × bottom.",
+            "bad"
+        );
+
+        showMedia("incorrect");
+
+    }
+
+}
+
+
+/* =====================================================
+   STEP 4
+   FIND GCF
+===================================================== */
+
+function renderStep4() {
+
+    const q =
+        currentQuestion();
+
+
+    const numerator =
+        q.a * q.d;
+
+    const denominator =
+        q.b * q.c;
+
+
+    const reduced =
+        simplified(
+            numerator,
+            denominator
+        );
+
+
+    /*
+       If already simplified,
+       move directly to final.
+    */
+
+    if(
+        reduced.n === numerator &&
+        reduced.d === denominator
+    ) {
+
+        game.step = 6;
+
+        renderFinal();
+
+        return;
+
+    }
+
+
+    $("stepLabel").textContent =
+        "STEP 4 — FIND THE GCF";
+
+
+    let explanation;
+
+
+    if(game.questionIndex < 3) {
+
+        explanation = `
+
+            <div class="explanation">
+
+                <b>Guided Practice</b>
+
+                <br><br>
+
+                We have:
+
+                <br><br>
+
+                ${fraction(
+                    numerator,
+                    denominator
+                )}
+
+                <br><br>
+
+                Find the greatest common factor
+                (GCF).
+
+                <br>
+
+                It must divide BOTH numbers
+                exactly.
+
+            </div>
+
+        `;
+
+    }
+
+    else {
+
+        explanation = `
+
+            <div class="explanation">
+
+                Find the GCF of
+                <b>${numerator}</b>
+                and
+                <b>${denominator}</b>.
+
+            </div>
+
+        `;
+
+    }
+
+
+    $("stage").innerHTML = `
+
+        <div class="prompt">
+
+            What is the greatest common factor?
+
+        </div>
+
+
+        ${explanation}
+
+
+        <div class="equation">
+
+            ${fraction(
+                numerator,
+                denominator
+            )}
+
+            →
+
+            <input
+                id="factorInput"
+                class="big-input"
+                type="number"
+                placeholder="GCF">
+
+        </div>
+
+
+        <div class="hint">
+
+            🔍 The GCF must divide BOTH
+            ${numerator} and ${denominator}
+            with no remainder.
+
+        </div>
+
+
+        <button
+            class="check-button"
+            onclick="checkStep4()">
+
+            Check GCF
+
+        </button>
+
+    `;
+
+
+    focusInput("factorInput");
+
+}
+
+
+function checkStep4() {
+
+    const q =
+        currentQuestion();
+
+
+    const numerator =
+        q.a * q.d;
+
+    const denominator =
+        q.b * q.c;
+
+
+    const answer =
+        Number(
+            $("factorInput").value
+        );
+
+
+    const correct =
+        gcd(
+            numerator,
+            denominator
+        );
+
+
+    game.attempts++;
+
+
+    if(answer === correct) {
+
+        game.correctSteps++;
+
+        game.step = 5;
+
+        game.streak++;
+
+        game.bestStreak =
+            Math.max(
+                game.bestStreak,
+                game.streak
+            );
+
+        updateStats();
+
+        showMedia("correct");
+
+
+        setTimeout(() => {
+
+            closeMediaModal();
+
+            render();
+
+        },900);
+
+    }
+
+    else {
+
+        game.streak = 0;
+
+        updateStats();
+
+        showFeedback(
+            "🔎 Find the greatest number that divides BOTH numbers exactly.",
+            "bad"
+        );
+
+        showMedia("incorrect");
+
+    }
+
+}
+
+
+/* =====================================================
+   STEP 5
+   SIMPLIFY
+===================================================== */
+
+function renderStep5() {
+
+    const q =
+        currentQuestion();
+
+
+    const numerator =
+        q.a * q.d;
+
+    const denominator =
+        q.b * q.c;
+
+
+    const factor =
+        gcd(
+            numerator,
+            denominator
+        );
+
+
+    const reduced =
+        simplified(
+            numerator,
+            denominator
+        );
+
+
+    $("stepLabel").textContent =
+        "STEP 5 — SIMPLIFY";
+
+
+    let explanation;
+
+
+    if(game.questionIndex < 3) {
+
+        explanation = `
+
+            <div class="explanation">
+
+                <b>Guided Practice</b>
+
+                <br><br>
+
+                Divide BOTH numerator and
+                denominator by the GCF.
+
+                <br><br>
+
+                ${numerator} ÷ ${factor}
+
+                <br>
+
+                ${denominator} ÷ ${factor}
+
+            </div>
+
+        `;
+
+    }
+
+    else {
+
+        explanation = `
+
+            <div class="explanation">
+
+                Simplify the fraction completely.
+
+            </div>
+
+        `;
+
+    }
+
+
+    $("stage").innerHTML = `
+
+        <div class="prompt">
+
+            Type the simplified numerator
+            and denominator.
+
+        </div>
+
+
+        ${explanation}
+
+
+        <div class="equation">
+
+            ${fraction(
+                numerator,
+                denominator
+            )}
+
+            ÷ ${factor}
+
+            =
+
+            <div class="input-fraction">
+
+                <input
+                    id="simplifyTop"
+                    class="small-input"
+                    type="number"
+                    placeholder="?">
+
+                <div class="input-bar"></div>
+
+                <input
+                    id="simplifyBottom"
+                    class="small-input"
+                    type="number"
+                    placeholder="?">
+
+            </div>
+
+        </div>
+
+
+        <div class="hint">
+
+            ✏️ Divide the numerator AND
+            denominator by the GCF.
+
+        </div>
+
+
+        <button
+            class="check-button"
+            onclick="checkStep5()">
+
+            Check Simplification
+
+        </button>
+
+    `;
+
+
+    focusInput("simplifyTop");
+
+}
+
+
+function checkStep5() {
+
+    const q =
+        currentQuestion();
+
+
+    const numerator =
+        q.a * q.d;
+
+    const denominator =
+        q.b * q.c;
+
+
+    const reduced =
+        simplified(
+            numerator,
+            denominator
+        );
+
+
+    const top =
+        Number(
+            $("simplifyTop").value
+        );
+
+    const bottom =
+        Number(
+            $("simplifyBottom").value
+        );
+
+
+    game.attempts++;
+
+
+    if(
+        top === reduced.n &&
+        bottom === reduced.d
+    ) {
+
+        game.correctSteps++;
+
+        game.step = 6;
+
+        game.streak++;
+
+        game.bestStreak =
+            Math.max(
+                game.bestStreak,
+                game.streak
+            );
+
+        updateStats();
+
+        showMedia("correct");
+
+
+        setTimeout(() => {
+
+            closeMediaModal();
+
+            render();
+
+        },900);
+
+    }
+
+    else {
+
+        game.streak = 0;
+
+        updateStats();
+
+        showFeedback(
+            "🤔 Divide BOTH parts by the GCF.",
+            "bad"
+        );
+
+        showMedia("incorrect");
+
+    }
+
+}
+
+
+/* =====================================================
+   FINAL ANSWER
+===================================================== */
+
+function renderFinal() {
+
+    const q =
+        currentQuestion();
+
+
+    const numerator =
+        q.a * q.d;
+
+    const denominator =
+        q.b * q.c;
+
+
+    const reduced =
+        simplified(
+            numerator,
+            denominator
+        );
+
+
+    $("stepLabel").textContent =
+        "⭐ FINAL ANSWER";
+
+
+    $("stage").innerHTML = `
+
+        <div class="prompt">
+
+            You have done all the steps!
+
+            <br>
+
+            Now type the final answer.
+
+        </div>
+
+
+        <div class="equation">
+
+            ${fraction(q.a,q.b)}
+
+            ÷
+
+            ${fraction(q.c,q.d)}
+
+            =
+
+            <div class="input-fraction">
+
+                <input
+                    id="finalTop"
+                    class="small-input"
+                    type="number"
+                    placeholder="?">
+
+                <div class="input-bar"></div>
+
+                <input
+                    id="finalBottom"
+                    class="small-input"
+                    type="number"
+                    placeholder="?">
+
+            </div>
+
+        </div>
+
+
+        <div class="hint">
+
+            🧠 Use everything you just learned:
+
+            <br><br>
+
+            <b>
+                KEEP → CHANGE → FLIP
+                → MULTIPLY → GCF → SIMPLIFY
+            </b>
+
+        </div>
+
+
+        <button
+            class="check-button"
+            onclick="checkFinal()">
+
+            Check Final Answer
+
+        </button>
+
+    `;
+
+
+    focusInput("finalTop");
+
+}
+
+
+function checkFinal() {
+
+    const q =
+        currentQuestion();
+
+
+    const numerator =
+        q.a * q.d;
+
+    const denominator =
+        q.b * q.c;
+
+
+    const reduced =
+        simplified(
+            numerator,
+            denominator
+        );
+
+
+    const top =
+        Number(
+            $("finalTop").value
+        );
+
+    const bottom =
+        Number(
+            $("finalBottom").value
+        );
+
+
+    game.attempts++;
+
+
+    if(
+        top === reduced.n &&
+        bottom === reduced.d
+    ) {
+
+        game.correctSteps++;
+
+        game.streak++;
+
+        game.bestStreak =
+            Math.max(
+                game.bestStreak,
+                game.streak
+            );
+
+        updateStats();
+
+        showMedia("correct");
+
+
+        setTimeout(() => {
+
+            closeMediaModal();
+
+            showCompletion();
+
+        },900);
+
+    }
+
+    else {
+
+        game.streak = 0;
+
+        updateStats();
+
+        showFeedback(
+            "🔎 Not quite! Check your simplified fraction.",
+            "bad"
+        );
+
+        showMedia("incorrect");
+
+    }
+
+}
+
+
+/* =====================================================
+   COMPLETION
+===================================================== */
+
+function showCompletion() {
+
+    const q =
+        currentQuestion();
+
+
+    const numerator =
+        q.a * q.d;
+
+    const denominator =
+        q.b * q.c;
+
+
+    const reduced =
+        simplified(
+            numerator,
+            denominator
+        );
+
+
+    $("stage").innerHTML = `
+
+        <div class="final-box">
+
+            <div class="final-label">
+
+                🎉 PROBLEM SOLVED!
+
+            </div>
+
+
+            <div class="final-answer">
+
+                ${fraction(
+                    reduced.n,
+                    reduced.d
+                )}
+
+            </div>
+
+
+            <div>
+
+                ${q.a}/${q.b}
+
+                ÷
+
+                ${q.c}/${q.d}
+
+                =
+
+                <b>
+                    ${reduced.n}/${reduced.d}
+                </b>
+
+            </div>
+
+        </div>
+
+
+        <button
+            class="check-button"
+            onclick="nextQuestion()">
+
+            Next Problem →
+
+        </button>
+
+    `;
+
+}
+
+
+/* =====================================================
+   NEXT QUESTION
+===================================================== */
+
+function nextQuestion() {
+
+    if(
+        game.questionIndex + 1 >=
+        game.totalQuestions
+    ) {
+
+        showResults();
+
+        return;
+
+    }
+
+
+    game.questionIndex++;
+
+    game.step = 1;
+
+    render();
+
+}
+
+
+/* =====================================================
+   RESULTS
+===================================================== */
+
+function showResults() {
+
+    document
+        .querySelector(".layout")
+        .classList.add("hidden");
+
+
+    document
+        .querySelector(".progress-card")
+        .classList.add("hidden");
+
+
+    document
+        .querySelector(".character-panel")
+        .classList.add("hidden");
+
+
+    const result =
+        $("result");
+
+
+    result.classList.remove(
+        "hidden"
+    );
+
+
+    const accuracy =
+        game.attempts === 0
+        ? 0
+        : Math.round(
+            game.correctSteps /
+            game.attempts *
+            100
+        );
+
+
+    let title;
+
+
+    if(accuracy >= 90) {
+
+        title =
+            "🏆 FRACTION MASTER!";
+
+    }
+
+    else if(accuracy >= 75) {
+
+        title =
+            "🌟 EXCELLENT WORK!";
+
+    }
+
+    else if(accuracy >= 50) {
+
+        title =
+            "💪 GREAT EFFORT!";
+
+    }
+
+    else {
+
+        title =
+            "🧠 KEEP PRACTICING!";
+
+    }
+
+
+    result.innerHTML = `
+
+        <div class="result-icon">
+            🧀
+        </div>
+
+
+        <h2>
+            ${title}
+        </h2>
+
+
+        <p>
+
+            You completed
+
+            <b>
+                ${game.totalQuestions}
+            </b>
+
+            fraction division problems!
+
+        </p>
+
+
+        <p>
+
+            Step Accuracy:
+
+            <b>
+                ${accuracy}%
+            </b>
+
+        </p>
+
+
+        <p>
+
+            ⭐ Best Streak:
+
+            <b>
+                ${game.bestStreak}
+            </b>
+
+        </p>
+
+
+        <p>
+
+            Remember the detective formula:
+
+        </p>
+
+
+        <div class="final-box">
+
+            <b>
+
+                KEEP
+
+                →
+
+                CHANGE
+
+                →
+
+                FLIP
+
+                →
+
+                MULTIPLY
+
+                →
+
+                GCF
+
+                →
+
+                SIMPLIFY
+
+            </b>
+
+        </div>
+
+
+        <button
+            class="check-button"
+            onclick="restartGame()">
+
+            🔄 Practice Again
+
+        </button>
+
+    `;
+
+}
+
+
+/* =====================================================
+   RESTART
+===================================================== */
+
+function restartGame() {
+
+    game = {
+
+        questionIndex: 0,
+
+        step: 1,
+
+        attempts: 0,
+
+        correctSteps: 0,
+
+        streak: 0,
+
+        bestStreak: 0,
+
+        totalQuestions: 10
+
+    };
+
+
+    document
+        .querySelector(".layout")
+        .classList.remove("hidden");
+
+
+    document
+        .querySelector(".progress-card")
+        .classList.remove("hidden");
+
+
+    document
+        .querySelector(".character-panel")
+        .classList.remove("hidden");
+
+
+    $("result")
+        .classList.add("hidden");
+
+
+    render();
+
+}
+
+
+/* =====================================================
+   AUTO FOCUS
+===================================================== */
+
+function focusInput(id) {
+
+    setTimeout(() => {
+
+        const input =
+            $(id);
+
+        if(input) {
+
+            input.focus();
+
+        }
+
+    },100);
+
+}
+
+
+/* =====================================================
+   ENTER KEY
+===================================================== */
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        if(
+            event.key !== "Enter"
+        ) {
+            return;
+        }
+
+
+        const active =
+            document.activeElement;
+
+
+        if(
+            active &&
+            active.tagName === "INPUT"
+        ) {
+
+            const buttons =
+                document.querySelectorAll(
+                    ".check-button"
+                );
+
+
+            if(buttons.length) {
+
+                buttons[
+                    buttons.length - 1
+                ].click();
+
+            }
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   START GAME
+===================================================== */
+
+render();
+
+</script>
+
+</body>
+</html>

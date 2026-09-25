@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Express a Number as a Fraction of Another Number</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f4f7fb;
+        color: #1f2937;
+    }
+
+    .app {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* HEADER */
+    header {
+        background: #ffffff;
+        border-bottom: 1px solid #e5e7eb;
+        padding: 16px 28px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+
+    .title {
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+    .progress-container {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .progress-bar {
+        width: 180px;
+        height: 8px;
+        background: #e5e7eb;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .progress-fill {
+        height: 100%;
+        width: 0%;
+        background: #4f46e5;
+        transition: width 0.3s ease;
+    }
+
+    #slideCounter {
+        font-size: 14px;
+        color: #6b7280;
+        min-width: 55px;
+        text-align: right;
+    }
+
+    /* MAIN */
+    main {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        padding: 35px 20px 100px;
+    }
+
+    .slide {
+        display: none;
+        width: min(950px, 100%);
+        animation: fadeIn 0.25s ease;
+    }
+
+    .slide.active {
+        display: block;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(8px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .slide-number {
+        color: #4f46e5;
+        font-size: 14px;
+        font-weight: 700;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+    }
+
+    h1 {
+        font-size: clamp(34px, 5vw, 56px);
+        margin: 0 0 20px;
+        line-height: 1.1;
+    }
+
+    h2 {
+        font-size: clamp(28px, 4vw, 42px);
+        margin: 0 0 22px;
+    }
+
+    h3 {
+        font-size: 24px;
+    }
+
+    p {
+        font-size: 19px;
+        line-height: 1.6;
+    }
+
+    /* CARDS */
+    .card {
+        background: white;
+        border-radius: 18px;
+        padding: 28px;
+        margin: 18px 0;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+        border: 1px solid #e5e7eb;
+    }
+
+    .center {
+        text-align: center;
+    }
+
+    .big {
+        font-size: clamp(36px, 7vw, 70px);
+        font-weight: 700;
+        margin: 25px 0;
+    }
+
+    .formula {
+        background: #eef2ff;
+        border: 2px solid #c7d2fe;
+        border-radius: 16px;
+        padding: 24px;
+        text-align: center;
+        font-size: clamp(28px, 5vw, 48px);
+        font-weight: 700;
+        margin: 20px 0;
+    }
+
+    .highlight {
+        background: #fef3c7;
+        padding: 3px 8px;
+        border-radius: 6px;
+        font-weight: 700;
+    }
+
+    .green {
+        color: #15803d;
+        font-weight: 700;
+    }
+
+    .red {
+        color: #dc2626;
+        font-weight: 700;
+    }
+
+    .blue {
+        color: #4338ca;
+        font-weight: 700;
+    }
+
+    /* STEPS */
+    .steps {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+        margin-top: 25px;
+    }
+
+    .step {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 16px;
+        padding: 22px;
+    }
+
+    .step-number {
+        width: 42px;
+        height: 42px;
+        background: #4f46e5;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        margin-bottom: 12px;
+    }
+
+    /* EXAMPLE */
+    .example-box {
+        background: #ffffff;
+        border-left: 6px solid #4f46e5;
+        border-radius: 12px;
+        padding: 25px;
+        margin: 20px 0;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }
+
+    .equation {
+        font-size: clamp(25px, 4vw, 40px);
+        text-align: center;
+        margin: 18px 0;
+        font-weight: 700;
+    }
+
+    .arrow {
+        color: #6b7280;
+        margin: 0 10px;
+    }
+
+    /* QUESTION */
+    .question {
+        background: white;
+        border-radius: 18px;
+        padding: 28px;
+        margin: 20px 0;
+        border: 2px solid #e5e7eb;
+    }
+
+    .question-number {
+        font-weight: bold;
+        color: #4f46e5;
+        margin-bottom: 8px;
+    }
+
+    .answer-row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        margin: 25px 0;
+        flex-wrap: wrap;
+    }
+
+    input {
+        width: 100px;
+        padding: 13px;
+        border: 2px solid #d1d5db;
+        border-radius: 10px;
+        font-size: 20px;
+        text-align: center;
+        outline: none;
+    }
+
+    input:focus {
+        border-color: #4f46e5;
+    }
+
+    button {
+        border: none;
+        border-radius: 10px;
+        padding: 12px 20px;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    button:hover {
+        transform: translateY(-1px);
+    }
+
+    .primary {
+        background: #4f46e5;
+        color: white;
+    }
+
+    .secondary {
+        background: #e5e7eb;
+        color: #111827;
+    }
+
+    .success {
+        background: #dcfce7;
+        color: #166534;
+        border: 1px solid #86efac;
+    }
+
+    .error {
+        background: #fee2e2;
+        color: #991b1b;
+        border: 1px solid #fca5a5;
+    }
+
+    .feedback {
+        margin-top: 15px;
+        padding: 13px;
+        border-radius: 10px;
+        display: none;
+        font-weight: 600;
+    }
+
+    /* MCQ */
+    .options {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        margin-top: 20px;
+    }
+
+    .option {
+        background: #f9fafb;
+        border: 2px solid #e5e7eb;
+        padding: 16px;
+        border-radius: 12px;
+        cursor: pointer;
+        font-size: 21px;
+        text-align: center;
+        font-weight: 600;
+    }
+
+    .option:hover {
+        border-color: #818cf8;
+        background: #eef2ff;
+    }
+
+    .option.correct {
+        background: #dcfce7;
+        border-color: #22c55e;
+    }
+
+    .option.wrong {
+        background: #fee2e2;
+        border-color: #ef4444;
+    }
+
+    /* WARNING */
+    .warning {
+        background: #fff7ed;
+        border: 2px solid #fed7aa;
+        border-radius: 15px;
+        padding: 20px;
+        margin: 15px 0;
+    }
+
+    /* CHECKLIST */
+    .checklist {
+        background: white;
+        border-radius: 18px;
+        padding: 28px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    }
+
+    .check-item {
+        padding: 15px;
+        border-bottom: 1px solid #e5e7eb;
+        font-size: 19px;
+    }
+
+    .check-item:last-child {
+        border-bottom: none;
+    }
+
+    /* FOOTER */
+    .navigation {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: white;
+        border-top: 1px solid #e5e7eb;
+        padding: 14px 25px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 10;
+    }
+
+    .nav-buttons {
+        display: flex;
+        gap: 10px;
+    }
+
+    .keyboard-hint {
+        color: #6b7280;
+        font-size: 13px;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 700px) {
+        .steps {
+            grid-template-columns: 1fr;
+        }
+
+        .options {
+            grid-template-columns: 1fr;
+        }
+
+        header {
+            padding: 12px 15px;
+        }
+
+        .title {
+            font-size: 15px;
+        }
+
+        .progress-bar {
+            width: 100px;
+        }
+
+        main {
+            padding: 25px 14px 100px;
+        }
+
+        .card,
+        .question,
+        .example-box {
+            padding: 20px;
+        }
+
+        .keyboard-hint {
+            display: none;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header>
+    <div class="title">📐 Fractions</div>
+
+    <div class="progress-container">
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div id="slideCounter">1 / 17</div>
+    </div>
+</header>
+
+
+<main>
+
+<!-- SLIDE 1 -->
+<section class="slide active">
+    <div class="slide-number">Lesson 1</div>
+
+    <h1>Express a Number as a Fraction of Another Number</h1>
+
+    <div class="card center">
+        <p>Today we will learn how to express one number as a fraction of another number.</p>
+
+        <div class="formula">
+            A as a fraction of B
+            <br>
+            ↓
+            <br>
+            A ÷ B = A/B
+        </div>
+
+        <p class="green">First number → TOP</p>
+        <p class="blue">Second number → BOTTOM</p>
+    </div>
+</section>
+
+
+<!-- SLIDE 2 -->
+<section class="slide">
+    <div class="slide-number">Key Idea</div>
+
+    <h2>What Does It Mean?</h2>
+
+    <div class="card">
+        <p>Suppose there are:</p>
+
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <strong>4 red balls</strong>
+            </div>
+
+            <div class="step">
+                <div class="step-number">2</div>
+                <strong>10 balls altogether</strong>
+            </div>
+
+            <div class="step">
+                <div class="step-number">3</div>
+                <strong>Find the fraction that are red</strong>
+            </div>
+        </div>
+
+        <div class="equation">
+            4 as a fraction of 10
+            <br>
+            ↓
+            <br>
+            <span class="blue">4/10</span>
+            <br>
+            ↓
+            <br>
+            <span class="green">2/5</span>
+        </div>
+
+        <div class="formula">
+            Answer = 2/5
+        </div>
+    </div>
+</section>
+
+
+<!-- SLIDE 3 -->
+<section class="slide">
+    <div class="slide-number">Golden Rule ⭐</div>
+
+    <h2>The Golden Rule</h2>
+
+    <div class="formula">
+        “A as a fraction of B”
+        <br><br>
+        = A/B
+    </div>
+
+    <div class="card">
+        <h3>Example</h3>
+
+        <p>Express <span class="highlight">6 as a fraction of 15</span>.</p>
+
+        <div class="equation">
+            6/15
+            <span class="arrow">→</span>
+            2/5
+        </div>
+
+        <p class="green">Answer: 2/5</p>
+    </div>
+</section>
+
+
+<!-- SLIDE 4 -->
+<section class="slide">
+    <div class="slide-number">Important</div>
+
+    <h2>Don't Reverse the Numbers! ⚠️</h2>
+
+    <div class="card">
+        <p>Express <strong>3 as a fraction of 12</strong>.</p>
+
+        <div class="equation">
+            <span class="green">3/12</span>
+            =
+            <span class="green">1/4</span>
+        </div>
+
+        <div class="warning">
+            ❌ <strong>12/3</strong> is wrong.
+            <br><br>
+            The number being described goes on TOP.
+        </div>
+
+        <div class="formula">
+            First number → TOP
+            <br>
+            Second number → BOTTOM
+        </div>
+    </div>
+</section>
+
+
+<!-- SLIDE 5 -->
+<section class="slide">
+    <div class="slide-number">Level 1</div>
+
+    <h2>Example 1</h2>
+
+    <div class="example-box">
+        <h3>Express 5 as a fraction of 20.</h3>
+
+        <div class="equation">
+            5/20
+        </div>
+
+        <p>Both numbers can be divided by 5.</p>
+
+        <div class="equation">
+            5 ÷ 5
+            /
+            20 ÷ 5
+            <br>
+            =
+            <span class="green">1/4</span>
+        </div>
+
+        <div class="formula">
+            Answer = 1/4
+        </div>
+    </div>
+</section>
+
+
+<!-- SLIDE 6 -->
+<section class="slide">
+    <div class="slide-number">Level 1</div>
+
+    <h2>Example 2</h2>
+
+    <div class="example-box">
+        <h3>Express 8 as a fraction of 24.</h3>
+
+        <div class="equation">
+            8/24
+            <br>
+            ↓
+            <br>
+            8 ÷ 8 / 24 ÷ 8
+            <br>
+            ↓
+            <br>
+            <span class="green">1/3</span>
+        </div>
+
+        <div class="formula">
+            Answer = 1/3
+        </div>
+    </div>
+</section>
+
+
+<!-- SLIDE 7 -->
+<section class="slide">
+    <div class="slide-number">Your Turn</div>
+
+    <h2>Quick Practice ✏️</h2>
+
+    <div class="question">
+        <div class="question-number">Question 1</div>
+        <p>Express <strong>4 as a fraction of 16</strong>.</p>
+
+        <div class="options">
+            <div class="option" onclick="choose(this, false)">4/16</div>
+            <div class="option" onclick="choose(this, true)">1/4</div>
+            <div class="option" onclick="choose(this, false)">16/4</div>
+            <div class="option" onclick="choose(this, false)">1/2</div>
+        </div>
+
+        <div class="feedback"></div>
+    </div>
+
+    <div class="question">
+        <div class="question-number">Question 2</div>
+        <p>Express <strong>7 as a fraction of 21</strong>.</p>
+
+        <div class="options">
+            <div class="option" onclick="choose(this, false)">2/3</div>
+            <div class="option" onclick="choose(this, true)">1/3</div>
+            <div class="option" onclick="choose(this, false)">3/7</div>
+            <div class="option" onclick="choose(this, false)">7/14</div>
+        </div>
+
+        <div class="feedback"></div>
+    </div>
+
+</section>
+
+
+<!-- SLIDE 8 -->
+<section class="slide">
+    <div class="slide-number">Level 2</div>
+
+    <h2>Larger Numbers</h2>
+
+    <div class="example-box">
+        <h3>Express 15 as a fraction of 60.</h3>
+
+        <div class="equation">
+            15/60
+            <br>
+            ↓
+            <br>
+            15 ÷ 15 / 60 ÷ 15
+            <br>
+            ↓
+            <br>
+            <span class="green">1/4</span>
+        </div>
+    </div>
+
+    <div class="example-box">
+        <h3>Express 18 as a fraction of 30.</h3>
+
+        <div class="equation">
+            18/30
+            <br>
+            ↓
+            <br>
+            18 ÷ 6 / 30 ÷ 6
+            <br>
+            ↓
+            <span class="green">3/5</span>
+        </div>
+    </div>
+</section>
+
+
+<!-- SLIDE 9 -->
+<section class="slide">
+    <div class="slide-number">Word Problems</div>
+
+    <h2>Let's Use a Story</h2>
+
+    <div class="card">
+        <p>A class has <strong>30 students</strong>.</p>
+        <p><strong>12 students</strong> walk to school.</p>
+
+        <h3>What fraction of the students walk to school?</h3>
+
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <strong>Walking = 12</strong>
+            </div>
+
+            <div class="step">
+                <div class="step-number">2</div>
+                <strong>Total = 30</strong>
+            </div>
+
+            <div class="step">
+                <div class="step-number">3</div>
+                <strong>12/30 = 2/5</strong>
+            </div>
+        </div>
+
+        <div class="formula">
+            Answer = 2/5
+        </div>
+    </div>
+</section>
+
+
+<!-- SLIDE 10 -->
+<section class="slide">
+    <div class="slide-number">Word Problem</div>
+
+    <h2>Another Example</h2>
+
+    <div class="card">
+        <p>A box contains <strong>24 pencils</strong>.</p>
+
+        <p><strong>6 pencils</strong> are blue.</p>
+
+        <h3>What fraction of the pencils are blue?</h3>
+
+        <div class="equation">
+            6/24
+            <br>
+            ↓
+            <br>
+            <span class="green">1/4</span>
+        </div>
+
+        <div class="formula">
+            Answer = 1/4
+        </div>
+    </div>
+</section>
+
+
+<!-- SLIDE 11 -->
+<section class="slide">
+    <div class="slide-number">Level 3</div>
+
+    <h2>Your Turn — Word Problems</h2>
+
+    <div class="question">
+        <p>
+            There are <strong>40 students</strong> in a school.
+            <strong>10</strong> play football.
+        </p>
+
+        <p>What fraction of the students play football?</p>
+
+        <div class="answer-row">
+            <input id="wp1" placeholder="numerator">
+            /
+            <input id="wp2" placeholder="denominator">
+            <button class="primary" onclick="checkFraction('wp1','wp2',1,4,'wpFeedback')">
+                Check
+            </button>
+        </div>
+
+        <div id="wpFeedback" class="feedback"></div>
+    </div>
+</section>
+
+
+<!-- SLIDE 12 -->
+<section class="slide">
+    <div class="slide-number">Decimals</div>
+
+    <h2>What If the Numbers Are Decimals?</h2>
+
+    <div class="example-box">
+        <h3>Express 0.4 as a fraction of 2.</h3>
+
+        <div class="equation">
+            0.4/2
+        </div>
+
+        <p>Convert 0.4 into a fraction:</p>
+
+        <div class="equation">
+            0.4 = 4/10
+        </div>
+
+        <p>So:</p>
+
+        <div class="equation">
+            0.4/2
+            =
+            4/20
+            =
+            <span class="green">1/5</span>
+        </div>
+
+        <div class="formula">
+            Answer = 1/5
+        </div>
+    </div>
+</section>
+
+
+<!-- SLIDE 13 -->
+<section class="slide">
+    <div class="slide-number">Decimals</div>
+
+    <h2>Another Decimal Example</h2>
+
+    <div class="card">
+        <h3>Express 1.5 as a fraction of 6.</h3>
+
+        <div class="equation">
+            1.5/6
+        </div>
+
+        <p>Multiply both numbers by 10:</p>
+
+        <div class="equation">
+            15/60
+        </div>
+
+        <p>Simplify:</p>
+
+        <div class="equation">
+            <span class="green">1/4</span>
+        </div>
+
+        <div class="warning">
+            ⭐ If you multiply the numerator by 10,
+            you must also multiply the denominator by 10.
+        </div>
+    </div>
+</section>
+
+
+<!-- SLIDE 14 -->
+<section class="slide">
+    <div class="slide-number">Common Mistakes</div>
+
+    <h2>Watch Out! ⚠️</h2>
+
+    <div class="warning">
+        <h3>1. Reversing the numbers</h3>
+
+        <p>Express 8 as a fraction of 20.</p>
+
+        <p class="red">❌ 20/8</p>
+        <p class="green">✅ 8/20 = 2/5</p>
+    </div>
+
+    <div class="warning">
+        <h3>2. Forgetting to simplify</h3>
+
+        <p class="red">❌ 6/18</p>
+        <p class="green">✅ 1/3</p>
+    </div>
+
+    <div class="warning">
+        <h3>3. Dividing only one number</h3>
+
+        <p>Always divide the numerator AND denominator by the same number.</p>
+    </div>
+</section>
+
+
+<!-- SLIDE 15 -->
+<section class="slide">
+    <div class="slide-number">Remember</div>
+
+    <h2>The 3-Step Method</h2>
+
+    <div class="steps">
+
+        <div class="step">
+            <div class="step-number">1</div>
+            <h3>Write</h3>
+            <p>Put the first number on top.</p>
+
+            <div class="formula">
+                A/B
+            </div>
+        </div>
+
+        <div class="step">
+            <div class="step-number">2</div>
+            <h3>Simplify</h3>
+            <p>Divide the numerator and denominator by a common factor.</p>
+        </div>
+
+        <div class="step">
+            <div class="step-number">3</div>
+            <h3>Check</h3>
+            <p>Make sure the fraction is in its simplest form.</p>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- SLIDE 16 -->
+<section class="slide">
+    <div class="slide-number">Challenge</div>
+
+    <h2>🏆 Challenge</h2>
+
+    <div class="question">
+        <div class="question-number">1</div>
+        <p>Express 12 as a fraction of 48.</p>
+
+        <div class="answer-row">
+            <input id="c1a">
+            /
+            <input id="c1b">
+            <button class="primary"
+                onclick="checkFraction('c1a','c1b',1,4,'c1f')">
+                Check
+            </button>
+        </div>
+
+        <div id="c1f" class="feedback"></div>
+    </div>
+
+
+    <div class="question">
+        <div class="question-number">2</div>
+        <p>Express 15 as a fraction of 25.</p>
+
+        <div class="answer-row">
+            <input id="c2a">
+            /
+            <input id="c2b">
+            <button class="primary"
+                onclick="checkFraction('c2a','c2b',3,5,'c2f')">
+                Check
+            </button>
+        </div>
+
+        <div id="c2f" class="feedback"></div>
+    </div>
+
+
+    <div class="question">
+        <div class="question-number">3</div>
+        <p>Express 21 as a fraction of 28.</p>
+
+        <div class="answer-row">
+            <input id="c3a">
+            /
+            <input id="c3b">
+            <button class="primary"
+                onclick="checkFraction('c3a','c3b',3,4,'c3f')">
+                Check
+            </button>
+        </div>
+
+        <div id="c3f" class="feedback"></div>
+    </div>
+
+</section>
+
+
+<!-- SLIDE 17 -->
+<section class="slide">
+    <div class="slide-number">Final Check</div>
+
+    <h2>Before You Submit ⭐</h2>
+
+    <div class="checklist">
+
+        <div class="check-item">
+            ⬜ Did I put the <strong>first number on top</strong>?
+        </div>
+
+        <div class="check-item">
+            ⬜ Did I put the <strong>second number on the bottom</strong>?
+        </div>
+
+        <div class="check-item">
+            ⬜ Did I <strong>simplify</strong> the fraction?
+        </div>
+
+        <div class="check-item">
+            ⬜ Is my answer in its <strong>simplest form</strong>?
+        </div>
+
+    </div>
+
+    <div class="formula">
+        “A as a fraction of B”
+        <br><br>
+        = A/B
+    </div>
+
+    <div class="card center">
+        <h2>🎉 Well Done!</h2>
+        <p>You now know how to express one number as a fraction of another number.</p>
+    </div>
+</section>
+
+</main>
+
+
+<!-- NAVIGATION -->
+<div class="navigation">
+
+    <div class="keyboard-hint">
+        Use ← → arrow keys
+    </div>
+
+    <div class="nav-buttons">
+        <button class="secondary" onclick="previousSlide()">
+            ← Back
+        </button>
+
+        <button class="primary" onclick="nextSlide()">
+            Next →
+        </button>
+    </div>
+
+</div>
+
+
+<script>
+
+let currentSlide = 0;
+
+const slides = document.querySelectorAll(".slide");
+const progressFill = document.getElementById("progressFill");
+const slideCounter = document.getElementById("slideCounter");
+
+function showSlide(index) {
+
+    if (index < 0) {
+        index = 0;
+    }
+
+    if (index >= slides.length) {
+        index = slides.length - 1;
+    }
+
+    currentSlide = index;
+
+    slides.forEach((slide, i) => {
+        slide.classList.toggle("active", i === currentSlide);
+    });
+
+    const progress =
+        ((currentSlide + 1) / slides.length) * 100;
+
+    progressFill.style.width = progress + "%";
+
+    slideCounter.textContent =
+        `${currentSlide + 1} / ${slides.length}`;
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+
+function nextSlide() {
+
+    if (currentSlide < slides.length - 1) {
+        showSlide(currentSlide + 1);
+    }
+
+}
+
+
+function previousSlide() {
+
+    if (currentSlide > 0) {
+        showSlide(currentSlide - 1);
+    }
+
+}
+
+
+/* KEYBOARD NAVIGATION */
+
+document.addEventListener("keydown", function(event) {
+
+    if (event.key === "ArrowRight") {
+        nextSlide();
+    }
+
+    if (event.key === "ArrowLeft") {
+        previousSlide();
+    }
+
+});
+
+
+/* MCQ */
+
+function choose(element, isCorrect) {
+
+    const question = element.closest(".question");
+    const options = question.querySelectorAll(".option");
+    const feedback = question.querySelector(".feedback");
+
+    options.forEach(option => {
+        option.classList.remove("correct", "wrong");
+    });
+
+    if (isCorrect) {
+
+        element.classList.add("correct");
+
+        feedback.textContent =
+            "✓ Correct! Remember: the first number goes on top.";
+
+        feedback.className =
+            "feedback success";
+
+        feedback.style.display = "block";
+
+    } else {
+
+        element.classList.add("wrong");
+
+        feedback.textContent =
+            "✗ Not quite. Try again. Put the first number on top, then simplify.";
+
+        feedback.className =
+            "feedback error";
+
+        feedback.style.display = "block";
+    }
+}
+
+
+/* FRACTION CHECKER */
+
+function checkFraction(
+    numeratorId,
+    denominatorId,
+    correctNumerator,
+    correctDenominator,
+    feedbackId
+) {
+
+    const numerator =
+        document.getElementById(numeratorId).value.trim();
+
+    const denominator =
+        document.getElementById(denominatorId).value.trim();
+
+    const feedback =
+        document.getElementById(feedbackId);
+
+    if (
+        numerator === String(correctNumerator) &&
+        denominator === String(correctDenominator)
+    ) {
+
+        feedback.textContent =
+            "✓ Correct! Excellent work.";
+
+        feedback.className =
+            "feedback success";
+
+        feedback.style.display = "block";
+
+    } else {
+
+        feedback.textContent =
+            "✗ Not quite. Check the numerator, denominator and simplification.";
+
+        feedback.className =
+            "feedback error";
+
+        feedback.style.display = "block";
+    }
+}
+
+
+/* START */
+
+showSlide(0);
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fractions Practice Worksheet</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f5f7fb;
+    color: #202735;
+}
+
+header {
+    background: white;
+    border-bottom: 1px solid #ddd;
+    padding: 16px 24px;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+}
+
+.header-inner {
+    max-width: 1000px;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.title {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.score {
+    background: #eef2ff;
+    color: #4338ca;
+    padding: 10px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+main {
+    max-width: 950px;
+    margin: auto;
+    padding: 30px 18px 80px;
+}
+
+.intro {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 25px;
+    box-shadow: 0 5px 20px rgba(0,0,0,.05);
+}
+
+h1 {
+    margin-top: 0;
+    font-size: 38px;
+}
+
+h2 {
+    font-size: 28px;
+    margin-top: 0;
+}
+
+h3 {
+    margin-bottom: 8px;
+}
+
+.instructions {
+    background: #eef2ff;
+    border: 2px solid #c7d2fe;
+    border-radius: 14px;
+    padding: 18px;
+    font-size: 18px;
+}
+
+.section {
+    background: white;
+    border-radius: 20px;
+    padding: 28px;
+    margin: 25px 0;
+    box-shadow: 0 5px 20px rgba(0,0,0,.05);
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+.badge {
+    background: #4f46e5;
+    color: white;
+    border-radius: 20px;
+    padding: 7px 13px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.question {
+    border: 2px solid #e5e7eb;
+    border-radius: 15px;
+    padding: 20px;
+    margin: 18px 0;
+    transition: .2s;
+}
+
+.question.correct {
+    border-color: #22c55e;
+    background: #f0fdf4;
+}
+
+.question.incorrect {
+    border-color: #ef4444;
+    background: #fef2f2;
+}
+
+.q-number {
+    color: #4f46e5;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.question p {
+    font-size: 18px;
+    line-height: 1.5;
+}
+
+.example {
+    background: #f8fafc;
+    border-left: 5px solid #4f46e5;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.fraction-input {
+    display: inline-flex;
+    flex-direction: column;
+    vertical-align: middle;
+    width: 75px;
+    margin: 0 6px;
+}
+
+.fraction-input input {
+    width: 100%;
+    height: 40px;
+    text-align: center;
+    border: 2px solid #cbd5e1;
+    font-size: 20px;
+    outline: none;
+}
+
+.fraction-input input:first-child {
+    border-radius: 8px 8px 0 0;
+    border-bottom: 1px solid #cbd5e1;
+}
+
+.fraction-input input:last-child {
+    border-radius: 0 0 8px 8px;
+    border-top: 1px solid #cbd5e1;
+}
+
+.fraction-input input:focus {
+    border-color: #6366f1;
+}
+
+.fraction-line {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin: 15px 0;
+}
+
+button {
+    border: none;
+    border-radius: 9px;
+    padding: 10px 17px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 12px;
+}
+
+.check-btn {
+    background: #4f46e5;
+    color: white;
+}
+
+.check-btn:hover {
+    background: #4338ca;
+}
+
+.retry-btn {
+    background: #e5e7eb;
+    color: #374151;
+    display: none;
+    margin-left: 8px;
+}
+
+.feedback {
+    display: none;
+    margin-top: 12px;
+    padding: 11px 14px;
+    border-radius: 9px;
+    font-weight: bold;
+}
+
+.feedback.correct {
+    display: block;
+    background: #dcfce7;
+    color: #166534;
+}
+
+.feedback.incorrect {
+    display: block;
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 15px;
+}
+
+.option {
+    border: 2px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 15px;
+    cursor: pointer;
+    text-align: center;
+    font-size: 19px;
+    font-weight: bold;
+    background: #fafafa;
+}
+
+.option:hover {
+    border-color: #818cf8;
+    background: #eef2ff;
+}
+
+.option.selected {
+    border-color: #6366f1;
+    background: #eef2ff;
+}
+
+.option.correct-option {
+    border-color: #22c55e;
+    background: #dcfce7;
+}
+
+.option.wrong-option {
+    border-color: #ef4444;
+    background: #fee2e2;
+}
+
+.text-answer {
+    width: 180px;
+    padding: 11px;
+    border: 2px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 18px;
+}
+
+.word-answer {
+    width: 120px;
+}
+
+.hint {
+    display: none;
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+    padding: 12px;
+    border-radius: 9px;
+    margin-top: 10px;
+}
+
+.show-hint {
+    background: #f3f4f6;
+    color: #374151;
+}
+
+.final-box {
+    background: #eef2ff;
+    border-radius: 18px;
+    padding: 25px;
+    text-align: center;
+    margin-top: 25px;
+}
+
+.final-score {
+    font-size: 38px;
+    font-weight: bold;
+    color: #4338ca;
+}
+
+.reset {
+    background: #111827;
+    color: white;
+    padding: 13px 25px;
+}
+
+@media(max-width:650px) {
+    h1 {
+        font-size: 29px;
+    }
+
+    .options {
+        grid-template-columns: 1fr;
+    }
+
+    .header-inner {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .section {
+        padding: 20px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-inner">
+        <div class="title">📐 Fraction Practice</div>
+        <div class="score">
+            Score: <span id="score">0</span> / <span id="total">0</span>
+        </div>
+    </div>
+</header>
+
+<main>
+
+<div class="intro">
+
+    <h1>Express a Number as a Fraction of Another Number</h1>
+
+    <p>
+        Complete the questions from <strong>Easy → Medium → Challenge</strong>.
+    </p>
+
+    <div class="instructions">
+        ⭐ <strong>Remember:</strong><br><br>
+
+        “A as a fraction of B” means:
+
+        <div class="fraction-line">
+            A / B
+        </div>
+
+        <strong>First number → numerator</strong><br>
+        <strong>Second number → denominator</strong><br>
+        <strong>Then simplify!</strong>
+    </div>
+
+</div>
+
+
+<!-- PART A -->
+
+<div class="section">
+
+<div class="section-title">
+    <span class="badge">PART A</span>
+    <h2>Write the Fraction</h2>
+</div>
+
+<div class="example">
+    <strong>Example:</strong><br>
+    Express 3 as a fraction of 8.<br><br>
+    Answer: <strong>3/8</strong>
+</div>
+
+
+<!-- Q1 -->
+<div class="question" id="q1">
+
+<div class="q-number">Question 1</div>
+
+<p>Express <strong>2 as a fraction of 7</strong>.</p>
+
+<div class="fraction-line">
+
+<div class="fraction-input">
+<input id="q1n">
+<input id="q1d">
+</div>
+
+</div>
+
+<button class="check-btn" onclick="checkFraction('q1', 'q1n', 'q1d', '2', '7')">
+Check
+</button>
+
+<button class="retry-btn" onclick="retry('q1')">
+Try Again
+</button>
+
+<div class="feedback"></div>
+
+</div>
+
+
+<!-- Q2 -->
+<div class="question" id="q2">
+
+<div class="q-number">Question 2</div>
+
+<p>Express <strong>5 as a fraction of 9</strong>.</p>
+
+<div class="fraction-line">
+
+<div class="fraction-input">
+<input id="q2n">
+<input id="q2d">
+</div>
+
+</div>
+
+<button class="check-btn" onclick="checkFraction('q2', 'q2n', 'q2d', '5', '9')">
+Check
+</button>
+
+<button class="retry-btn" onclick="retry('q2')">
+Try Again
+</button>
+
+<div class="feedback"></div>
+
+</div>
+
+
+<!-- Q3 -->
+<div class="question" id="q3">
+
+<div class="q-number">Question 3</div>
+
+<p>Express <strong>7 as a fraction of 12</strong>.</p>
+
+<div class="fraction-line">
+
+<div class="fraction-input">
+<input id="q3n">
+<input id="q3d">
+</div>
+
+</div>
+
+<button class="check-btn" onclick="checkFraction('q3', 'q3n', 'q3d', '7', '12')">
+Check
+</button>
+
+<button class="retry-btn" onclick="retry('q3')">
+Try Again
+</button>
+
+<div class="feedback"></div>
+
+</div>
+
+</div>
+
+
+<!-- PART B -->
+
+<div class="section">
+
+<div class="section-title">
+    <span class="badge">PART B</span>
+    <h2>Write and Simplify</h2>
+</div>
+
+
+<!-- Q4 -->
+<div class="question" id="q4">
+
+<div class="q-number">Question 4</div>
+
+<p>Express <strong>4 as a fraction of 12</strong>.</p>
+
+<div class="fraction-line">
+
+<div class="fraction-input">
+<input id="q4n">
+<input id="q4d">
+</div>
+
+</div>
+
+<p>Write your answer in its simplest form.</p>
+
+<button class="check-btn"
+onclick="checkFraction('q4','q4n','q4d','1','3')">
+Check
+</button>
+
+<button class="retry-btn" onclick="retry('q4')">
+Try Again
+</button>
+
+<div class="feedback"></div>
+
+</div>
+
+
+<!-- Q5 -->
+<div class="question" id="q5">
+
+<div class="q-number">Question 5</div>
+
+<p>Express <strong>5 as a fraction of 20</strong>.</p>
+
+<div class="fraction-line">
+
+<div class="fraction-input">
+<input id="q5n">
+<input id="q5d">
+</div>
+
+</div>
+
+<button class="check-btn"
+onclick="checkFraction('q5','q5n','q5d','1','4')">
+Check
+</button>
+
+<button class="retry-btn" onclick="retry('q5')">
+Try Again
+</button>
+
+<div class="feedback"></div>
+
+</div>
+
+
+<!-- Q6 -->
+<div class="question" id="q6">
+
+<div class="q-number">Question 6</div>
+
+<p>Express <strong>12 as a fraction of 16</strong>.</p>
+
+<div class="fraction-line">
+
+<div class="fraction-input">
+<input id="q6n">
+<input id="q6d">
+</div>
+
+</div>
+
+<button class="check-btn"
+onclick="checkFraction('q6','q6n','q6d','3','4')">
+Check
+</button>
+
+<button class="retry-btn" onclick="retry('q6')">
+Try Again
+</button>
+
+<div class="feedback"></div>
+
+</div>
+
+
+<!-- Q7 -->
+<div class="question" id="q7">
+
+<div class="q-number">Question 7</div>
+
+<p>Express <strong>18 as a fraction of 30</strong>.</p>
+
+<div class="fraction-line">
+
+<div class="fraction-input">
+<input id="q7n">
+<input id="q7d">
+</div>
+
+</div>
+
+<button class="check-btn"
+onclick="checkFraction('q7','q7n','q7d','3','5')">
+Check
+</button>
+
+<button class="retry-btn" onclick="retry('q7')">
+Try Again
+</button>
+
+<div class="feedback"></div>
+
+</div>
+
+</div>
+
+
+<!-- PART C -->
+
+<div class="section">
+
+<div class="section-title">
+    <span class="badge">PART C</span>
+    <h2>Medium</h2>
+</div>
+
+
+<!-- Q8 -->
+<div class="question" id="q8">
+
+<div class="q-number">Question 8</div>
+
+<p>Express <strong>15 as a fraction of 60</strong>.</p>
+
+<div class="fraction-input">
+<input id="q8n">
+<input id="q8d">
+</div>
+
+<br>
+
+<button class="check-btn"
+onclick="checkFraction('q8','q8n','q8d','1','4')">
+Check
+</button>
+
+<button class="retry-btn" onclick="retry('q8')">
+Try Again
+</button>
+
+<div class="feedback"></div>
+
+</div>
+
+
+<!-- Q9 -->
+<div class="question" id="q9">
+
+<div class="q-number">Question 9</div>
+
+<p>Express <strong>21 as a fraction of 28</strong>.</p>
+
+<div class="fraction-input">
+<input id="q9n">
+<input id="q9d">
+</div>
+
+<br>
+
+<button class="check-btn"
+onclick="checkFraction('q9','q9n','q9d','3','4')">
+Check
+</button>
+
+<button class="retry-btn" onclick="retry('q9')">
+Try Again
+</button>
+
+<div class="feedback"></div>
+
+</div>
+
+
+<!-- Q10 -->
+<div class="question" id="q10">
+
+<div class="q-number">Question 10</div>
+
+<p>Express <strong>24 as a fraction of 36</strong>.</p>
+
+<div class="fraction-input">
+<input id="q10n">
+<input id="q10d">
+</div>
+
+<br>
+
+<button class="check-btn"
+onclick="checkFraction('q10','q10n','q10d','2','3')">
+Check
+</button>
+
+<button class="retry-btn" onclick="retry('q10')">
+Try Again
+</button>
+
+<div class="feedback"></div>
+
+</div>
+
+</div>
+
+
+<!-- PART D WORD PROBLEMS -->
+
+<div class="section">
+
+<div class="section-title">
+    <span class="badge">PART D</span>
+    <h2>Word Problems</h2>
+</div>
+
+
+<!-- Q11 -->
+
+<div class="question" id="q11">
+
+<div class="q-number">Question 11</div>
+
+<p>
+There are <strong>20 students</strong> in a class.
+<strong>8 students</strong> bring lunch from home.
+</p>
+
+<p>
+What fraction of the students bring lunch from home?
+</p>
+
+<div class="fraction-input">
+<input id="q11n">
+<input id="q11d">
+</div>
+
+<br>
+
+<button class="check-btn"
+onclick="checkFraction('q11','q11n','q11d','2','5')">
+Check
+</button>
+
+<button class="retry-btn" onclick="retry('q11')">
+Try Again
+</button>
+
+<div class="feedback"></div>
+
+</div>
+
+
+<!-- Q12 -->
+
+<div class="question" id="q12">
+
+<div class="q-number">Question 12</div>
+
+<p>
+A box contains <strong>30 pencils</strong>.
+<strong>12 pencils</strong> are blue.
+</p>
+
+<p>
+What fraction of the pencils are blue?
+</p>
+
+<div class="fraction-input">
+<input id="q12n">
+<input id="q12d">
+</div>
+
+<br>
+
+<button class="check-btn"
+onclick="checkFraction('q12','q12n','q12d','2','5')">
+Check
+</button>
+
+<button class="retry-btn" onclick="retry('q12')">
+Try Again
+</button>
+
+<div class="feedback"></div>
+
+</div>
+
+
+<!-- Q13 -->
+
+<div class="question" id="q13">
+
+<div class="q-number">Question 13</div>
+
+<p>
+A test has <strong>40 questions</strong>.
+A student gets <strong>32 correct</strong>.
+</p>
+
+<p>
+What fraction of the questions did the student get correct?
+</p>
+
+<div class="fraction-input">
+<input id="q13n">
+<input id="q13d">
+</div>
+
+<br>
+
+<button class="check-btn"
+onclick="checkFraction('q13','q13n','q13d','4','5')">
+Check
+</button>
+
+<button class="retry-btn" onclick="retry('q13')">
+Try Again
+</button>
+
+<div class="feedback"></div>
+
+</div>
+
+</div>
+
+
+<!-- PART E MCQ -->
+
+<div class="section">
+
+<div class="section-title">
+    <span class="badge">PART E</span>
+    <h2>Choose the Correct Answer</h2>
+</div>
+
+
+<div class="question mcq" id="q14">
+
+<div class="q-number">Question 14</div>
+
+<p>Express <strong>6 as a fraction of 15</strong>.</p>
+
+<div class="options">
+
+<div class="option" onclick="selectOption(this,'q14',false)">
+15/6
+</div>
+
+<div class="option" onclick="selectOption(this,'q14',true)">
+2/5
+</div>
+
+<div class="option" onclick="selectOption(this,'q14',false)">
+6/9
+</div>
+
+<div class="option" onclick="selectOption(this,'q14',false)">
+9/15
+</div>
+
+</div>
+
+<div class="feedback"></div>
+
+</div>
+
+
+<div class="question mcq" id="q15">
+
+<div class="q-number">Question 15</div>
+
+<p>Express <strong>8 as a fraction of 32</strong>.</p>
+
+<div class="options">
+
+<div class="option" onclick="selectOption(this,'q15',true)">
+1/4
+</div>
+
+<div class="option" onclick="selectOption(this,'q15',false)">
+1/8
+</div>
+
+<div class="option" onclick="selectOption(this,'q15',false)">
+4/1
+</div>
+
+<div class="option" onclick="selectOption(this,'q15',false)">
+8/24
+</div>
+
+</div>
+
+<div class="feedback"></div>
+
+</div>
+
+
+<div class="question mcq" id="q16">
+
+<div class="q-number">Question 16</div>
+
+<p>Express <strong>18 as a fraction of 24</strong>.</p>
+
+<div class="options">
+
+<div class="option" onclick="selectOption(this,'q16',false)">
+2/3
+</div>
+
+<div class="option" onclick="selectOption(this,'q16',true)">
+3/4
+</div>
+
+<div class="option" onclick="selectOption(this,'q16',false)">
+4/3
+</div>
+
+<div class="option" onclick="selectOption(this,'q16',false)">
+18/6
+</div>
+
+</div>
+
+<div class="feedback"></div>
+
+</div>
+
+</div>
+
+
+<!-- PART F -->
+
+<div class="section">
+
+<div class="section-title">
+    <span class="badge">PART F</span>
+    <h2>Find the Mistake</h2>
+</div>
+
+
+<div class="question mcq" id="q17">
+
+<div class="q-number">Question 17</div>
+
+<p>
+A student says:
+</p>
+
+<div class="example">
+Express <strong>6 as a fraction of 18</strong>.<br><br>
+Answer: <strong>18/6 = 3</strong>
+</div>
+
+<p>Is the student correct?</p>
+
+<div class="options">
+
+<div class="option" onclick="selectOption(this,'q17',false)">
+Yes
+</div>
+
+<div class="option" onclick="selectOption(this,'q17',true)">
+No
+</div>
+
+</div>
+
+<div class="feedback"></div>
+
+</div>
+
+
+<div class="question mcq" id="q18">
+
+<div class="q-number">Question 18</div>
+
+<p>
+A student says:
+</p>
+
+<div class="example">
+Express <strong>8 as a fraction of 20</strong>.<br><br>
+Answer: <strong>8/20 = 2/5</strong>
+</div>
+
+<p>Is the student's answer correct?</p>
+
+<div class="options">
+
+<div class="option" onclick="selectOption(this,'q18',true)">
+Correct
+</div>
+
+<div class="option" onclick="selectOption(this,'q18',false)">
+Incorrect
+</div>
+
+</div>
+
+<div class="feedback"></div>
+
+</div>
+
+</div>
+
+
+<!-- PART G -->
+
+<div class="section">
+
+<div class="section-title">
+    <span class="badge">PART G</span>
+    <h2>🏆 Challenge</h2>
+</div>
+
+
+<div class="question" id="q19">
+
+<div class="q-number">Question 19</div>
+
+<p>Express <strong>36 as a fraction of 48</strong>.</p>
+
+<div class="fraction-input">
+<input id="q19n">
+<input id="q19d">
+</div>
+
+<br>
+
+<button class="check-btn"
+onclick="checkFraction('q19','q19n','q19d','3','4')">
+Check
+</button>
+
+<button class="retry-btn" onclick="retry('q19')">
+Try Again
+</button>
+
+<div class="feedback"></div>
+
+</div>
+
+
+<div class="question" id="q20">
+
+<div class="q-number">Question 20</div>
+
+<p>Express <strong>45 as a fraction of 60</strong>.</p>
+
+<div class="fraction-input">
+<input id="q20n">
+<input id="q20d">
+</div>
+
+<br>
+
+<button class="check-btn"
+onclick="checkFraction('q20','q20n','q20d','3','4')">
+Check
+</button>
+
+<button class="retry-btn" onclick="retry('q20')">
+Try Again
+</button>
+
+<div class="feedback"></div>
+
+</div>
+
+
+<div class="question" id="q21">
+
+<div class="q-number">Question 21</div>
+
+<p>Express <strong>42 as a fraction of 56</strong>.</p>
+
+<div class="fraction-input">
+<input id="q21n">
+<input id="q21d">
+</div>
+
+<br>
+
+<button class="check-btn"
+onclick="checkFraction('q21','q21n','q21d','3','4')">
+Check
+</button>
+
+<button class="retry-btn" onclick="retry('q21')">
+Try Again
+</button>
+
+<div class="feedback"></div>
+
+</div>
+
+
+<div class="question" id="q22">
+
+<div class="q-number">Question 22</div>
+
+<p>
+There are <strong>50 books</strong>.
+<strong>35 are fiction books</strong>.
+</p>
+
+<p>
+What fraction of the books are fiction?
+</p>
+
+<div class="fraction-input">
+<input id="q22n">
+<input id="q22d">
+</div>
+
+<br>
+
+<button class="check-btn"
+onclick="checkFraction('q22','q22n','q22d','7','10')">
+Check
+</button>
+
+<button class="retry-btn" onclick="retry('q22')">
+Try Again
+</button>
+
+<div class="feedback"></div>
+
+</div>
+
+</div>
+
+
+<!-- FINAL -->
+
+<div class="final-box">
+
+<h2>🎉 Worksheet Complete!</h2>
+
+<p>Your final score is:</p>
+
+<div class="final-score">
+<span id="finalScore">0</span> / 22
+</div>
+
+<p id="finalMessage">
+Complete the questions to see your result.
+</p>
+
+<button class="reset" onclick="resetWorksheet()">
+Reset Worksheet
+</button>
+
+</div>
+
+</main>
+
+
+<script>
+
+let score = 0;
+let answered = new Set();
+
+const totalQuestions = 22;
+
+document.getElementById("total").textContent = totalQuestions;
+
+
+/* FRACTION QUESTIONS */
+
+function checkFraction(
+    questionId,
+    numeratorId,
+    denominatorId,
+    correctNumerator,
+    correctDenominator
+) {
+
+    const question = document.getElementById(questionId);
+
+    const numerator =
+        document.getElementById(numeratorId).value.trim();
+
+    const denominator =
+        document.getElementById(denominatorId).value.trim();
+
+    const feedback =
+        question.querySelector(".feedback");
+
+    const retryButton =
+        question.querySelector(".retry-btn");
+
+    if (
+        numerator === correctNumerator &&
+        denominator === correctDenominator
+    ) {
+
+        if (!answered.has(questionId)) {
+            score++;
+            answered.add(questionId);
+            updateScore();
+        }
+
+        question.classList.remove("incorrect");
+        question.classList.add("correct");
+
+        feedback.textContent =
+            "✓ Correct! Great work.";
+
+        feedback.className =
+            "feedback correct";
+
+        retryButton.style.display = "none";
+
+    } else {
+
+        question.classList.remove("correct");
+        question.classList.add("incorrect");
+
+        feedback.textContent =
+            "✗ Not quite. Remember: first number goes on top, second number goes on the bottom, then simplify.";
+
+        feedback.className =
+            "feedback incorrect";
+
+        retryButton.style.display = "inline-block";
+    }
+
+}
+
+
+/* MCQ */
+
+function selectOption(element, questionId, correct) {
+
+    const question =
+        document.getElementById(questionId);
+
+    const options =
+        question.querySelectorAll(".option");
+
+    const feedback =
+        question.querySelector(".feedback");
+
+    options.forEach(option => {
+        option.classList.remove(
+            "selected",
+            "correct-option",
+            "wrong-option"
+        );
+    });
+
+    element.classList.add("selected");
+
+    if (correct) {
+
+        element.classList.add("correct-option");
+
+        if (!answered.has(questionId)) {
+            score++;
+            answered.add(questionId);
+            updateScore();
+        }
+
+        feedback.textContent =
+            "✓ Correct!";
+
+        feedback.className =
+            "feedback correct";
+
+    } else {
+
+        element.classList.add("wrong-option");
+
+        feedback.textContent =
+            "✗ Not quite. Think about which number goes on top and simplify.";
+
+        feedback.className =
+            "feedback incorrect";
+    }
+}
+
+
+/* SCORE */
+
+function updateScore() {
+
+    document.getElementById("score").textContent = score;
+
+    document.getElementById("finalScore").textContent = score;
+
+    const message =
+        document.getElementById("finalMessage");
+
+    if (score === totalQuestions) {
+
+        message.textContent =
+            "🌟 Perfect! You mastered this skill!";
+
+    } else if (score >= 18) {
+
+        message.textContent =
+            "👏 Excellent work! You have a strong understanding.";
+
+    } else if (score >= 14) {
+
+        message.textContent =
+            "👍 Good work! Review the questions you missed.";
+
+    } else if (score >= 10) {
+
+        message.textContent =
+            "🙂 You're getting there. Practise simplifying fractions.";
+
+    } else {
+
+        message.textContent =
+            "💪 Keep practising! Remember: first number on top, second number underneath.";
+    }
+}
+
+
+/* RETRY */
+
+function retry(questionId) {
+
+    const question =
+        document.getElementById(questionId);
+
+    question.classList.remove("incorrect");
+
+    const feedback =
+        question.querySelector(".feedback");
+
+    feedback.style.display = "none";
+
+    const inputs =
+        question.querySelectorAll("input");
+
+    inputs.forEach(input => {
+        input.value = "";
+    });
+
+    const retryButton =
+        question.querySelector(".retry-btn");
+
+    retryButton.style.display = "none";
+}
+
+
+/* RESET */
+
+function resetWorksheet() {
+
+    score = 0;
+    answered.clear();
+
+    document.querySelectorAll(".question").forEach(question => {
+
+        question.classList.remove(
+            "correct",
+            "incorrect"
+        );
+
+        question.querySelectorAll("input")
+            .forEach(input => input.value = "");
+
+        question.querySelectorAll(".option")
+            .forEach(option => {
+                option.classList.remove(
+                    "selected",
+                    "correct-option",
+                    "wrong-option"
+                );
+            });
+
+        const feedback =
+            question.querySelector(".feedback");
+
+        if (feedback) {
+            feedback.className = "feedback";
+            feedback.textContent = "";
+            feedback.style.display = "none";
+        }
+
+        const retry =
+            question.querySelector(".retry-btn");
+
+        if (retry) {
+            retry.style.display = "none";
+        }
+    });
+
+    updateScore();
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+
+/* ENTER KEY */
+
+document.addEventListener("keydown", function(event) {
+
+    if (event.key === "Enter") {
+
+        const active =
+            document.activeElement;
+
+        if (active && active.tagName === "INPUT") {
+
+            const question =
+                active.closest(".question");
+
+            if (question) {
+
+                const button =
+                    question.querySelector(".check-btn");
+
+                if (button) {
+                    button.click();
+                }
+            }
+        }
+    }
+
+});
+
+updateScore();
+
+</script>
+
+</body>
+</html>
